@@ -1,0 +1,95 @@
+{
+	"name": "T3 Stack Development Environment",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "app",
+	"workspaceFolder": "/workspace",
+
+	"features": {
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
+		"ghcr.io/devcontainers/features/github-cli:1": {},
+		"ghcr.io/devcontainers/features/git:1": {
+			"ppa": true,
+			"version": "latest"
+		},
+		"ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {},
+		"ghcr.io/devcontainers/features/node:1": {}
+	},
+
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				// TypeScript & JavaScript
+				"bradlc.vscode-tailwindcss",
+				"esbenp.prettier-vscode",
+				"dbaeumer.vscode-eslint",
+				"ms-vscode.vscode-typescript-next",
+
+				// React & Next.js
+				"formulahendry.auto-rename-tag",
+				"christian-kohler.path-intellisense",
+				"bradlc.vscode-tailwindcss",
+				"ms-vscode.vscode-json",
+
+				// Database & Prisma
+				"Prisma.prisma",
+				"ms-mssql.mssql",
+
+				// tRPC & API
+				"ms-vscode.vscode-json",
+				"humao.rest-client",
+
+				// Git & Development Tools
+				"eamodio.gitlens",
+				"ms-vscode.vscode-json",
+				"usernamehw.errorlens",
+				"christian-kohler.npm-intellisense",
+
+				// Docker
+				"ms-azuretools.vscode-docker",
+
+				// Theme & UI
+				"PKief.material-icon-theme",
+				"GitHub.github-vscode-theme"
+			],
+
+			"settings": {
+				"typescript.preferences.preferTypeOnlyAutoImports": true,
+				"typescript.preferences.includePackageJsonAutoImports": "auto",
+				"editor.formatOnSave": true,
+				"editor.defaultFormatter": "esbenp.prettier-vscode",
+				"editor.codeActionsOnSave": {
+					"source.fixAll.eslint": "explicit"
+				},
+				"files.associations": {
+					"*.css": "tailwindcss"
+				},
+				"emmet.includeLanguages": {
+					"javascript": "javascriptreact",
+					"typescript": "typescriptreact"
+				},
+				"tailwindCSS.experimental.classRegex": [
+					["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+					["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+				]
+			}
+		}
+	},
+
+	"forwardPorts": [3000, 5432, 3001, 8080],
+
+	"portsAttributes": {
+		"3000": {
+			"label": "Next.js App",
+			"onAutoForward": "notify"
+		},
+		"5432": {
+			"label": "PostgreSQL Database"
+		},
+		"3001": {
+			"label": "Development Server"
+		},
+		"8080": {
+			"label": "Additional Services"
+		}
+	}
+}

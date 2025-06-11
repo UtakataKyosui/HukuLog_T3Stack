@@ -1,0 +1,95 @@
+version: '3.8'
+
+services:
+  # Development Container
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: t3-devcontainer
+    volumes:
+      - ../:/workspace:cached
+      - /var/run/docker.sock:/var/run/docker-host.sock
+    command: sleep infinity
+    networks:
+      - t3-network
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/t3stack
+      - REDIS_URL=redis://redis:6379
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: t3-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: t3stack
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - t3-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis (セッション管理、キャッシュ用)
+  redis:
+    image: redis:7-alpine
+    container_name: t3-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - t3-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Adminer (データベース管理ツール)
+  adminer:
+    image: adminer:latest
+    container_name: t3-adminer
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+    networks:
+      - t3-network
+    depends_on:
+      - postgres
+
+  # MailHog (開発用メールサーバー)
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: t3-mailhog
+    restart: unless-stopped
+    ports:
+      - "1025:1025"  # SMTP
+      - "8025:8025"  # Web UI
+    networks:
+      - t3-network
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  t3-network:
+    driver: bridge
