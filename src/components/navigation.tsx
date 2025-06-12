@@ -3,9 +3,11 @@
 import { useSession } from "@/components/providers/session-provider";
 import { FavoriteThemeSelector } from "@/components/theme/favorite-theme-selector";
 import { QuickThemeSelector } from "@/components/theme/quick-theme-selector";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useSubscriptionLimits } from "@/hooks/use-subscription-limits";
 import { authClient } from "@/lib/auth-client";
-import { Menu, Plus, Settings, User, X } from "lucide-react";
+import { Crown, Menu, Plus, Settings, Sparkles, User, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -14,6 +16,7 @@ export function Navigation() {
 	const router = useRouter();
 	const { session, isLoading } = useSession();
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+	const { isFreePlan } = useSubscriptionLimits();
 
 	const handleSignOut = async () => {
 		await authClient.signOut();
@@ -89,7 +92,7 @@ export function Navigation() {
 
 						{/* User menu with avatar */}
 						<div className="flex items-center space-x-3">
-							<span className="hidden max-w-20 truncate text-theme-text text-sm sm:block lg:max-w-none">
+							<span className="hidden max-w-20 truncate text-sm text-theme-text sm:block lg:max-w-none">
 								{session.user.name}さん
 							</span>
 
@@ -100,7 +103,7 @@ export function Navigation() {
 									className="h-8 w-8 rounded-full"
 								/>
 							) : (
-								<div className="flex h-8 w-8 items-center justify-center rounded-full bg-theme-surface border border-theme-border">
+								<div className="flex h-8 w-8 items-center justify-center rounded-full border border-theme-border bg-theme-surface">
 									<User className="h-5 w-5 text-theme-text-secondary" />
 								</div>
 							)}
@@ -112,6 +115,19 @@ export function Navigation() {
 
 							{/* クイックテーマセレクター */}
 							<QuickThemeSelector />
+
+							<Link
+								href="/subscription"
+								className="relative rounded-md p-2 text-theme-text-secondary transition-colors hover:text-theme-text"
+								title="プレミアム"
+							>
+								<Crown className="h-5 w-5" />
+								{isFreePlan() && (
+									<Badge className="-top-1 -right-1 absolute h-4 bg-theme-accent px-1 text-theme-background text-xs">
+										!
+									</Badge>
+								)}
+							</Link>
 
 							<Link
 								href="/settings"
@@ -166,10 +182,19 @@ export function Navigation() {
 							</Link>
 							<Link
 								href="/subscription"
-								className="block rounded-md px-3 py-2 font-medium text-base text-theme-text hover:bg-theme-surface hover:text-theme-primary"
+								className="flex items-center justify-between rounded-md px-3 py-2 font-medium text-base text-theme-text hover:bg-theme-surface hover:text-theme-primary"
 								onClick={() => setIsMobileMenuOpen(false)}
 							>
-								プレミアム
+								<div className="flex items-center gap-2">
+									<Crown className="h-4 w-4" />
+									プレミアム
+								</div>
+								{isFreePlan() && (
+									<Badge className="bg-theme-accent text-theme-background text-xs">
+										<Sparkles className="mr-1 h-3 w-3" />
+										おすすめ
+									</Badge>
+								)}
 							</Link>
 							<div className="space-y-2 pt-2">
 								<Button
@@ -193,9 +218,9 @@ export function Navigation() {
 									<Plus className="mr-1 h-4 w-4" />
 									服を追加
 								</Button>
-								
+
 								{/* モバイル用テーマセレクター */}
-								<div className="pt-2 border-t border-theme-border space-y-2">
+								<div className="space-y-2 border-theme-border border-t pt-2">
 									<div className="flex items-center justify-center">
 										<FavoriteThemeSelector />
 									</div>

@@ -94,7 +94,8 @@ export default function SetupPasskeyPage() {
 						パスキーを設定しませんか？
 					</CardTitle>
 					<CardDescription className="text-slate-600">
-						ようこそ、{session.user.name}さん！<br />
+						ようこそ、{session.user.name}さん！
+						<br />
 						パスキーを設定すると次回からより簡単にログインできます
 					</CardDescription>
 				</CardHeader>
@@ -130,7 +131,8 @@ export default function SetupPasskeyPage() {
 
 					<div className="rounded-lg border border-blue-200 bg-blue-50 p-3">
 						<p className="text-blue-800 text-xs">
-							💡 パスキーは一度設定すると、Googleアカウントなしでもログインできるようになります
+							💡
+							パスキーは一度設定すると、Googleアカウントなしでもログインできるようになります
 						</p>
 					</div>
 				</CardContent>

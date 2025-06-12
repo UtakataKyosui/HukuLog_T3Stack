@@ -53,15 +53,17 @@ export function AuthForm() {
 		setIsLoading(true);
 		try {
 			const result = await authClient.signIn.passkey();
-			
+
 			if (result?.error) {
 				throw new Error(result.error.message);
 			}
-			
+
 			router.push("/");
 		} catch (error) {
 			console.error("Passkey auth error:", error);
-			alert("パスキーでのログインに失敗しました。パスキーが登録されているか確認してください。");
+			alert(
+				"パスキーでのログインに失敗しました。パスキーが登録されているか確認してください。",
+			);
 		} finally {
 			setIsLoading(false);
 		}
@@ -99,7 +101,8 @@ export function AuthForm() {
 						<div className="space-y-4">
 							<div className="rounded-lg border border-blue-200 bg-blue-50 p-3">
 								<p className="text-blue-800 text-sm">
-									🔑 Googleアカウントで登録後、パスキーを設定できます<br />
+									🔑 Googleアカウントで登録後、パスキーを設定できます
+									<br />
 									より安全で簡単なログイン体験をお楽しみください
 								</p>
 							</div>
@@ -110,18 +113,16 @@ export function AuthForm() {
 							>
 								{isLoading ? "登録中..." : "🔑 Google登録 + パスキー設定"}
 							</Button>
-							
+
 							<div className="relative">
 								<div className="absolute inset-0 flex items-center">
 									<div className="w-full border-slate-300 border-t" />
 								</div>
 								<div className="relative flex justify-center text-xs">
-									<span className="bg-white px-2 text-slate-500">
-										または
-									</span>
+									<span className="bg-white px-2 text-slate-500">または</span>
 								</div>
 							</div>
-							
+
 							<Button
 								onClick={handleGoogleAuth}
 								variant="outline"
