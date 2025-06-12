@@ -1,0 +1,2 @@
+CREATE INDEX "clothing_user_created_idx" ON "workspace_clothing_item" USING btree ("userId","createdAt");--> statement-breakpoint
+CREATE INDEX "outfit_user_created_idx" ON "workspace_outfit" USING btree ("userId","createdAt");

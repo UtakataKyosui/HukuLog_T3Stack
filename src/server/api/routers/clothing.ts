@@ -27,13 +27,26 @@ export const clothingRouter = createTRPCRouter({
 		}),
 
 	// Get user's clothing items
-	getAll: protectedProcedure.query(({ ctx }) => {
-		return ctx.db
-			.select()
-			.from(clothingItems)
-			.where(eq(clothingItems.userId, ctx.session.user.id))
-			.orderBy(desc(clothingItems.createdAt));
-	}),
+	getAll: protectedProcedure
+		.input(
+			z
+				.object({
+					limit: z.number().min(1).max(100).default(50),
+					offset: z.number().min(0).default(0),
+				})
+				.optional(),
+		)
+		.query(({ ctx, input }) => {
+			const { limit = 50, offset = 0 } = input ?? {};
+
+			return ctx.db
+				.select()
+				.from(clothingItems)
+				.where(eq(clothingItems.userId, ctx.session.user.id))
+				.orderBy(desc(clothingItems.createdAt))
+				.limit(limit)
+				.offset(offset);
+		}),
 
 	// Get clothing item by ID
 	getById: protectedProcedure

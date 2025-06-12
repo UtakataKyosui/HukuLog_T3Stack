@@ -14,8 +14,9 @@ import { useState } from "react";
 
 export function PasskeyManager() {
 	const [isLoading, setIsLoading] = useState(false);
-	
-	const { data: passkeys, refetch: refetchPasskeys } = api.passkey.getMyPasskeys.useQuery();
+
+	const { data: passkeys, refetch: refetchPasskeys } =
+		api.passkey.getMyPasskeys.useQuery();
 
 	const addPasskey = async () => {
 		setIsLoading(true);
@@ -52,7 +53,7 @@ export function PasskeyManager() {
 									<div className="flex items-center justify-between">
 										<div>
 											<span className="font-medium">{pk.name}</span>
-											<span className="ml-2 text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded">
+											<span className="ml-2 rounded bg-slate-100 px-2 py-1 text-slate-500 text-xs">
 												{pk.deviceType}
 											</span>
 										</div>

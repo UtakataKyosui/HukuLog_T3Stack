@@ -3,6 +3,7 @@ import { outfitRouter } from "@/server/api/routers/outfit";
 import { passkeyRouter } from "@/server/api/routers/passkey";
 import { postRouter } from "@/server/api/routers/post";
 import { subscriptionRouter } from "@/server/api/routers/subscription";
+import { userRouter } from "@/server/api/routers/user";
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
 
 /**
@@ -16,6 +17,7 @@ export const appRouter = createTRPCRouter({
 	outfit: outfitRouter,
 	subscription: subscriptionRouter,
 	passkey: passkeyRouter,
+	user: userRouter,
 });
 
 // export type definition of API

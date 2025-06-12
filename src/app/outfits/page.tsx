@@ -1,4 +1,4 @@
-import { BackButton } from "@/components/back-button";
+import { Navigation } from "@/components/navigation";
 import { getServerAuthSession } from "@/server/auth";
 import { redirect } from "next/navigation";
 import OutfitList from "./_components/outfit-list";
@@ -7,13 +7,13 @@ export default async function OutfitsPage() {
 	const session = await getServerAuthSession();
 
 	if (!session) {
-		redirect("/api/auth/signin");
+		redirect("/");
 	}
 
 	return (
 		<div className="gradient-pink-soft min-h-screen">
+			<Navigation />
 			<div className="container mx-auto px-4 py-8">
-				<BackButton href="/" />
 				<div className="mb-8 text-center">
 					<h1 className="mb-2 font-bold text-4xl text-slate-900">
 						マイコーディネート

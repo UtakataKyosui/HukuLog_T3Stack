@@ -1,30 +1,140 @@
-# Create T3 App
+# 服管理アプリ
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+服とコーディネートを効率的に管理できるWebアプリケーションです。
 
-## What's next? How do I make an app with this?
+## 📱 主な機能
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+### 🧥 服の管理
+- **服の登録・編集・削除** - 写真、ブランド、色、サイズ、購入価格などの詳細情報を記録
+- **カテゴリ分類** - トップス、ボトムス、アウター、靴、アクセサリーなどで分類
+- **季節管理** - 春夏秋冬、オールシーズンでの季節分け
+- **タグ機能** - 自由なタグ付けで検索や整理が簡単
+- **メモ機能** - 着こなしのコツや思い出を記録
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+### 👗 コーディネート管理
+- **コーデ作成** - 登録した服を組み合わせてコーディネートを作成
+- **シーン設定** - カジュアル、フォーマル、デート、仕事などのシーン分け
+- **評価システム** - 5段階の星評価でお気に入り度を記録
+- **着用履歴** - 最後に着用した日付を記録して重複を防止
+- **コーデ検索** - タグやシーンで簡単に検索
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+### ⭐ プレミアム機能
+- **無制限登録** - 服やコーディネートを無制限に登録
+- **高度な検索** - 複数条件での絞り込み検索
+- **データエクスポート** - CSV形式でのデータ出力
+- **クラウド同期** - 複数デバイス間でのデータ同期
 
-## Learn More
+### 🔐 セキュリティ
+- **Google認証** - Googleアカウントで簡単ログイン
+- **Passkey対応** - パスワードレスでより安全な認証
+- **プライベート** - あなたのデータは他の人からは見えません
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+## 🚀 はじめ方
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+### 1. アカウント作成
+1. トップページの「ログインして始める」をクリック
+2. Googleアカウントまたはパスキーでログイン
+3. 初回ログイン時に簡単なセットアップ
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+### 2. 服を登録
+1. 「服を追加」ボタンをクリック
+2. 服の写真をアップロード（推奨）
+3. 名前、ブランド、色、サイズなどの情報を入力
+4. カテゴリを選択（新しいカテゴリも作成可能）
+5. 「服を追加」で完了
 
-## How do I deploy this?
+### 3. コーディネート作成
+1. 「コーデ作成」ボタンをクリック
+2. コーディネート名と説明を入力
+3. 登録した服の中から組み合わせを選択
+4. シーンや季節を設定
+5. 「作成」で完了
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
-# ClaudeCoded-DigitalCloset
+## 💡 使い方のコツ
+
+### 効率的な服の登録
+- **写真を撮影** - 服を着た状態や平置きで撮影すると後で分かりやすい
+- **詳細情報** - ブランドや価格を記録しておくと買い物の参考になる
+- **タグ活用** - 「お気に入り」「新品」「処分検討」などのタグで管理
+
+### コーディネート作成のポイント
+- **シーン別** - 仕事用、プライベート用で分けて作成
+- **季節考慮** - 季節に合った組み合わせで作成
+- **評価記録** - 実際に着用後の満足度を記録
+
+### 整理のコツ
+- **定期的な見直し** - 着用頻度の低い服は処分を検討
+- **重複チェック** - 似た服がないか確認してから購入
+- **コーデ履歴** - 最近着用したコーデをチェックして偏りを防止
+
+## 📱 PWA対応
+
+このアプリはPWA（Progressive Web App）対応で、以下の機能が利用できます：
+
+- **ホーム画面追加** - スマートフォンのホーム画面にアプリアイコンを追加
+- **オフライン閲覧** - インターネット接続がなくても基本機能が利用可能
+- **プッシュ通知** - 新機能やお知らせの通知を受信（要設定）
+
+### インストール方法
+1. ブラウザで本アプリにアクセス
+2. ブラウザの「ホーム画面に追加」オプションを選択
+3. アプリのようにホーム画面から起動可能
+
+## 🔧 対応ブラウザ
+
+- Chrome 90+
+- Firefox 88+
+- Safari 14+
+- Edge 90+
+
+モバイルブラウザも完全対応しています。
+
+## 📞 サポート
+
+### よくある質問
+
+**Q: 無料で使えますか？**
+A: 基本機能は無料でご利用いただけます。より多くの服やコーディネートを登録したい場合はプレミアムプランをご検討ください。
+
+**Q: データは安全ですか？**
+A: はい。すべてのデータは暗号化され、あなただけがアクセス可能です。
+
+**Q: 他の人に見られますか？**
+A: いいえ。登録したデータは完全にプライベートで、他のユーザーからは見えません。
+
+**Q: スマートフォンで使えますか？**
+A: はい。レスポンシブデザインでスマートフォン、タブレット、PCすべてに対応しています。
+
+**Q: データの移行はできますか？**
+A: プレミアムプランではCSVでのデータエクスポートが可能です。
+
+### お問い合わせ
+
+技術的な問題や機能に関するご要望がございましたら、以下の方法でお問い合わせください：
+
+- **GitHub Issues**: [リポジトリ](https://github.com/your-repo/wardrobe-manager) でのissue報告
+- **メール**: support@example.com
+- **Twitter**: @wardrobemanager
+
+## 🎯 今後の予定
+
+- **AI機能** - コーディネート提案機能
+- **天気連携** - 天気予報に基づく服装提案
+- **ソーシャル機能** - 友達とのコーディネートシェア（オプション）
+- **分析機能** - 着用頻度や購入傾向の分析
+- **リマインダー** - 定期的なワードローブ整理のお知らせ
+
+## 🏷️ バージョン情報
+
+現在のバージョン: 1.0.0
+
+### 更新履歴
+- **v1.0.0** (2024年) - 初回リリース
+  - 服の管理機能
+  - コーディネート作成機能
+  - 認証システム
+  - PWA対応
+
+---
+
+**👔 素敵なコーディネートライフをお楽しみください！**

@@ -17,6 +17,7 @@ export const env = createEnv({
 		NODE_ENV: z
 			.enum(["development", "test", "production"])
 			.default("development"),
+		VAPID_PRIVATE_KEY: z.string().optional(),
 	},
 
 	/**
@@ -26,6 +27,11 @@ export const env = createEnv({
 	 */
 	client: {
 		NEXT_PUBLIC_APP_URL: z.string().url().optional(),
+		NEXT_PUBLIC_APP_NAME: z.string().default("服管理アプリ"),
+		NEXT_PUBLIC_APP_DESCRIPTION: z
+			.string()
+			.default("服とコーディネートを効率的に管理"),
+		NEXT_PUBLIC_VAPID_PUBLIC_KEY: z.string().optional(),
 	},
 
 	/**
@@ -37,6 +43,10 @@ export const env = createEnv({
 		GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
 		GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
 		NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+		NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME,
+		NEXT_PUBLIC_APP_DESCRIPTION: process.env.NEXT_PUBLIC_APP_DESCRIPTION,
+		NEXT_PUBLIC_VAPID_PUBLIC_KEY: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
+		VAPID_PRIVATE_KEY: process.env.VAPID_PRIVATE_KEY,
 		DATABASE_URL: process.env.DATABASE_URL,
 		NODE_ENV: process.env.NODE_ENV,
 	},

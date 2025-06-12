@@ -214,6 +214,7 @@ export const clothingItems = createTable(
 	}),
 	(t) => [
 		index("clothing_user_idx").on(t.userId),
+		index("clothing_user_created_idx").on(t.userId, t.createdAt),
 		index("clothing_category_idx").on(t.categoryId),
 		index("clothing_season_idx").on(t.season),
 	],
@@ -243,6 +244,7 @@ export const outfits = createTable(
 	}),
 	(t) => [
 		index("outfit_user_idx").on(t.userId),
+		index("outfit_user_created_idx").on(t.userId, t.createdAt),
 		index("outfit_occasion_idx").on(t.occasion),
 		index("outfit_season_idx").on(t.season),
 	],

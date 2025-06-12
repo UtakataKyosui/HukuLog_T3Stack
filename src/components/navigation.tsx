@@ -1,72 +1,192 @@
 "use client";
 
+import { useSession } from "@/components/providers/session-provider";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
+import { Menu, Plus, Settings, User, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export function Navigation() {
 	const router = useRouter();
-	const { data: session } = authClient.useSession();
+	const { session, isLoading } = useSession();
+	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
 	const handleSignOut = async () => {
 		await authClient.signOut();
 		router.push("/login");
 	};
 
+	// セッションがない場合はログインページにリダイレクト
+	useEffect(() => {
+		if (!isLoading && !session) {
+			router.push("/login?expired=true");
+		}
+	}, [isLoading, session, router]);
+
+	// ローディング中は何も表示しない
+	if (isLoading) {
+		return null;
+	}
+
+	// ログインしていない場合は表示しない（リダイレクト処理中）
 	if (!session) {
 		return null;
 	}
 
 	return (
-		<nav className="bg-white border-b border-slate-200 shadow-sm">
-			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-				<div className="flex justify-between h-16">
+		<nav className="border-slate-200 border-b bg-white shadow-lg">
+			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+				<div className="flex h-16 justify-between">
+					{/* Left side - Logo and main nav */}
 					<div className="flex items-center space-x-8">
-						<Link href="/" className="text-xl font-bold text-slate-900">
-							Wardrobe Manager
+						<Link href="/outfits" className="font-bold text-slate-900 text-xl">
+							服管理アプリ
 						</Link>
-						<div className="hidden md:flex space-x-6">
-							<Link
-								href="/wardrobe"
-								className="text-slate-700 hover:text-slate-900 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-							>
-								ワードローブ
-							</Link>
+
+						{/* Desktop navigation */}
+						<div className="hidden space-x-6 md:flex">
 							<Link
 								href="/outfits"
-								className="text-slate-700 hover:text-slate-900 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+								className="rounded-md px-3 py-2 font-medium text-slate-700 text-sm transition-colors hover:text-slate-900"
 							>
 								コーディネート
 							</Link>
 							<Link
-								href="/subscription"
-								className="text-slate-700 hover:text-slate-900 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+								href="/wardrobe"
+								className="rounded-md px-3 py-2 font-medium text-slate-700 text-sm transition-colors hover:text-slate-900"
 							>
-								プレミアム
-							</Link>
-							<Link
-								href="/settings"
-								className="text-slate-700 hover:text-slate-900 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-							>
-								設定
+								服の管理
 							</Link>
 						</div>
 					</div>
+
+					{/* Right side - Add button, user menu, auth */}
 					<div className="flex items-center space-x-4">
-						<span className="text-sm text-slate-700">
-							こんにちは、{session.user.name}さん
-						</span>
+						{/* Add button for quick access */}
+						<div className="hidden space-x-2 lg:flex">
+							<Button
+								onClick={() => router.push("/outfits?create=true")}
+								size="sm"
+								className="bg-blue-600 text-white hover:bg-blue-700"
+							>
+								<Plus className="mr-1 h-4 w-4" />
+								コーデ作成
+							</Button>
+							<Button
+								onClick={() => router.push("/wardrobe?add=true")}
+								variant="outline"
+								size="sm"
+								className="border-slate-300 text-slate-700 hover:bg-slate-50"
+							>
+								<Plus className="mr-1 h-4 w-4" />
+								服を追加
+							</Button>
+						</div>
+
+						{/* User menu with avatar */}
+						<div className="flex items-center space-x-3">
+							<span className="hidden max-w-20 truncate text-slate-700 text-sm sm:block lg:max-w-none">
+								{session.user.name}さん
+							</span>
+
+							{session.user?.image ? (
+								<img
+									src={session.user.image}
+									alt="プロフィール"
+									className="h-8 w-8 rounded-full"
+								/>
+							) : (
+								<div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-300">
+									<User className="h-5 w-5 text-gray-600" />
+								</div>
+							)}
+
+							<Link
+								href="/settings"
+								className="rounded-md p-2 text-slate-700 transition-colors hover:text-slate-900"
+								title="設定"
+							>
+								<Settings className="h-5 w-5" />
+							</Link>
+						</div>
+
+						{/* Auth button */}
 						<Button
 							onClick={handleSignOut}
 							variant="outline"
 							size="sm"
-							className="text-slate-700 hover:text-slate-900"
+							className="border-slate-300 text-slate-700 hover:bg-slate-50"
 						>
 							ログアウト
 						</Button>
+
+						{/* Mobile menu button */}
+						<button
+							onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+							className="rounded-md p-2 text-slate-700 hover:bg-slate-100 hover:text-slate-900 md:hidden"
+						>
+							{isMobileMenuOpen ? (
+								<X className="h-6 w-6" />
+							) : (
+								<Menu className="h-6 w-6" />
+							)}
+						</button>
 					</div>
 				</div>
+
+				{/* Mobile menu */}
+				{isMobileMenuOpen && (
+					<div className="border-slate-200 border-t md:hidden">
+						<div className="space-y-1 px-2 pt-2 pb-3">
+							<Link
+								href="/outfits"
+								className="block rounded-md px-3 py-2 font-medium text-base text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+								onClick={() => setIsMobileMenuOpen(false)}
+							>
+								コーディネート
+							</Link>
+							<Link
+								href="/wardrobe"
+								className="block rounded-md px-3 py-2 font-medium text-base text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+								onClick={() => setIsMobileMenuOpen(false)}
+							>
+								服の管理
+							</Link>
+							<Link
+								href="/subscription"
+								className="block rounded-md px-3 py-2 font-medium text-base text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+								onClick={() => setIsMobileMenuOpen(false)}
+							>
+								プレミアム
+							</Link>
+							<div className="space-y-2 pt-2">
+								<Button
+									onClick={() => {
+										router.push("/outfits?create=true");
+										setIsMobileMenuOpen(false);
+									}}
+									className="w-full bg-blue-600 text-white hover:bg-blue-700"
+								>
+									<Plus className="mr-1 h-4 w-4" />
+									コーデ作成
+								</Button>
+								<Button
+									onClick={() => {
+										router.push("/wardrobe?add=true");
+										setIsMobileMenuOpen(false);
+									}}
+									variant="outline"
+									className="w-full border-slate-300 text-slate-700 hover:bg-slate-50"
+								>
+									<Plus className="mr-1 h-4 w-4" />
+									服を追加
+								</Button>
+							</div>
+						</div>
+					</div>
+				)}
 			</div>
 		</nav>
 	);

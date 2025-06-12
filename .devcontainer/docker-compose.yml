@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   # Development Container
@@ -6,7 +6,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: t3-devcontainer
+    ports:
+      - "3000:3000"
     volumes:
       - ../:/workspace:cached
       - /var/run/docker.sock:/var/run/docker-host.sock
@@ -23,7 +24,6 @@ services:
   # PostgreSQL Database
   postgres:
     image: postgres:15-alpine
-    container_name: t3-postgres
     restart: unless-stopped
     environment:
       POSTGRES_DB: t3stack
@@ -45,7 +45,6 @@ services:
   # Redis (セッション管理、キャッシュ用)
   redis:
     image: redis:7-alpine
-    container_name: t3-redis
     restart: unless-stopped
     ports:
       - "6379:6379"
@@ -62,7 +61,6 @@ services:
   # Adminer (データベース管理ツール)
   adminer:
     image: adminer:latest
-    container_name: t3-adminer
     restart: unless-stopped
     ports:
       - "8080:8080"
@@ -76,11 +74,10 @@ services:
   # MailHog (開発用メールサーバー)
   mailhog:
     image: mailhog/mailhog:latest
-    container_name: t3-mailhog
     restart: unless-stopped
     ports:
-      - "1025:1025"  # SMTP
-      - "8025:8025"  # Web UI
+      - "1025:1025" # SMTP
+      - "8025:8025" # Web UI
     networks:
       - t3-network
 

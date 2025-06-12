@@ -6,13 +6,26 @@ import { clothingItems, outfitItems, outfits } from "@/server/db/schema";
 
 export const outfitRouter = createTRPCRouter({
 	// Get user's outfits
-	getAll: protectedProcedure.query(({ ctx }) => {
-		return ctx.db
-			.select()
-			.from(outfits)
-			.where(eq(outfits.userId, ctx.session.user.id))
-			.orderBy(desc(outfits.createdAt));
-	}),
+	getAll: protectedProcedure
+		.input(
+			z
+				.object({
+					limit: z.number().min(1).max(100).default(50),
+					offset: z.number().min(0).default(0),
+				})
+				.optional(),
+		)
+		.query(({ ctx, input }) => {
+			const { limit = 50, offset = 0 } = input ?? {};
+
+			return ctx.db
+				.select()
+				.from(outfits)
+				.where(eq(outfits.userId, ctx.session.user.id))
+				.orderBy(desc(outfits.createdAt))
+				.limit(limit)
+				.offset(offset);
+		}),
 
 	// Get outfit by ID with clothing items
 	getById: protectedProcedure

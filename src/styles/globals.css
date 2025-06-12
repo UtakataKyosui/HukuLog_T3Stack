@@ -126,6 +126,68 @@
 		font-family: system-ui, -apple-system, sans-serif;
 	}
 
+	/* 全ての入力要素に枠線を適用 */
+	input[type="text"],
+	input[type="email"],
+	input[type="password"],
+	input[type="number"],
+	input[type="tel"],
+	input[type="url"],
+	input[type="search"],
+	input[type="date"],
+	input[type="time"],
+	input[type="datetime-local"],
+	textarea,
+	select {
+		border: 2px solid #e2e8f0;
+		border-radius: 8px;
+		padding: 8px 12px;
+		background: #ffffff;
+		transition: all 0.2s ease;
+	}
+
+	input[type="text"]:focus,
+	input[type="email"]:focus,
+	input[type="password"]:focus,
+	input[type="number"]:focus,
+	input[type="tel"]:focus,
+	input[type="url"]:focus,
+	input[type="search"]:focus,
+	input[type="date"]:focus,
+	input[type="time"]:focus,
+	input[type="datetime-local"]:focus,
+	textarea:focus,
+	select:focus {
+		border-color: #475569;
+		box-shadow: 0 0 0 3px rgba(71, 85, 105, 0.1);
+		outline: none;
+	}
+
+	/* 全てのボタンを角丸に */
+	button {
+		border-radius: 8px;
+		padding: 8px 16px;
+		font-weight: 600;
+		transition: all 0.2s ease;
+	}
+
+	/* 入力要素の親要素に余白を追加 */
+	.form-field,
+	.input-wrapper,
+	form > div,
+	form > label {
+		margin-bottom: 16px;
+	}
+
+	/* 一般的な入力コンテナのスタイル */
+	.input-container {
+		margin-bottom: 16px;
+	}
+
+	.input-container:last-child {
+		margin-bottom: 0;
+	}
+
 	/* カスタムスクロールバー */
 	::-webkit-scrollbar {
 		width: 8px;
@@ -257,4 +319,235 @@
 .status-info {
 	background-color: #3b82f6;
 	color: #ffffff;
+}
+
+/* ========================================
+   テーマシステム用CSS変数とスタイル
+   ======================================== */
+
+/* デフォルトテーマの追加変数 */
+:root {
+	--theme-primary: #3b82f6;
+	--theme-secondary: #64748b;
+	--theme-background: #ffffff;
+	--theme-surface: #f8fafc;
+	--theme-text: #1e293b;
+	--theme-text-secondary: #64748b;
+	--theme-border: #e2e8f0;
+	--theme-accent: #f59e0b;
+	--theme-success: #10b981;
+	--theme-warning: #f59e0b;
+	--theme-error: #ef4444;
+}
+
+/* テーマ適用のためのユーティリティクラス */
+.theme-bg {
+	background-color: var(--theme-background) !important;
+}
+
+.theme-bg-surface {
+	background-color: var(--theme-surface) !important;
+}
+
+.theme-text {
+	color: var(--theme-text) !important;
+}
+
+.theme-text-secondary {
+	color: var(--theme-text-secondary) !important;
+}
+
+.theme-border {
+	border-color: var(--theme-border) !important;
+}
+
+.theme-primary {
+	color: var(--theme-primary) !important;
+}
+
+.theme-bg-primary {
+	background-color: var(--theme-primary) !important;
+}
+
+.theme-accent {
+	color: var(--theme-accent) !important;
+}
+
+.theme-bg-accent {
+	background-color: var(--theme-accent) !important;
+}
+
+.theme-success {
+	color: var(--theme-success) !important;
+}
+
+.theme-bg-success {
+	background-color: var(--theme-success) !important;
+}
+
+.theme-warning {
+	color: var(--theme-warning) !important;
+}
+
+.theme-bg-warning {
+	background-color: var(--theme-warning) !important;
+}
+
+.theme-error {
+	color: var(--theme-error) !important;
+}
+
+.theme-bg-error {
+	background-color: var(--theme-error) !important;
+}
+
+/* ダークテーマ対応 */
+[data-theme="dark"] body {
+	background: linear-gradient(
+		135deg,
+		var(--theme-background) 0%,
+		var(--theme-surface) 100%
+	);
+}
+
+[data-theme="dark"] .gradient-light {
+	background: linear-gradient(
+		135deg,
+		var(--theme-surface) 0%,
+		var(--theme-background) 100%
+	);
+}
+
+[data-theme="dark"] .clean-card {
+	background: var(--theme-surface);
+	border-color: var(--theme-border);
+	color: var(--theme-text);
+}
+
+[data-theme="dark"] .clean-input {
+	background: var(--theme-surface);
+	border-color: var(--theme-border);
+	color: var(--theme-text);
+}
+
+/* ダークテーマでの入力要素スタイル */
+[data-theme="dark"] input[type="text"],
+[data-theme="dark"] input[type="email"],
+[data-theme="dark"] input[type="password"],
+[data-theme="dark"] input[type="number"],
+[data-theme="dark"] input[type="tel"],
+[data-theme="dark"] input[type="url"],
+[data-theme="dark"] input[type="search"],
+[data-theme="dark"] input[type="date"],
+[data-theme="dark"] input[type="time"],
+[data-theme="dark"] input[type="datetime-local"],
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+	background: var(--theme-surface);
+	border-color: var(--theme-border);
+	color: var(--theme-text);
+}
+
+/* 目に優しいテーマ */
+[data-theme="eye-friendly"] body {
+	background: linear-gradient(
+		135deg,
+		var(--theme-background) 0%,
+		var(--theme-surface) 100%
+	);
+	filter: sepia(0.05) saturate(0.95);
+}
+
+[data-theme="eye-friendly"] * {
+	text-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+/* ハイコントラストテーマ */
+[data-theme="high-contrast"] {
+	--shadow-color: rgba(0, 0, 0, 0.8);
+}
+
+[data-theme="high-contrast"] .shadow-lg,
+[data-theme="high-contrast"] .shadow-clean-lg {
+	box-shadow: 0 10px 15px -3px var(--shadow-color), 0 4px 6px -2px
+		var(--shadow-color);
+}
+
+[data-theme="high-contrast"] button,
+[data-theme="high-contrast"] .clean-button {
+	border: 2px solid var(--theme-text) !important;
+	font-weight: bold;
+}
+
+[data-theme="high-contrast"] input,
+[data-theme="high-contrast"] textarea,
+[data-theme="high-contrast"] select,
+[data-theme="high-contrast"] .clean-input {
+	border: 2px solid var(--theme-text) !important;
+	background: var(--theme-background) !important;
+}
+
+/* 色盲対応テーマでのフォーカス強調 */
+[data-theme^="deuteranopia"] :focus,
+[data-theme^="protanopia"] :focus,
+[data-theme^="tritanopia"] :focus {
+	outline: 3px solid var(--theme-primary) !important;
+	outline-offset: 2px;
+}
+
+/* ダークテーマでのスクロールバー */
+[data-theme="dark"] ::-webkit-scrollbar-track {
+	background: var(--theme-surface);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+	background: var(--theme-border);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+	background: var(--theme-text-secondary);
+}
+
+/* アニメーション設定（視覚的疲労軽減） */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+}
+
+/* プリント用スタイル */
+@media print {
+	[data-theme] {
+		--theme-background: #ffffff;
+		--theme-text: #000000;
+		--theme-border: #000000;
+	}
+}
+
+/* テーマプレビュー用スタイル */
+.theme-preview {
+	width: 60px;
+	height: 40px;
+	border-radius: 8px;
+	border: 2px solid var(--theme-border);
+	position: relative;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+}
+
+.theme-preview::before {
+	content: "";
+	flex: 1;
+	background: var(--theme-background);
+}
+
+.theme-preview::after {
+	content: "";
+	flex: 1;
+	background: var(--theme-primary);
 }

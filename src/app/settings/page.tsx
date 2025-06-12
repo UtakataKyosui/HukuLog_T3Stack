@@ -1,19 +1,25 @@
-import { BackButton } from "@/components/back-button";
 import { PasskeyManager } from "@/components/auth/passkey-manager";
+import { PasskeySetupPrompt } from "@/components/auth/passkey-setup-prompt";
+import { Navigation } from "@/components/navigation";
+import { ThemeSelector } from "@/components/settings/theme-selector";
+import { ProfileImageUpload } from "@/components/user/profile-image-upload";
 import { getServerSession } from "@/server/auth";
+import { userHasPasskeys } from "@/server/queries/user";
 import { redirect } from "next/navigation";
 
 export default async function SettingsPage() {
 	const session = await getServerSession();
 
 	if (!session) {
-		redirect("/login");
+		redirect("/");
 	}
+
+	const hasPasskeys = await userHasPasskeys(session.user.id);
 
 	return (
 		<div className="gradient-light min-h-screen">
+			<Navigation />
 			<div className="container mx-auto px-4 py-8">
-				<BackButton href="/" />
 				<div className="mb-8 text-center">
 					<h1 className="mb-2 font-bold text-4xl text-slate-900">設定</h1>
 					<p className="text-lg text-slate-700">
@@ -22,6 +28,8 @@ export default async function SettingsPage() {
 				</div>
 
 				<div className="mx-auto max-w-2xl space-y-6">
+					<ProfileImageUpload />
+
 					<div className="clean-card p-6">
 						<h2 className="mb-4 font-semibold text-slate-900 text-xl">
 							アカウント情報
@@ -37,7 +45,12 @@ export default async function SettingsPage() {
 						</div>
 					</div>
 
+					{/* パスキー設定プロンプト（Googleユーザーでパスキーがない場合） */}
+					{!hasPasskeys && session.user?.email && <PasskeySetupPrompt />}
+
 					<PasskeyManager />
+
+					<ThemeSelector />
 				</div>
 			</div>
 		</div>

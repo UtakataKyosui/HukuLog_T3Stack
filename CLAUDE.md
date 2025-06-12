@@ -22,6 +22,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run db:push` - Push schema changes directly to database
 - `npm run db:studio` - Open Drizzle Studio for database management
 
+**Testing:**
+- `npm run test` - Run Playwright end-to-end tests
+- `npm run test:ui` - Run Playwright tests with interactive UI
+- `npm run test:headed` - Run Playwright tests in headed mode (visible browser)
+
 ## Architecture
 
 This is a T3 Stack application using:
@@ -31,6 +36,7 @@ This is a T3 Stack application using:
 - **NextAuth.js** for authentication (configured with Discord provider)
 - **Biome** for linting and formatting
 - **Tailwind CSS v4** for styling
+- **Playwright** for end-to-end testing
 
 **Key Architecture Patterns:**
 
@@ -57,6 +63,12 @@ This is a T3 Stack application using:
 **Environment Configuration:**
 - Uses `@t3-oss/env-nextjs` for type-safe environment variables
 - Configuration in `src/env.js`
+
+**Testing (`tests/`):**
+- Uses Playwright for end-to-end testing
+- Test files follow `*.spec.ts` naming convention
+- Tests include filter functionality, pagination, and user interactions
+- Components use `data-testid` attributes for reliable test selectors
 
 **Path Aliases:**
 - `@/*` maps to `src/*` for cleaner imports

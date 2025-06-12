@@ -10,6 +10,7 @@ import {
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { passkey } from "better-auth/plugins/passkey";
+import { nextCookies } from "better-auth/next-js";
 
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {
@@ -24,7 +25,7 @@ export const auth = betterAuth({
 	}),
 	secret: env.BETTER_AUTH_SECRET || "dev-secret-key",
 	emailAndPassword: {
-		enabled: true,
+		enabled: false,
 	},
 	socialProviders:
 		env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET
@@ -35,7 +36,7 @@ export const auth = betterAuth({
 					},
 				}
 			: {},
-	plugins: [passkey()],
+	plugins: [passkey(), nextCookies()],
 	session: {
 		expiresIn: 60 * 60 * 24 * 7, // 7 days
 		updateAge: 60 * 60 * 24, // 1 day
