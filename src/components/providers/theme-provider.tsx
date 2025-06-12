@@ -203,13 +203,21 @@ export function ThemeProvider({
 		const config = themeConfigs[theme];
 		const root = document.documentElement;
 
-		// CSS カスタムプロパティを設定
+		// CSS カスタムプロパティを設定（両方の命名規則で）
 		Object.entries(config.colors).forEach(([key, value]) => {
 			root.style.setProperty(`--color-${key}`, value);
+			root.style.setProperty(`--theme-${key}`, value);
 		});
 
 		// データ属性も設定（CSS セレクターで使用可能）
 		root.setAttribute("data-theme", theme);
+		
+		// bodyクラスも設定（追加の確実性のため）
+		document.body.className = document.body.className.replace(/theme-\w+/g, '');
+		document.body.classList.add(`theme-${theme}`);
+		
+		// 強制的にスタイル再適用
+		root.style.setProperty('--force-update', Date.now().toString());
 	}, [theme, mounted]);
 
 	const themeConfig = themeConfigs[theme];

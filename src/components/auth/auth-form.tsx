@@ -8,8 +8,6 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth-client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
@@ -17,7 +15,6 @@ import { useState } from "react";
 export function AuthForm() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isSignUp, setIsSignUp] = useState(false);
-	const [name, setName] = useState("");
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const isExpired = searchParams.get("expired") === "true";
@@ -25,15 +22,14 @@ export function AuthForm() {
 	const handlePasskeySignUp = async () => {
 		setIsLoading(true);
 		try {
-			// TODO: Fix passkey API integration
-			alert("パスキー登録機能は現在準備中です。");
-			// await authClient.signUp.passkey({
-			// 	name,
-			// });
-			// router.push("/");
+			// Googleで登録してからパスキー設定ページにリダイレクト
+			await authClient.signIn.social({
+				provider: "google",
+				callbackURL: "/setup-passkey",
+			});
 		} catch (error) {
-			console.error("Passkey registration error:", error);
-			alert("パスキーでの登録に失敗しました。");
+			console.error("Google signup error:", error);
+			alert("Googleでの登録に失敗しました。");
 		} finally {
 			setIsLoading(false);
 		}
@@ -56,13 +52,16 @@ export function AuthForm() {
 	const handlePasskeyAuth = async () => {
 		setIsLoading(true);
 		try {
-			// TODO: Fix passkey API integration
-			alert("パスキーログイン機能は現在準備中です。");
-			// await authClient.signIn.passkey();
-			// router.push("/");
+			const result = await authClient.signIn.passkey();
+			
+			if (result?.error) {
+				throw new Error(result.error.message);
+			}
+			
+			router.push("/");
 		} catch (error) {
 			console.error("Passkey auth error:", error);
-			alert("パスキーでのログインに失敗しました。");
+			alert("パスキーでのログインに失敗しました。パスキーが登録されているか確認してください。");
 		} finally {
 			setIsLoading(false);
 		}
@@ -98,26 +97,38 @@ export function AuthForm() {
 				<CardContent className="space-y-4">
 					{isSignUp && (
 						<div className="space-y-4">
-							<div className="space-y-2">
-								<Label htmlFor="name" className="text-slate-700">
-									名前
-								</Label>
-								<Input
-									id="name"
-									type="text"
-									value={name}
-									onChange={(e) => setName(e.target.value)}
-									placeholder="お名前を入力"
-									required
-									className="border-slate-300 focus:border-slate-500"
-								/>
+							<div className="rounded-lg border border-blue-200 bg-blue-50 p-3">
+								<p className="text-blue-800 text-sm">
+									🔑 Googleアカウントで登録後、パスキーを設定できます<br />
+									より安全で簡単なログイン体験をお楽しみください
+								</p>
 							</div>
 							<Button
 								onClick={handlePasskeySignUp}
 								className="w-full bg-slate-800 text-white hover:bg-slate-700"
-								disabled={isLoading || !name.trim()}
+								disabled={isLoading}
 							>
-								{isLoading ? "登録中..." : "🔑 パスキーで新規登録"}
+								{isLoading ? "登録中..." : "🔑 Google登録 + パスキー設定"}
+							</Button>
+							
+							<div className="relative">
+								<div className="absolute inset-0 flex items-center">
+									<div className="w-full border-slate-300 border-t" />
+								</div>
+								<div className="relative flex justify-center text-xs">
+									<span className="bg-white px-2 text-slate-500">
+										または
+									</span>
+								</div>
+							</div>
+							
+							<Button
+								onClick={handleGoogleAuth}
+								variant="outline"
+								className="w-full border-slate-300 hover:bg-slate-50"
+								disabled={isLoading}
+							>
+								{isLoading ? "登録中..." : "Googleのみで新規登録"}
 							</Button>
 						</div>
 					)}
@@ -159,10 +170,7 @@ export function AuthForm() {
 					<div className="text-center">
 						<Button
 							variant="link"
-							onClick={() => {
-								setIsSignUp(!isSignUp);
-								setName("");
-							}}
+							onClick={() => setIsSignUp(!isSignUp)}
 							className="text-slate-600 hover:text-slate-800"
 						>
 							{isSignUp

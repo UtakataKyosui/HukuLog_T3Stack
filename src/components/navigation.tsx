@@ -36,12 +36,12 @@ export function Navigation() {
 	}
 
 	return (
-		<nav className="border-slate-200 border-b bg-white shadow-lg">
+		<nav className="theme-bg theme-border border-b shadow-lg">
 			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 				<div className="flex h-16 justify-between">
 					{/* Left side - Logo and main nav */}
 					<div className="flex items-center space-x-8">
-						<Link href="/outfits" className="font-bold text-slate-900 text-xl">
+						<Link href="/outfits" className="theme-text font-bold text-xl">
 							服管理アプリ
 						</Link>
 
@@ -49,13 +49,13 @@ export function Navigation() {
 						<div className="hidden space-x-6 md:flex">
 							<Link
 								href="/outfits"
-								className="rounded-md px-3 py-2 font-medium text-slate-700 text-sm transition-colors hover:text-slate-900"
+								className="theme-text-secondary theme-text rounded-md px-3 py-2 font-medium text-sm transition-colors hover:opacity-80"
 							>
 								コーディネート
 							</Link>
 							<Link
 								href="/wardrobe"
-								className="rounded-md px-3 py-2 font-medium text-slate-700 text-sm transition-colors hover:text-slate-900"
+								className="theme-text-secondary theme-text rounded-md px-3 py-2 font-medium text-sm transition-colors hover:opacity-80"
 							>
 								服の管理
 							</Link>

@@ -18,38 +18,26 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				// TypeScript & JavaScript
 				"bradlc.vscode-tailwindcss",
 				"esbenp.prettier-vscode",
 				"dbaeumer.vscode-eslint",
 				"ms-vscode.vscode-typescript-next",
-
-				// React & Next.js
 				"formulahendry.auto-rename-tag",
 				"christian-kohler.path-intellisense",
 				"bradlc.vscode-tailwindcss",
 				"ms-vscode.vscode-json",
-
-				// Database & Prisma
 				"Prisma.prisma",
 				"ms-mssql.mssql",
-
-				// tRPC & API
 				"ms-vscode.vscode-json",
 				"humao.rest-client",
-
-				// Git & Development Tools
 				"eamodio.gitlens",
 				"ms-vscode.vscode-json",
 				"usernamehw.errorlens",
 				"christian-kohler.npm-intellisense",
-
-				// Docker
 				"ms-azuretools.vscode-docker",
-
-				// Theme & UI
 				"PKief.material-icon-theme",
-				"GitHub.github-vscode-theme"
+				"GitHub.github-vscode-theme",
+				"MichaelCurrin.auto-commit-msg"
 			],
 
 			"settings": {

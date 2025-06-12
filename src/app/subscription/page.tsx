@@ -1,4 +1,3 @@
-import { Navigation } from "@/components/navigation";
 import { getServerAuthSession } from "@/server/auth";
 import { redirect } from "next/navigation";
 import SubscriptionPlans from "./_components/subscription-plans";
@@ -12,7 +11,6 @@ export default async function SubscriptionPage() {
 
 	return (
 		<div className="gradient-pink-soft min-h-screen">
-			<Navigation />
 			<div className="container mx-auto px-4 py-8">
 				<div className="mb-12 text-center">
 					<h1 className="mb-4 font-bold text-5xl text-slate-900">

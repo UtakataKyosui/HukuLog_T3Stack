@@ -9,8 +9,8 @@ import {
 } from "@/server/db/schema";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { passkey } from "better-auth/plugins/passkey";
 import { nextCookies } from "better-auth/next-js";
+import { passkey } from "better-auth/plugins/passkey";
 
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {
@@ -24,6 +24,21 @@ export const auth = betterAuth({
 		},
 	}),
 	secret: env.BETTER_AUTH_SECRET || "dev-secret-key",
+	baseURL: process.env.NODE_ENV === "production" 
+		? process.env.NEXT_PUBLIC_APP_URL 
+		: process.env.CODESPACE_NAME 
+			? `https://${process.env.CODESPACE_NAME}-3000.${process.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}`
+			: "http://localhost:3000",
+	trustedOrigins: [
+		"http://localhost:3000",
+		"https://localhost:3000",
+		...(process.env.CODESPACE_NAME 
+			? [`https://${process.env.CODESPACE_NAME}-3000.${process.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}`]
+			: []),
+		...(process.env.NEXT_PUBLIC_APP_URL 
+			? [process.env.NEXT_PUBLIC_APP_URL]
+			: []),
+	],
 	emailAndPassword: {
 		enabled: false,
 	},
@@ -36,7 +51,27 @@ export const auth = betterAuth({
 					},
 				}
 			: {},
-	plugins: [passkey(), nextCookies()],
+	plugins: [
+		passkey({
+			rpID: process.env.NODE_ENV === "production" 
+				? new URL(process.env.NEXT_PUBLIC_APP_URL || "").hostname
+				: process.env.CODESPACE_NAME 
+					? `${process.env.CODESPACE_NAME}-3000.${process.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}`
+					: "localhost",
+			rpName: "Workspace App",
+			origin: [
+				...(process.env.NODE_ENV === "production" && process.env.NEXT_PUBLIC_APP_URL
+					? [process.env.NEXT_PUBLIC_APP_URL]
+					: []),
+				...(process.env.CODESPACE_NAME 
+					? [`https://${process.env.CODESPACE_NAME}-3000.${process.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}`]
+					: []),
+				"http://localhost:3000",
+				"https://localhost:3000",
+			],
+		}),
+		nextCookies()
+	],
 	session: {
 		expiresIn: 60 * 60 * 24 * 7, // 7 days
 		updateAge: 60 * 60 * 24, // 1 day

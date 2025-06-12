@@ -121,9 +121,11 @@
 	}
 	body {
 		@apply text-foreground;
-		background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%);
+		background: var(--theme-background, #ffffff) !important;
+		color: var(--theme-text, #1e293b) !important;
 		min-height: 100vh;
 		font-family: system-ui, -apple-system, sans-serif;
+		transition: background-color 0.3s ease, color 0.3s ease;
 	}
 
 	/* 全ての入力要素に枠線を適用 */
@@ -401,13 +403,46 @@
 	background-color: var(--theme-error) !important;
 }
 
-/* ダークテーマ対応 */
+/* 全テーマ共通の強制適用 */
+html[data-theme] body {
+	background: var(--theme-background) !important;
+	color: var(--theme-text) !important;
+}
+
+html[data-theme] * {
+	transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* 主要要素への強制適用 */
+html[data-theme] main,
+html[data-theme] div[class*="min-h-screen"],
+html[data-theme] div[class*="gradient"],
+html[data-theme] nav {
+	background: var(--theme-background) !important;
+	color: var(--theme-text) !important;
+}
+
+html[data-theme] h1,
+html[data-theme] h2,
+html[data-theme] h3,
+html[data-theme] h4,
+html[data-theme] h5,
+html[data-theme] h6 {
+	color: var(--theme-text) !important;
+}
+
+html[data-theme] p {
+	color: var(--theme-text-secondary) !important;
+}
+
+/* 各テーマ専用の追加スタイル */
 [data-theme="dark"] body {
-	background: linear-gradient(
-		135deg,
-		var(--theme-background) 0%,
-		var(--theme-surface) 100%
-	);
+	background: var(--theme-background) !important;
+	color: var(--theme-text) !important;
+}
+
+[data-theme="dark"] * {
+	border-color: var(--theme-border, #334155) !important;
 }
 
 [data-theme="dark"] .gradient-light {
@@ -418,10 +453,18 @@
 	);
 }
 
+/* カードスタイルのテーマ適用 */
+html[data-theme] .clean-card,
+html[data-theme] [class*="card"] {
+	background: var(--theme-surface) !important;
+	border-color: var(--theme-border) !important;
+	color: var(--theme-text) !important;
+}
+
 [data-theme="dark"] .clean-card {
-	background: var(--theme-surface);
-	border-color: var(--theme-border);
-	color: var(--theme-text);
+	background: var(--theme-surface) !important;
+	border-color: var(--theme-border) !important;
+	color: var(--theme-text) !important;
 }
 
 [data-theme="dark"] .clean-input {

@@ -17,7 +17,7 @@ import { Label } from "@/components/ui/label";
 import { Check } from "lucide-react";
 
 export function ThemeSelector() {
-	const { theme, setTheme, allThemes } = useTheme();
+	const { theme, setTheme, allThemes, themeConfig } = useTheme();
 
 	return (
 		<Card>
@@ -124,6 +124,59 @@ export function ThemeSelector() {
 							• <strong>青色盲対応</strong>: 3型色覚（青色盲）の方向けのテーマ
 						</li>
 					</ul>
+				</div>
+
+				{/* テーマプレビューエリア */}
+				<div className="theme-bg theme-border rounded-lg border-2 p-4">
+					<h4 className="theme-text mb-3 font-medium text-sm">
+						🎨 テーマプレビュー
+					</h4>
+					<div className="theme-bg-surface theme-border rounded-lg border p-3">
+						<p className="theme-text mb-2 font-medium">メインテキスト</p>
+						<p className="theme-text-secondary text-sm">セカンダリテキスト</p>
+						<div className="mt-3 flex gap-2">
+							<div className="theme-bg-primary h-6 w-6 rounded"></div>
+							<div className="theme-bg-accent h-6 w-6 rounded"></div>
+							<div className="theme-bg-success h-6 w-6 rounded"></div>
+						</div>
+					</div>
+				</div>
+
+				{/* 現在のテーマ確認 */}
+				<div className="theme-bg-surface theme-border rounded-lg border p-4">
+					<h4 className="mb-3 font-medium text-gray-900 text-sm">
+						🔍 現在適用中のテーマ
+					</h4>
+					<div className="space-y-2 text-sm">
+						<div>
+							<strong>テーマID:</strong> <code className="rounded bg-gray-200 px-1">{theme}</code>
+						</div>
+						<div>
+							<strong>テーマ名:</strong> {themeConfig.name}
+						</div>
+						<div className="grid grid-cols-2 gap-2">
+							<div>
+								<strong>プライマリ:</strong>
+								<div className="mt-1 flex items-center gap-2">
+									<div 
+										className="h-4 w-8 rounded border" 
+										style={{ backgroundColor: themeConfig.colors.primary }}
+									/>
+									<code className="text-xs">{themeConfig.colors.primary}</code>
+								</div>
+							</div>
+							<div>
+								<strong>背景:</strong>
+								<div className="mt-1 flex items-center gap-2">
+									<div 
+										className="h-4 w-8 rounded border" 
+										style={{ backgroundColor: themeConfig.colors.background }}
+									/>
+									<code className="text-xs">{themeConfig.colors.background}</code>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 
 				<div className="flex justify-end">
