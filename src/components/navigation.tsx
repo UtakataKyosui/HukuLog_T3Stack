@@ -1,6 +1,8 @@
 "use client";
 
 import { useSession } from "@/components/providers/session-provider";
+import { FavoriteThemeSelector } from "@/components/theme/favorite-theme-selector";
+import { QuickThemeSelector } from "@/components/theme/quick-theme-selector";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 import { Menu, Plus, Settings, User, X } from "lucide-react";
@@ -69,7 +71,7 @@ export function Navigation() {
 							<Button
 								onClick={() => router.push("/outfits?create=true")}
 								size="sm"
-								className="bg-blue-600 text-white hover:bg-blue-700"
+								className="bg-theme-primary text-theme-background hover:bg-theme-secondary"
 							>
 								<Plus className="mr-1 h-4 w-4" />
 								コーデ作成
@@ -78,7 +80,7 @@ export function Navigation() {
 								onClick={() => router.push("/wardrobe?add=true")}
 								variant="outline"
 								size="sm"
-								className="border-slate-300 text-slate-700 hover:bg-slate-50"
+								className="border-theme-border text-theme-text hover:bg-theme-surface"
 							>
 								<Plus className="mr-1 h-4 w-4" />
 								服を追加
@@ -87,7 +89,7 @@ export function Navigation() {
 
 						{/* User menu with avatar */}
 						<div className="flex items-center space-x-3">
-							<span className="hidden max-w-20 truncate text-slate-700 text-sm sm:block lg:max-w-none">
+							<span className="hidden max-w-20 truncate text-theme-text text-sm sm:block lg:max-w-none">
 								{session.user.name}さん
 							</span>
 
@@ -98,14 +100,22 @@ export function Navigation() {
 									className="h-8 w-8 rounded-full"
 								/>
 							) : (
-								<div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-300">
-									<User className="h-5 w-5 text-gray-600" />
+								<div className="flex h-8 w-8 items-center justify-center rounded-full bg-theme-surface border border-theme-border">
+									<User className="h-5 w-5 text-theme-text-secondary" />
 								</div>
 							)}
 
+							{/* お気に入りテーマセレクター */}
+							<div className="hidden lg:block">
+								<FavoriteThemeSelector />
+							</div>
+
+							{/* クイックテーマセレクター */}
+							<QuickThemeSelector />
+
 							<Link
 								href="/settings"
-								className="rounded-md p-2 text-slate-700 transition-colors hover:text-slate-900"
+								className="rounded-md p-2 text-theme-text-secondary transition-colors hover:text-theme-text"
 								title="設定"
 							>
 								<Settings className="h-5 w-5" />
@@ -117,7 +127,7 @@ export function Navigation() {
 							onClick={handleSignOut}
 							variant="outline"
 							size="sm"
-							className="border-slate-300 text-slate-700 hover:bg-slate-50"
+							className="border-theme-border text-theme-text hover:bg-theme-surface"
 						>
 							ログアウト
 						</Button>
@@ -125,7 +135,7 @@ export function Navigation() {
 						{/* Mobile menu button */}
 						<button
 							onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-							className="rounded-md p-2 text-slate-700 hover:bg-slate-100 hover:text-slate-900 md:hidden"
+							className="rounded-md p-2 text-theme-text-secondary hover:bg-theme-surface hover:text-theme-text md:hidden"
 						>
 							{isMobileMenuOpen ? (
 								<X className="h-6 w-6" />
@@ -138,25 +148,25 @@ export function Navigation() {
 
 				{/* Mobile menu */}
 				{isMobileMenuOpen && (
-					<div className="border-slate-200 border-t md:hidden">
+					<div className="border-theme-border border-t md:hidden">
 						<div className="space-y-1 px-2 pt-2 pb-3">
 							<Link
 								href="/outfits"
-								className="block rounded-md px-3 py-2 font-medium text-base text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+								className="block rounded-md px-3 py-2 font-medium text-base text-theme-text hover:bg-theme-surface hover:text-theme-primary"
 								onClick={() => setIsMobileMenuOpen(false)}
 							>
 								コーディネート
 							</Link>
 							<Link
 								href="/wardrobe"
-								className="block rounded-md px-3 py-2 font-medium text-base text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+								className="block rounded-md px-3 py-2 font-medium text-base text-theme-text hover:bg-theme-surface hover:text-theme-primary"
 								onClick={() => setIsMobileMenuOpen(false)}
 							>
 								服の管理
 							</Link>
 							<Link
 								href="/subscription"
-								className="block rounded-md px-3 py-2 font-medium text-base text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+								className="block rounded-md px-3 py-2 font-medium text-base text-theme-text hover:bg-theme-surface hover:text-theme-primary"
 								onClick={() => setIsMobileMenuOpen(false)}
 							>
 								プレミアム
@@ -167,7 +177,7 @@ export function Navigation() {
 										router.push("/outfits?create=true");
 										setIsMobileMenuOpen(false);
 									}}
-									className="w-full bg-blue-600 text-white hover:bg-blue-700"
+									className="w-full bg-theme-primary text-theme-background hover:bg-theme-secondary"
 								>
 									<Plus className="mr-1 h-4 w-4" />
 									コーデ作成
@@ -178,11 +188,21 @@ export function Navigation() {
 										setIsMobileMenuOpen(false);
 									}}
 									variant="outline"
-									className="w-full border-slate-300 text-slate-700 hover:bg-slate-50"
+									className="w-full border-theme-border text-theme-text hover:bg-theme-surface"
 								>
 									<Plus className="mr-1 h-4 w-4" />
 									服を追加
 								</Button>
+								
+								{/* モバイル用テーマセレクター */}
+								<div className="pt-2 border-t border-theme-border space-y-2">
+									<div className="flex items-center justify-center">
+										<FavoriteThemeSelector />
+									</div>
+									<div className="flex items-center justify-center">
+										<QuickThemeSelector />
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

@@ -37,14 +37,14 @@ export function ThemeSelector() {
 							key={themeConfig.id}
 							className={`relative cursor-pointer rounded-lg border-2 p-4 transition-all hover:shadow-md ${
 								theme === themeConfig.id
-									? "border-blue-500 bg-blue-50"
-									: "border-gray-200 hover:border-gray-300"
+									? "theme-border-primary theme-bg-primary/10"
+									: "theme-border hover:theme-border-secondary"
 							}`}
 							onClick={() => setTheme(themeConfig.id)}
 						>
 							{theme === themeConfig.id && (
 								<div className="absolute top-2 right-2">
-									<Check className="h-5 w-5 text-blue-600" />
+									<Check className="h-5 w-5 theme-text-primary" />
 								</div>
 							)}
 
@@ -63,7 +63,7 @@ export function ThemeSelector() {
 									<Label className="cursor-pointer font-semibold text-sm">
 										{themeConfig.name}
 									</Label>
-									<p className="mt-1 text-gray-600 text-xs">
+									<p className="mt-1 theme-text-secondary text-xs">
 										{themeConfig.description}
 									</p>
 								</div>
@@ -102,11 +102,11 @@ export function ThemeSelector() {
 				</div>
 
 				{/* アクセシビリティ情報 */}
-				<div className="mt-6 rounded-lg bg-blue-50 p-4">
-					<h4 className="mb-2 font-medium text-blue-900 text-sm">
+				<div className="mt-6 rounded-lg theme-bg-primary/10 p-4">
+					<h4 className="mb-2 font-medium theme-text text-sm">
 						💡 アクセシビリティテーマについて
 					</h4>
-					<ul className="space-y-1 text-blue-800 text-xs">
+					<ul className="space-y-1 theme-text-secondary text-xs">
 						<li>
 							• <strong>目に優しい</strong>: ブルーライトを抑えた暖色系のテーマ
 						</li>
@@ -127,29 +127,29 @@ export function ThemeSelector() {
 				</div>
 
 				{/* テーマプレビューエリア */}
-				<div className="theme-bg theme-border rounded-lg border-2 p-4">
-					<h4 className="theme-text mb-3 font-medium text-sm">
+				<div className="bg-theme-background border-theme-border text-theme-text rounded-lg border-2 p-4">
+					<h4 className="text-theme-text mb-3 font-medium text-sm">
 						🎨 テーマプレビュー
 					</h4>
-					<div className="theme-bg-surface theme-border rounded-lg border p-3">
-						<p className="theme-text mb-2 font-medium">メインテキスト</p>
-						<p className="theme-text-secondary text-sm">セカンダリテキスト</p>
+					<div className="bg-theme-surface border-theme-border rounded-lg border p-3">
+						<p className="text-theme-text mb-2 font-medium">メインテキスト</p>
+						<p className="text-theme-text-secondary text-sm">セカンダリテキスト</p>
 						<div className="mt-3 flex gap-2">
-							<div className="theme-bg-primary h-6 w-6 rounded"></div>
-							<div className="theme-bg-accent h-6 w-6 rounded"></div>
-							<div className="theme-bg-success h-6 w-6 rounded"></div>
+							<div className="bg-theme-primary h-6 w-6 rounded"></div>
+							<div className="bg-theme-accent h-6 w-6 rounded"></div>
+							<div className="bg-theme-success h-6 w-6 rounded"></div>
 						</div>
 					</div>
 				</div>
 
 				{/* 現在のテーマ確認 */}
 				<div className="theme-bg-surface theme-border rounded-lg border p-4">
-					<h4 className="mb-3 font-medium text-gray-900 text-sm">
+					<h4 className="mb-3 font-medium theme-text text-sm">
 						🔍 現在適用中のテーマ
 					</h4>
 					<div className="space-y-2 text-sm">
 						<div>
-							<strong>テーマID:</strong> <code className="rounded bg-gray-200 px-1">{theme}</code>
+							<strong>テーマID:</strong> <code className="rounded theme-bg-surface px-1">{theme}</code>
 						</div>
 						<div>
 							<strong>テーマ名:</strong> {themeConfig.name}

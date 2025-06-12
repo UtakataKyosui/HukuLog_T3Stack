@@ -5,6 +5,8 @@ import { Geist } from "next/font/google";
 
 import { Navigation } from "@/components/navigation";
 import { SessionProvider } from "@/components/providers/session-provider";
+import { AccessibilityThemeManager } from "@/components/theme/accessibility-theme-manager";
+import { VisualFeedbackSystem } from "@/components/accessibility/visual-feedback-system";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { TRPCReactProvider } from "@/trpc/react";
 
@@ -35,6 +37,8 @@ export default function RootLayout({
 		<html lang="ja" className={`${geist.variable}`}>
 			<body>
 				<ThemeProvider>
+					<AccessibilityThemeManager />
+					<VisualFeedbackSystem />
 					<SessionProvider>
 						<TRPCReactProvider>
 							<Navigation />

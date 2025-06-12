@@ -141,10 +141,11 @@
 	input[type="datetime-local"],
 	textarea,
 	select {
-		border: 2px solid #e2e8f0;
+		border: 2px solid var(--theme-border, #e2e8f0);
 		border-radius: 8px;
 		padding: 8px 12px;
-		background: #ffffff;
+		background: var(--theme-surface, #ffffff);
+		color: var(--theme-text, #1e293b);
 		transition: all 0.2s ease;
 	}
 
@@ -160,8 +161,8 @@
 	input[type="datetime-local"]:focus,
 	textarea:focus,
 	select:focus {
-		border-color: #475569;
-		box-shadow: 0 0 0 3px rgba(71, 85, 105, 0.1);
+		border-color: var(--theme-primary, #3b82f6);
+		box-shadow: 0 0 0 3px color-mix(in srgb, var(--theme-primary, #3b82f6) 10%, transparent);
 		outline: none;
 	}
 
@@ -196,62 +197,63 @@
 	}
 
 	::-webkit-scrollbar-track {
-		background: #f1f5f9;
+		background: var(--theme-surface, #f1f5f9);
 		border-radius: 4px;
 	}
 
 	::-webkit-scrollbar-thumb {
-		background: linear-gradient(135deg, #475569, #334155);
+		background: linear-gradient(135deg, var(--theme-border, #475569), var(--theme-text-secondary, #334155));
 		border-radius: 4px;
 	}
 
 	::-webkit-scrollbar-thumb:hover {
-		background: linear-gradient(135deg, #334155, #1e293b);
+		background: linear-gradient(135deg, var(--theme-text-secondary, #334155), var(--theme-text, #1e293b));
 	}
 }
 
 /* Clean gradient classes */
 .gradient-neutral {
-	background: linear-gradient(135deg, #475569 0%, #334155 100%);
+	background: linear-gradient(135deg, var(--theme-primary, #3b82f6) 0%, var(--theme-secondary, #64748b) 100%);
 }
 
 .gradient-light {
-	background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+	background: linear-gradient(135deg, var(--theme-surface, #f8fafc) 0%, var(--theme-background, #ffffff) 100%);
 }
 
 .gradient-soft {
-	background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+	background: linear-gradient(135deg, var(--theme-background, #ffffff) 0%, var(--theme-surface, #f8fafc) 100%);
 }
 
 /* Clean design system */
 .clean-card {
-	background: #ffffff;
+	background: var(--theme-surface, #ffffff);
 	border-radius: 12px;
-	border: 2px solid #e2e8f0;
+	border: 2px solid var(--theme-border, #e2e8f0);
+	color: var(--theme-text, #1e293b);
 	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px
 		rgba(0, 0, 0, 0.06);
 	transition: all 0.2s ease;
 }
 
 .clean-card:hover {
-	border-color: #cbd5e1;
+	border-color: var(--theme-primary, #3b82f6);
 	box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px
 		rgba(0, 0, 0, 0.05);
 	transform: translateY(-1px);
 }
 
 .clean-button {
-	background: linear-gradient(135deg, #475569, #334155);
+	background: linear-gradient(135deg, var(--theme-primary, #3b82f6), var(--theme-secondary, #64748b));
 	border-radius: 8px;
 	border: none;
-	color: #ffffff;
+	color: var(--theme-background, #ffffff);
 	font-weight: 600;
 	box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
 	transition: all 0.2s ease;
 }
 
 .clean-button:hover {
-	background: linear-gradient(135deg, #334155, #1e293b);
+	background: linear-gradient(135deg, var(--theme-secondary, #64748b), var(--theme-primary, #3b82f6));
 	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px
 		rgba(0, 0, 0, 0.06);
 	transform: translateY(-1px);
@@ -263,15 +265,16 @@
 }
 
 .clean-input {
-	background: #ffffff;
+	background: var(--theme-surface, #ffffff);
 	border-radius: 8px;
-	border: 2px solid #e2e8f0;
+	border: 2px solid var(--theme-border, #e2e8f0);
+	color: var(--theme-text, #1e293b);
 	transition: all 0.2s ease;
 }
 
 .clean-input:focus {
-	border-color: #475569;
-	box-shadow: 0 0 0 3px rgba(71, 85, 105, 0.1);
+	border-color: var(--theme-primary, #3b82f6);
+	box-shadow: 0 0 0 3px color-mix(in srgb, var(--theme-primary, #3b82f6) 10%, transparent);
 	outline: none;
 }
 
@@ -304,45 +307,137 @@
 
 /* Status indicators */
 .status-success {
-	background-color: #10b981;
-	color: #ffffff;
+	background-color: var(--theme-success, #10b981);
+	color: var(--theme-background, #ffffff);
 }
 
 .status-warning {
-	background-color: #f59e0b;
-	color: #ffffff;
+	background-color: var(--theme-warning, #f59e0b);
+	color: var(--theme-background, #ffffff);
 }
 
 .status-error {
-	background-color: #dc2626;
-	color: #ffffff;
+	background-color: var(--theme-error, #dc2626);
+	color: var(--theme-background, #ffffff);
 }
 
 .status-info {
-	background-color: #3b82f6;
-	color: #ffffff;
+	background-color: var(--theme-primary, #3b82f6);
+	color: var(--theme-background, #ffffff);
 }
 
 /* ========================================
-   テーマシステム用CSS変数とスタイル
+   テーマシステム用CSS変数とスタイル（Tailwind v4準拠）
    ======================================== */
 
-/* デフォルトテーマの追加変数 */
-:root {
-	--theme-primary: #3b82f6;
-	--theme-secondary: #64748b;
-	--theme-background: #ffffff;
-	--theme-surface: #f8fafc;
-	--theme-text: #1e293b;
-	--theme-text-secondary: #64748b;
-	--theme-border: #e2e8f0;
-	--theme-accent: #f59e0b;
-	--theme-success: #10b981;
-	--theme-warning: #f59e0b;
-	--theme-error: #ef4444;
+/* デフォルトテーマの定義 */
+@theme {
+	--color-theme-primary: #3b82f6;
+	--color-theme-secondary: #64748b;
+	--color-theme-background: #ffffff;
+	--color-theme-surface: #f8fafc;
+	--color-theme-text: #1e293b;
+	--color-theme-text-secondary: #64748b;
+	--color-theme-border: #e2e8f0;
+	--color-theme-accent: #f59e0b;
+	--color-theme-success: #10b981;
+	--color-theme-warning: #f59e0b;
+	--color-theme-error: #ef4444;
 }
 
-/* テーマ適用のためのユーティリティクラス */
+/* 後方互換性のための追加変数 */
+:root {
+	--theme-primary: var(--color-theme-primary);
+	--theme-secondary: var(--color-theme-secondary);
+	--theme-background: var(--color-theme-background);
+	--theme-surface: var(--color-theme-surface);
+	--theme-text: var(--color-theme-text);
+	--theme-text-secondary: var(--color-theme-text-secondary);
+	--theme-border: var(--color-theme-border);
+	--theme-accent: var(--color-theme-accent);
+	--theme-success: var(--color-theme-success);
+	--theme-warning: var(--color-theme-warning);
+	--theme-error: var(--color-theme-error);
+}
+
+/* テーマ適用のためのユーティリティクラス（Tailwind v4準拠） */
+.bg-theme-background {
+	background-color: var(--color-theme-background) !important;
+}
+
+.bg-theme-surface {
+	background-color: var(--color-theme-surface) !important;
+}
+
+.bg-theme-primary {
+	background-color: var(--color-theme-primary) !important;
+}
+
+.bg-theme-secondary {
+	background-color: var(--color-theme-secondary) !important;
+}
+
+.bg-theme-accent {
+	background-color: var(--color-theme-accent) !important;
+}
+
+.bg-theme-success {
+	background-color: var(--color-theme-success) !important;
+}
+
+.bg-theme-warning {
+	background-color: var(--color-theme-warning) !important;
+}
+
+.bg-theme-error {
+	background-color: var(--color-theme-error) !important;
+}
+
+.text-theme-text {
+	color: var(--color-theme-text) !important;
+}
+
+.text-theme-text-secondary {
+	color: var(--color-theme-text-secondary) !important;
+}
+
+.text-theme-primary {
+	color: var(--color-theme-primary) !important;
+}
+
+.text-theme-secondary {
+	color: var(--color-theme-secondary) !important;
+}
+
+.text-theme-accent {
+	color: var(--color-theme-accent) !important;
+}
+
+.text-theme-success {
+	color: var(--color-theme-success) !important;
+}
+
+.text-theme-warning {
+	color: var(--color-theme-warning) !important;
+}
+
+.text-theme-error {
+	color: var(--color-theme-error) !important;
+}
+
+.border-theme-border {
+	border-color: var(--color-theme-border) !important;
+}
+
+.border-theme-primary {
+	border-color: var(--color-theme-primary) !important;
+}
+
+.border-theme-secondary {
+	border-color: var(--color-theme-secondary) !important;
+}
+
+/* 後方互換性のための従来クラス */
 .theme-bg {
 	background-color: var(--theme-background) !important;
 }
@@ -403,6 +498,18 @@
 	background-color: var(--theme-error) !important;
 }
 
+.theme-text-primary {
+	color: var(--theme-primary) !important;
+}
+
+.theme-border-primary {
+	border-color: var(--theme-primary) !important;
+}
+
+.theme-border-secondary {
+	border-color: var(--theme-text-secondary) !important;
+}
+
 /* 全テーマ共通の強制適用 */
 html[data-theme] body {
 	background: var(--theme-background) !important;
@@ -422,6 +529,17 @@ html[data-theme] nav {
 	color: var(--theme-text) !important;
 }
 
+/* コンテナ系要素への背景適用 */
+html[data-theme] .container,
+html[data-theme] section,
+html[data-theme] article,
+html[data-theme] .space-y-6 > div:not([class*="clean-card"]),
+html[data-theme] .max-w-2xl,
+html[data-theme] .max-w-4xl,
+html[data-theme] .max-w-6xl {
+	background: var(--theme-background) !important;
+}
+
 html[data-theme] h1,
 html[data-theme] h2,
 html[data-theme] h3,
@@ -433,6 +551,26 @@ html[data-theme] h6 {
 
 html[data-theme] p {
 	color: var(--theme-text-secondary) !important;
+}
+
+html[data-theme] span {
+	color: inherit;
+}
+
+/* グリッドアイテムへの背景適用 */
+html[data-theme] .grid > div {
+	background: var(--theme-surface);
+	border-radius: 8px;
+	padding: 1rem;
+}
+
+/* リンクスタイルの統一 */
+html[data-theme] a:not([class*="clean-"]):not([class*="bg-"]) {
+	color: var(--theme-primary) !important;
+}
+
+html[data-theme] a:not([class*="clean-"]):not([class*="bg-"]):hover {
+	color: var(--theme-secondary) !important;
 }
 
 /* 各テーマ専用の追加スタイル */
@@ -453,12 +591,110 @@ html[data-theme] p {
 	);
 }
 
+/* ハイコントラストテーマの強化 */
+[data-theme="high-contrast"] {
+	--shadow-color: rgba(0, 0, 0, 0.8);
+}
+
+[data-theme="high-contrast"] body {
+	background: var(--theme-background) !important;
+	color: var(--theme-text) !important;
+	font-weight: 500;
+}
+
+[data-theme="high-contrast"] .clean-card,
+[data-theme="high-contrast"] [class*="card"] {
+	background: var(--theme-surface) !important;
+	border: 3px solid var(--theme-border) !important;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* 緑色盲対応テーマ（青系強調） */
+[data-theme="deuteranopia"] body {
+	background: var(--theme-background) !important;
+	color: var(--theme-text) !important;
+}
+
+[data-theme="deuteranopia"] .clean-card,
+[data-theme="deuteranopia"] [class*="card"] {
+	background: var(--theme-surface) !important;
+	border: 2px solid var(--theme-border) !important;
+	box-shadow: 0 4px 12px rgba(0, 102, 204, 0.15) !important;
+}
+
+[data-theme="deuteranopia"] nav {
+	box-shadow: 0 2px 8px rgba(0, 102, 204, 0.2) !important;
+}
+
+/* 赤色盲対応テーマ（青系強調） */
+[data-theme="protanopia"] body {
+	background: var(--theme-background) !important;
+	color: var(--theme-text) !important;
+}
+
+[data-theme="protanopia"] .clean-card,
+[data-theme="protanopia"] [class*="card"] {
+	background: var(--theme-surface) !important;
+	border: 2px solid var(--theme-border) !important;
+	box-shadow: 0 4px 12px rgba(0, 153, 204, 0.15) !important;
+}
+
+[data-theme="protanopia"] nav {
+	box-shadow: 0 2px 8px rgba(0, 153, 204, 0.2) !important;
+}
+
+/* 青色盲対応テーマ（暖色系強調） */
+[data-theme="tritanopia"] body {
+	background: var(--theme-background) !important;
+	color: var(--theme-text) !important;
+}
+
+[data-theme="tritanopia"] .clean-card,
+[data-theme="tritanopia"] [class*="card"] {
+	background: var(--theme-surface) !important;
+	border: 2px solid var(--theme-border) !important;
+	box-shadow: 0 4px 12px rgba(204, 51, 102, 0.15) !important;
+}
+
+[data-theme="tritanopia"] nav {
+	box-shadow: 0 2px 8px rgba(204, 51, 102, 0.2) !important;
+}
+
+/* 全テーマ対応のgradient-light */
+html[data-theme] .gradient-light {
+	background: linear-gradient(
+		135deg,
+		var(--theme-surface) 0%,
+		var(--theme-background) 100%
+	) !important;
+}
+
 /* カードスタイルのテーマ適用 */
 html[data-theme] .clean-card,
 html[data-theme] [class*="card"] {
 	background: var(--theme-surface) !important;
 	border-color: var(--theme-border) !important;
 	color: var(--theme-text) !important;
+}
+
+/* カードの詳細部分のテーマ適用 */
+html[data-theme] .clean-card h1,
+html[data-theme] .clean-card h2,
+html[data-theme] .clean-card h3,
+html[data-theme] .clean-card h4,
+html[data-theme] .clean-card h5,
+html[data-theme] .clean-card h6 {
+	color: var(--theme-text) !important;
+}
+
+html[data-theme] .clean-card p {
+	color: var(--theme-text-secondary) !important;
+}
+
+/* ボタンスタイルのテーマ適用 */
+html[data-theme] .clean-button {
+	background: linear-gradient(135deg, var(--theme-primary), var(--theme-secondary)) !important;
+	color: var(--theme-background) !important;
 }
 
 [data-theme="dark"] .clean-card {

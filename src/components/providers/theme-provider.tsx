@@ -92,16 +92,16 @@ export const themeConfigs: Record<Theme, ThemeConfig> = {
 		description: "視認性を最大化した高コントラストテーマ",
 		colors: {
 			primary: "#000000",
-			secondary: "#4b5563",
+			secondary: "#333333",
 			background: "#ffffff",
-			surface: "#f9fafb",
+			surface: "#f0f0f0",
 			text: "#000000",
-			textSecondary: "#374151",
+			textSecondary: "#333333",
 			border: "#000000",
-			accent: "#b45309",
-			success: "#065f46",
-			warning: "#b45309",
-			error: "#991b1b",
+			accent: "#ff6600",
+			success: "#006600",
+			warning: "#cc6600",
+			error: "#cc0000",
 		},
 	},
 	deuteranopia: {
@@ -109,17 +109,17 @@ export const themeConfigs: Record<Theme, ThemeConfig> = {
 		name: "緑色盲対応",
 		description: "2型色覚（緑色盲）の方向けのテーマ",
 		colors: {
-			primary: "#2563eb",
-			secondary: "#6b7280",
-			background: "#ffffff",
-			surface: "#f8fafc",
-			text: "#1e293b",
-			textSecondary: "#6b7280",
-			border: "#e2e8f0",
-			accent: "#ea580c",
-			success: "#0891b2",
-			warning: "#ea580c",
-			error: "#dc2626",
+			primary: "#0066cc",
+			secondary: "#4d79a4",
+			background: "#f7f9fc",
+			surface: "#e8f2ff",
+			text: "#1a365d",
+			textSecondary: "#4a5568",
+			border: "#bee3f8",
+			accent: "#ff7700",
+			success: "#0088cc",
+			warning: "#ff9500",
+			error: "#cc3300",
 		},
 	},
 	protanopia: {
@@ -127,17 +127,17 @@ export const themeConfigs: Record<Theme, ThemeConfig> = {
 		name: "赤色盲対応",
 		description: "1型色覚（赤色盲）の方向けのテーマ",
 		colors: {
-			primary: "#0284c7",
-			secondary: "#6b7280",
-			background: "#ffffff",
-			surface: "#f8fafc",
-			text: "#1e293b",
-			textSecondary: "#6b7280",
-			border: "#e2e8f0",
-			accent: "#0891b2",
-			success: "#0284c7",
-			warning: "#f59e0b",
-			error: "#4b5563",
+			primary: "#0099cc",
+			secondary: "#336699",
+			background: "#f0f8ff",
+			surface: "#e0f0ff",
+			text: "#003366",
+			textSecondary: "#556b8d",
+			border: "#99ccff",
+			accent: "#6699cc",
+			success: "#0099cc",
+			warning: "#ffaa00",
+			error: "#666666",
 		},
 	},
 	tritanopia: {
@@ -145,17 +145,17 @@ export const themeConfigs: Record<Theme, ThemeConfig> = {
 		name: "青色盲対応",
 		description: "3型色覚（青色盲）の方向けのテーマ",
 		colors: {
-			primary: "#dc2626",
-			secondary: "#6b7280",
-			background: "#ffffff",
-			surface: "#f8fafc",
-			text: "#1e293b",
-			textSecondary: "#6b7280",
-			border: "#e2e8f0",
-			accent: "#ea580c",
-			success: "#dc2626",
-			warning: "#ea580c",
-			error: "#4b5563",
+			primary: "#cc3366",
+			secondary: "#996633",
+			background: "#fffaf5",
+			surface: "#fff0e6",
+			text: "#663300",
+			textSecondary: "#8b4513",
+			border: "#ffcc99",
+			accent: "#ff6600",
+			success: "#cc3366",
+			warning: "#ff9900",
+			error: "#999999",
 		},
 	},
 };
@@ -203,10 +203,14 @@ export function ThemeProvider({
 		const config = themeConfigs[theme];
 		const root = document.documentElement;
 
-		// CSS カスタムプロパティを設定（両方の命名規則で）
+		// CSS カスタムプロパティを設定（Tailwind v4準拠）
 		Object.entries(config.colors).forEach(([key, value]) => {
-			root.style.setProperty(`--color-${key}`, value);
-			root.style.setProperty(`--theme-${key}`, value);
+			// キャメルケースをケバブケースに変換
+			const kebabKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
+			// Tailwind v4の@themeディレクティブ用の命名規則
+			root.style.setProperty(`--color-theme-${kebabKey}`, value);
+			// 後方互換性のための従来の命名規則
+			root.style.setProperty(`--theme-${kebabKey}`, value);
 		});
 
 		// データ属性も設定（CSS セレクターで使用可能）

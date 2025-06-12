@@ -68,13 +68,13 @@ export function AuthForm() {
 	};
 
 	return (
-		<div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-4">
+		<div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-theme-surface to-theme-background p-4">
 			<Card className="w-full max-w-md">
 				<CardHeader className="text-center">
-					<CardTitle className="font-bold text-2xl text-slate-800">
+					<CardTitle className="font-bold text-2xl text-theme-text">
 						{isSignUp ? "アカウント作成" : "ログイン"}
 					</CardTitle>
-					<CardDescription className="text-slate-600">
+					<CardDescription className="text-theme-text-secondary">
 						{isSignUp
 							? "安全で簡単なパスキーでアカウント作成"
 							: "安全で簡単な方法でログイン"}

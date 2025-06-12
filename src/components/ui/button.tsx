@@ -5,18 +5,18 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-	"inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium text-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-95 active:transition-transform active:duration-100",
+	"inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium text-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-theme-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-95 active:transition-transform active:duration-100",
 	{
 		variants: {
 			variant: {
-				default: "bg-slate-800 text-white shadow-md border border-slate-700 hover:bg-slate-700 hover:shadow-lg hover:border-slate-600 active:bg-slate-900",
+				default: "bg-theme-primary text-theme-background shadow-md border border-theme-primary hover:bg-theme-secondary hover:shadow-lg hover:border-theme-secondary active:bg-theme-primary",
 				destructive:
-					"bg-red-600 text-white shadow-md border border-red-500 hover:bg-red-700 hover:shadow-lg hover:border-red-600 active:bg-red-800",
+					"bg-theme-error text-theme-background shadow-md border border-theme-error hover:opacity-90 hover:shadow-lg active:opacity-80",
 				outline:
-					"border-2 border-slate-300 bg-white text-slate-700 shadow-sm hover:border-slate-400 hover:bg-slate-50 hover:shadow-md active:bg-slate-100",
-				secondary: "bg-slate-100 text-slate-800 shadow-sm border border-slate-200 hover:bg-slate-200 hover:border-slate-300 active:bg-slate-300",
-				ghost: "text-slate-700 hover:bg-slate-100 hover:text-slate-800 active:bg-slate-200",
-				link: "text-slate-600 underline-offset-4 hover:text-slate-700 hover:underline",
+					"border-2 border-theme-border bg-theme-background text-theme-text shadow-sm hover:border-theme-primary hover:bg-theme-surface hover:shadow-md active:bg-theme-surface",
+				secondary: "bg-theme-surface text-theme-text shadow-sm border border-theme-border hover:bg-theme-border hover:border-theme-secondary active:bg-theme-border",
+				ghost: "text-theme-text hover:bg-theme-surface hover:text-theme-primary active:bg-theme-border",
+				link: "text-theme-secondary underline-offset-4 hover:text-theme-primary hover:underline",
 			},
 			size: {
 				default: "h-10 px-6 py-2",
