@@ -1,6 +1,43 @@
-# 服管理アプリ
+# HukuLog_T3Stack 🎯
+
+> **服管理アプリ - Next.js T3 Stack Edition**
+
+[![GitHub Issues](https://img.shields.io/github/issues/UtakataKyosui/HukuLog_T3Stack)](https://github.com/UtakataKyosui/HukuLog_T3Stack/issues)
+[![GitHub Stars](https://img.shields.io/github/stars/UtakataKyosui/HukuLog_T3Stack)](https://github.com/UtakataKyosui/HukuLog_T3Stack/stargazers)
 
 服とコーディネートを効率的に管理できるWebアプリケーションです。
+
+## 📋 リポジトリ統合履歴
+
+このリポジトリは複数の服管理アプリプロジェクトを統合したものです：
+
+### 統合戦略 (2025-06-20 完了)
+- ✅ **HukuLog (元)** → [アーカイブ済み](https://github.com/UtakataKyosui/HukuLog)
+- ✅ **ClaudeCoded-DigitalCloset** → **HukuLog_T3Stack** にリネーム
+- ✅ **DigitalCloset-WebApp** → 削除済み
+
+### 移植済み要素
+- ✅ GitHub Actions ワークフロー
+- ✅ Issue/PR テンプレート
+- ✅ データベーススキーマ設計（参考）
+- ✅ WebAuthn認証実装の知見
+
+## 🚀 技術スタック
+
+### 現在の構成 (T3 Stack)
+- **フレームワーク**: Next.js 15.2.3
+- **言語**: TypeScript 5.8.2
+- **スタイリング**: TailwindCSS 4.0.15
+- **API**: tRPC 11.0.0
+- **データベースORM**: Drizzle ORM 0.41.0
+- **認証**: Better Auth + SimpleWebAuthn
+- **データベース**: PostgreSQL
+
+### 開発ツール
+- **リンター**: Biome 1.9.4
+- **テスト**: Playwright
+- **UI Components**: Radix UI
+- **バリデーション**: Zod
 
 ## 📱 主な機能
 
@@ -18,122 +55,95 @@
 - **着用履歴** - 最後に着用した日付を記録して重複を防止
 - **コーデ検索** - タグやシーンで簡単に検索
 
-### ⭐ プレミアム機能
-- **無制限登録** - 服やコーディネートを無制限に登録
-- **高度な検索** - 複数条件での絞り込み検索
-- **データエクスポート** - CSV形式でのデータ出力
-- **クラウド同期** - 複数デバイス間でのデータ同期
-
 ### 🔐 セキュリティ
 - **Google認証** - Googleアカウントで簡単ログイン
 - **Passkey対応** - パスワードレスでより安全な認証
 - **プライベート** - あなたのデータは他の人からは見えません
 
-## 🚀 はじめ方
+## 🛠️ 開発環境
 
-### 1. アカウント作成
-1. トップページの「ログインして始める」をクリック
-2. Googleアカウントまたはパスキーでログイン
-3. 初回ログイン時に簡単なセットアップ
+### 前提条件
+- Node.js 20+
+- PostgreSQL
+- Docker (推奨)
 
-### 2. 服を登録
-1. 「服を追加」ボタンをクリック
-2. 服の写真をアップロード（推奨）
-3. 名前、ブランド、色、サイズなどの情報を入力
-4. カテゴリを選択（新しいカテゴリも作成可能）
-5. 「服を追加」で完了
+### セットアップ
 
-### 3. コーディネート作成
-1. 「コーデ作成」ボタンをクリック
-2. コーディネート名と説明を入力
-3. 登録した服の中から組み合わせを選択
-4. シーンや季節を設定
-5. 「作成」で完了
+```bash
+# リポジトリクローン
+git clone https://github.com/UtakataKyosui/HukuLog_T3Stack.git
+cd HukuLog_T3Stack
 
-## 💡 使い方のコツ
+# 依存関係インストール
+npm install
 
-### 効率的な服の登録
-- **写真を撮影** - 服を着た状態や平置きで撮影すると後で分かりやすい
-- **詳細情報** - ブランドや価格を記録しておくと買い物の参考になる
-- **タグ活用** - 「お気に入り」「新品」「処分検討」などのタグで管理
+# 環境変数設定
+cp .env.example .env
+# .env ファイルを編集
 
-### コーディネート作成のポイント
-- **シーン別** - 仕事用、プライベート用で分けて作成
-- **季節考慮** - 季節に合った組み合わせで作成
-- **評価記録** - 実際に着用後の満足度を記録
+# データベース起動 (Docker)
+./start-database.sh
 
-### 整理のコツ
-- **定期的な見直し** - 着用頻度の低い服は処分を検討
-- **重複チェック** - 似た服がないか確認してから購入
-- **コーデ履歴** - 最近着用したコーデをチェックして偏りを防止
+# データベースマイグレーション
+npm run db:push
 
-## 📱 PWA対応
+# 開発サーバー起動
+npm run dev
+```
 
-このアプリはPWA（Progressive Web App）対応で、以下の機能が利用できます：
+### 利用可能なスクリプト
 
-- **ホーム画面追加** - スマートフォンのホーム画面にアプリアイコンを追加
-- **オフライン閲覧** - インターネット接続がなくても基本機能が利用可能
-- **プッシュ通知** - 新機能やお知らせの通知を受信（要設定）
+```bash
+# 開発
+npm run dev          # 開発サーバー起動
+npm run dev:turbo    # Turbopack使用
 
-### インストール方法
-1. ブラウザで本アプリにアクセス
-2. ブラウザの「ホーム画面に追加」オプションを選択
-3. アプリのようにホーム画面から起動可能
+# ビルド・デプロイ
+npm run build        # プロダクションビルド
+npm run start        # プロダクションサーバー起動
 
-## 🔧 対応ブラウザ
+# データベース
+npm run db:generate  # マイグレーションファイル生成
+npm run db:migrate   # マイグレーション実行
+npm run db:push      # スキーマ同期
+npm run db:studio    # Drizzle Studio起動
 
-- Chrome 90+
-- Firefox 88+
-- Safari 14+
-- Edge 90+
+# コード品質
+npm run check        # Biome チェック
+npm run check:write  # Biome 自動修正
+npm run typecheck    # TypeScript チェック
 
-モバイルブラウザも完全対応しています。
+# テスト
+npm run test         # Playwright テスト実行
+npm run test:ui      # テストUI起動
+```
+
+## 🔮 将来の計画
+
+### Phase 1: T3 Stack開発継続 (現在)
+- 🟢 現在のNext.js フルスタック構成での機能開発に集中
+- 服管理・コーディネート機能の充実
+- UIコンポーネントの改善
+
+### Phase 2: Loco.rs移行検討 (将来)
+- 🟡 パフォーマンス・スケーラビリティが必要になった場合
+- バックエンドAPIをRust (Loco.rs) で実装
+- フロントエンドとバックエンドの分離
+
+詳細な移行計画は [Issue #2](https://github.com/UtakataKyosui/HukuLog_T3Stack/issues/2) で管理しています。
 
 ## 📞 サポート
 
-### よくある質問
-
-**Q: 無料で使えますか？**
-A: 基本機能は無料でご利用いただけます。より多くの服やコーディネートを登録したい場合はプレミアムプランをご検討ください。
-
-**Q: データは安全ですか？**
-A: はい。すべてのデータは暗号化され、あなただけがアクセス可能です。
-
-**Q: 他の人に見られますか？**
-A: いいえ。登録したデータは完全にプライベートで、他のユーザーからは見えません。
-
-**Q: スマートフォンで使えますか？**
-A: はい。レスポンシブデザインでスマートフォン、タブレット、PCすべてに対応しています。
-
-**Q: データの移行はできますか？**
-A: プレミアムプランではCSVでのデータエクスポートが可能です。
+### Contributing
+Issue や Pull Request をお待ちしています！
 
 ### お問い合わせ
+- **GitHub Issues**: [新しいIssueを作成](https://github.com/UtakataKyosui/HukuLog_T3Stack/issues/new/choose)
+- **開発者**: [@UtakataKyosui](https://github.com/UtakataKyosui)
 
-技術的な問題や機能に関するご要望がございましたら、以下の方法でお問い合わせください：
+## 📄 ライセンス
 
-- **GitHub Issues**: [リポジトリ](https://github.com/your-repo/wardrobe-manager) でのissue報告
-- **メール**: support@example.com
-- **Twitter**: @wardrobemanager
-
-## 🎯 今後の予定
-
-- **AI機能** - コーディネート提案機能
-- **天気連携** - 天気予報に基づく服装提案
-- **ソーシャル機能** - 友達とのコーディネートシェア（オプション）
-- **分析機能** - 着用頻度や購入傾向の分析
-- **リマインダー** - 定期的なワードローブ整理のお知らせ
-
-## 🏷️ バージョン情報
-
-現在のバージョン: 1.0.0
-
-### 更新履歴
-- **v1.0.0** (2024年) - 初回リリース
-  - 服の管理機能
-  - コーディネート作成機能
-  - 認証システム
-  - PWA対応
+このプロジェクトはMITライセンスのもとで公開されています。
 
 ---
 
