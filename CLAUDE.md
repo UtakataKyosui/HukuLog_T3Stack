@@ -1,76 +1,66 @@
-# CLAUDE.md
+# HukuLog_T3Stack - Claude Code開発ガイド
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+## プロジェクト概要
+**HukuLog_T3Stack**は、服とコーディネートを効率的に管理できるWebアプリケーションです。
 
-## Commands
+- **技術スタック**: Next.js T3 Stack (TypeScript + tRPC + Drizzle ORM)
+- **認証**: Better Auth + SimpleWebAuthn (Passkey対応)
+- **データベース**: PostgreSQL
+- **UI**: TailwindCSS + Radix UI
+- **目標**: 直感的で使いやすい服管理・コーディネートアプリの提供
 
-**Development:**
-- `npm run dev` - Start Next.js development server with Turbo
-- `npm run build` - Build production application
-- `npm run start` - Start production server
-- `npm run preview` - Build and start for preview
+## 📚 知見管理システム
 
-**Code Quality:**
-- `npm run check` - Run Biome linter and formatter checks
-- `npm run check:write` - Run Biome checks and auto-fix
-- `npm run check:unsafe` - Run Biome checks with unsafe fixes
-- `npm run typecheck` - Run TypeScript type checking
+このプロジェクトでは以下のファイルで知見を体系的に管理しています：
 
-**Database:**
-- `npm run db:generate` - Generate Drizzle migrations
-- `npm run db:migrate` - Run database migrations
-- `npm run db:push` - Push schema changes directly to database
-- `npm run db:studio` - Open Drizzle Studio for database management
+### `.claude/context.md`
+- プロジェクトの背景、目的、制約条件
+- T3 Stack選定理由と技術的制約
+- ビジネス要件とユーザーストーリー
 
-**Testing:**
-- `npm run test` - Run Playwright end-to-end tests
-- `npm run test:ui` - Run Playwright tests with interactive UI
-- `npm run test:headed` - Run Playwright tests in headed mode (visible browser)
+### `.claude/project-knowledge.md`
+- T3 Stack実装パターンや設計決定の知見
+- 認証システム（Passkey）のベストプラクティス
+- Drizzle ORMとtRPCの効果的な組み合わせ方
+- TailwindCSS + Radix UIのコンポーネント設計
 
-## Architecture
+### `.claude/project-improvements.md`
+- 過去の試行錯誤の記録
+- パフォーマンス改善の履歴
+- UI/UX改善プロセスと結果
+- 技術的課題の解決記録
 
-This is a T3 Stack application using:
-- **Next.js 15** with App Router and React 19
-- **tRPC** for type-safe API layer with React Query integration
-- **Drizzle ORM** with PostgreSQL database
-- **NextAuth.js** for authentication (configured with Discord provider)
-- **Biome** for linting and formatting
-- **Tailwind CSS v4** for styling
-- **Playwright** for end-to-end testing
+### `.claude/common-patterns.md`
+- 頻繁に使用するT3 Stackパターン
+- tRPCルーターの定型実装
+- Drizzleスキーマの作成パターン
+- Radix UIコンポーネントのカスタマイズ
 
-**Key Architecture Patterns:**
+### `.claude/debug-log.md`
+- 重要なデバッグ記録
+- T3 Stack特有の問題と解決法
+- Passkeyやブラウザ認証関連のトラブルシューティング
 
-**Database Layer (`src/server/db/`):**
-- Uses multi-project schema with `workspace_` table prefix
-- Database connection in `index.ts`, schema definitions in `schema.ts`
-- Drizzle config points to PostgreSQL with environment-based URL
+## 🎯 開発指針
 
-**API Layer (`src/server/api/`):**
-- tRPC router structure with `root.ts` as main router
-- Individual routers in `routers/` directory (currently `post.ts`)
-- Type-safe procedures with Zod validation
+### Claude Codeとの協働ルール
+1. **新しい実装や重要な決定**を行った際は、該当するファイルを必ず更新
+2. **問題解決に30分以上要した場合**は`debug-log.md`に記録
+3. **機能実装前**に既存の知見ファイルを確認
+4. **UI/UXの変更**は必ずアクセシビリティを考慮
 
-**Authentication (`src/server/auth/`):**
-- NextAuth.js with Drizzle adapter
-- Session extension to include user ID
-- Discord OAuth provider configured
+### コミットルール
+- feat: 新機能
+- fix: バグ修正
+- docs: ドキュメント更新
+- style: UIスタイル変更
+- refactor: リファクタリング
+- test: テスト追加・修正
+- chore: 設定やツール変更
 
-**Client-Side tRPC (`src/trpc/`):**
-- React Query integration with custom hooks
-- Server-side caller for SSR scenarios
-- Query client configuration
+## 🔄 将来計画
+Loco.rsバックエンドAPI移行計画については [Issue #2](https://github.com/UtakataKyosui/HukuLog_T3Stack/issues/2) で管理しています。
 
-**Environment Configuration:**
-- Uses `@t3-oss/env-nextjs` for type-safe environment variables
-- Configuration in `src/env.js`
+---
 
-**Testing (`tests/`):**
-- Uses Playwright for end-to-end testing
-- Test files follow `*.spec.ts` naming convention
-- Tests include filter functionality, pagination, and user interactions
-- Components use `data-testid` attributes for reliable test selectors
-
-**Path Aliases:**
-- `@/*` maps to `src/*` for cleaner imports
-
-The codebase follows T3 Stack conventions with strict TypeScript settings and integrated tooling for development workflow.
+**重要**: Claude Codeでの開発時は、必ず該当する知見ファイルを参照し、新たな学びを記録してください。
