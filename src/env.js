@@ -18,6 +18,9 @@ export const env = createEnv({
 			.enum(["development", "test", "production"])
 			.default("development"),
 		VAPID_PRIVATE_KEY: z.string().optional(),
+		// Stripe環境変数
+		STRIPE_SECRET_KEY: z.string().optional(),
+		STRIPE_WEBHOOK_SECRET: z.string().optional(),
 	},
 
 	/**
@@ -32,6 +35,8 @@ export const env = createEnv({
 			.string()
 			.default("服とコーディネートを効率的に管理"),
 		NEXT_PUBLIC_VAPID_PUBLIC_KEY: z.string().optional(),
+		// Stripe公開可能キー
+		NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().optional(),
 	},
 
 	/**
@@ -49,6 +54,11 @@ export const env = createEnv({
 		VAPID_PRIVATE_KEY: process.env.VAPID_PRIVATE_KEY,
 		DATABASE_URL: process.env.DATABASE_URL,
 		NODE_ENV: process.env.NODE_ENV,
+		// Stripe環境変数
+		STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+		STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
+		NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
+			process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
 	},
 	/**
 	 * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

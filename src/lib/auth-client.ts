@@ -7,17 +7,17 @@ function getBaseURL() {
 		// Client-side: use current origin
 		return window.location.origin;
 	}
-	
+
 	// Server-side
 	if (process.env.NODE_ENV === "production") {
 		return process.env.NEXT_PUBLIC_APP_URL || "";
 	}
-	
+
 	// Development: Check for CodeSpace
 	if (process.env.CODESPACE_NAME) {
 		return `https://${process.env.CODESPACE_NAME}-3000.${process.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}`;
 	}
-	
+
 	return "http://localhost:3000";
 }
 

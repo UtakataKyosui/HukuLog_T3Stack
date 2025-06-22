@@ -13,13 +13,13 @@ export default async function Home() {
 
 	return (
 		<main className="theme-bg min-h-screen">
-			<div className="container mx-auto flex flex-col items-center justify-center gap-12 px-4 py-16 theme-bg">
+			<div className="theme-bg container mx-auto flex flex-col items-center justify-center gap-12 px-4 py-16">
 				{/* ヒーローセクション */}
 				<div className="max-w-4xl text-center">
-					<h1 className="mb-6 font-extrabold text-5xl theme-text tracking-tight sm:text-[6rem]">
+					<h1 className="theme-text mb-6 font-extrabold text-5xl tracking-tight sm:text-[6rem]">
 						服管理アプリ
 					</h1>
-					<p className="mb-8 font-medium theme-text-secondary text-xl">
+					<p className="theme-text-secondary mb-8 font-medium text-xl">
 						服とコーディネートを効率的に管理し、毎日のスタイリングをもっと楽しく
 					</p>
 					<div className="flex justify-center gap-4">
@@ -31,7 +31,7 @@ export default async function Home() {
 						</Link>
 						<Link
 							href="#features"
-							className="clean-card flex items-center px-8 py-4 font-bold text-lg theme-text hover:opacity-80 transition-opacity"
+							className="clean-card theme-text flex items-center px-8 py-4 font-bold text-lg transition-opacity hover:opacity-80"
 						>
 							📖 機能を見る
 						</Link>
@@ -40,22 +40,20 @@ export default async function Home() {
 
 				{/* 機能紹介セクション */}
 				<section id="features" className="w-full max-w-6xl">
-					<h2 className="mb-12 text-center font-bold text-3xl theme-text">
+					<h2 className="theme-text mb-12 text-center font-bold text-3xl">
 						主な機能
 					</h2>
 					<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
 						<div className="clean-card p-6 text-center">
 							<div className="mb-4 text-5xl">👔</div>
-							<h3 className="mb-3 font-bold theme-text text-xl">
-								服の管理
-							</h3>
+							<h3 className="theme-text mb-3 font-bold text-xl">服の管理</h3>
 							<p className="theme-text-secondary">
 								写真付きで服を登録し、ブランド、色、サイズ、購入価格などの詳細情報を記録できます
 							</p>
 						</div>
 						<div className="clean-card p-6 text-center">
 							<div className="mb-4 text-5xl">📋</div>
-							<h3 className="mb-3 font-bold theme-text text-xl">
+							<h3 className="theme-text mb-3 font-bold text-xl">
 								コーディネート
 							</h3>
 							<p className="theme-text-secondary">
@@ -64,9 +62,7 @@ export default async function Home() {
 						</div>
 						<div className="clean-card p-6 text-center">
 							<div className="mb-4 text-5xl">🔍</div>
-							<h3 className="mb-3 font-bold theme-text text-xl">
-								検索・整理
-							</h3>
+							<h3 className="theme-text mb-3 font-bold text-xl">検索・整理</h3>
 							<p className="theme-text-secondary">
 								カテゴリ、季節、タグで効率的に検索し、着用履歴で重複を防げます
 							</p>
@@ -77,12 +73,12 @@ export default async function Home() {
 				{/* セキュリティ・安全性 */}
 				<section className="w-full max-w-4xl">
 					<div className="clean-card p-8 text-center">
-						<h3 className="mb-6 font-bold text-2xl theme-text">
+						<h3 className="theme-text mb-6 font-bold text-2xl">
 							🔒 安全でパスワードレス
 						</h3>
 						<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 							<div>
-								<h4 className="mb-3 font-semibold text-lg theme-text">
+								<h4 className="theme-text mb-3 font-semibold text-lg">
 									Passkeyログイン
 								</h4>
 								<p className="theme-text-secondary text-sm">
@@ -90,7 +86,7 @@ export default async function Home() {
 								</p>
 							</div>
 							<div>
-								<h4 className="mb-3 font-semibold text-lg theme-text">
+								<h4 className="theme-text mb-3 font-semibold text-lg">
 									プライベート
 								</h4>
 								<p className="theme-text-secondary text-sm">
@@ -104,20 +100,18 @@ export default async function Home() {
 				{/* PWA対応 */}
 				<section className="w-full max-w-4xl">
 					<div className="clean-card p-8 text-center">
-						<h3 className="mb-4 font-bold text-2xl theme-text">
-							📱 PWA対応
-						</h3>
-						<p className="mb-6 theme-text-secondary">
+						<h3 className="theme-text mb-4 font-bold text-2xl">📱 PWA対応</h3>
+						<p className="theme-text-secondary mb-6">
 							スマートフォンのホーム画面にアプリを追加して、オフラインでも利用可能
 						</p>
 						<div className="flex flex-wrap justify-center gap-4 text-sm">
-							<span className="rounded-full theme-bg-primary/10 theme-border border px-3 py-1 theme-text-secondary">
+							<span className="theme-bg-primary/10 theme-border theme-text-secondary rounded-full border px-3 py-1">
 								📲 ホーム画面追加
 							</span>
-							<span className="rounded-full theme-bg-primary/10 theme-border border px-3 py-1 theme-text-secondary">
+							<span className="theme-bg-primary/10 theme-border theme-text-secondary rounded-full border px-3 py-1">
 								📡 オフライン閱覧
 							</span>
-							<span className="rounded-full theme-bg-primary/10 theme-border border px-3 py-1 theme-text-secondary">
+							<span className="theme-bg-primary/10 theme-border theme-text-secondary rounded-full border px-3 py-1">
 								🔔 プッシュ通知
 							</span>
 						</div>
@@ -126,10 +120,10 @@ export default async function Home() {
 
 				{/* CTA */}
 				<div className="text-center">
-					<h3 className="mb-4 font-bold text-2xl theme-text">
+					<h3 className="theme-text mb-4 font-bold text-2xl">
 						今すぐ始めましょう
 					</h3>
-					<p className="mb-6 theme-text-secondary">
+					<p className="theme-text-secondary mb-6">
 						無料で利用開始できます。GoogleやPasskeyで簡単ログイン。
 					</p>
 					<Link
