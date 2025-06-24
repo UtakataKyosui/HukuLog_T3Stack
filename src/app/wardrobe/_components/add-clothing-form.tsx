@@ -11,6 +11,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useTheme } from "@/components/providers/theme-provider";
 import { api } from "@/trpc/react";
 import { useState } from "react";
 
@@ -23,6 +24,7 @@ export default function AddClothingForm({
 	onSuccess,
 	onCancel,
 }: AddClothingFormProps) {
+	const { theme } = useTheme();
 	const [formData, setFormData] = useState({
 		name: "",
 		brand: "",
@@ -59,6 +61,20 @@ export default function AddClothingForm({
 			console.error("Failed to create clothing item:", error);
 		},
 	});
+
+	// テーマに応じたクラス名を決定
+	const getThemeClasses = () => {
+		const isDark = theme === 'dark' || theme === 'high-contrast';
+		return {
+			label: isDark ? 'text-theme-text' : 'text-theme-text',
+			input: isDark ? 'border-theme-border focus:border-theme-primary text-gray-900' : 'border-theme-border focus:border-theme-primary text-gray-900',
+			helpText: isDark ? 'text-theme-text-secondary' : 'text-theme-text-secondary',
+			categoryBox: isDark ? 'border-theme-primary bg-theme-primary/10' : 'border-blue-200 bg-blue-50',
+			border: isDark ? 'border-theme-border' : 'border-slate-200',
+		};
+	};
+
+	const themeClasses = getThemeClasses();
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -98,7 +114,7 @@ export default function AddClothingForm({
 		<div className="max-h-[70vh] overflow-y-auto">
 			<form onSubmit={handleSubmit} className="space-y-4">
 				<div>
-					<Label htmlFor="name" className="text-slate-700">
+					<Label htmlFor="name" className={themeClasses.label}>
 						名前 *
 					</Label>
 					<Input
@@ -108,16 +124,16 @@ export default function AddClothingForm({
 						placeholder="例: 白いTシャツ"
 						required
 						aria-describedby="name-help"
-						className="border-slate-300 focus:border-blue-500"
+						className={themeClasses.input}
 					/>
-					<p id="name-help" className="mt-1 text-slate-500 text-xs">
+					<p id="name-help" className={`mt-1 text-xs ${themeClasses.helpText}`}>
 						服の名前を入力してください
 					</p>
 				</div>
 
 				<div>
 					<div className="flex items-center justify-between">
-						<Label htmlFor="categoryId" className="text-slate-700">
+						<Label htmlFor="categoryId" className={themeClasses.label}>
 							カテゴリ *
 						</Label>
 						<Button
@@ -125,19 +141,19 @@ export default function AddClothingForm({
 							variant="link"
 							size="sm"
 							onClick={() => setShowNewCategory(!showNewCategory)}
-							className="text-blue-600 text-xs hover:text-blue-800"
+							className="text-theme-primary text-xs hover:text-theme-secondary"
 						>
 							+ 新しいカテゴリ
 						</Button>
 					</div>
 
 					{showNewCategory && (
-						<div className="mb-2 rounded-lg border border-blue-200 bg-blue-50 p-3">
+						<div className={`mb-2 rounded-lg p-3 ${themeClasses.categoryBox}`}>
 							<div className="space-y-2">
 								<div>
 									<Label
 										htmlFor="newCategoryName"
-										className="text-slate-700 text-xs"
+										className={`text-xs ${themeClasses.label}`}
 									>
 										カテゴリ名
 									</Label>
@@ -151,14 +167,14 @@ export default function AddClothingForm({
 											})
 										}
 										placeholder="例: パーカー"
-										className="text-sm"
+										className={`text-sm ${themeClasses.input}`}
 										required
 									/>
 								</div>
 								<div>
 									<Label
 										htmlFor="newCategoryType"
-										className="text-slate-700 text-xs"
+										className={`text-xs ${themeClasses.label}`}
 									>
 										タイプ
 									</Label>
@@ -213,7 +229,7 @@ export default function AddClothingForm({
 					>
 						<SelectTrigger
 							aria-describedby="category-help"
-							className="border-slate-300 focus:border-blue-500"
+							className={themeClasses.input}
 						>
 							<SelectValue placeholder="カテゴリを選択してください" />
 						</SelectTrigger>
@@ -232,14 +248,14 @@ export default function AddClothingForm({
 							)}
 						</SelectContent>
 					</Select>
-					<p id="category-help" className="mt-1 text-slate-500 text-xs">
+					<p id="category-help" className={`mt-1 text-xs ${themeClasses.helpText}`}>
 						服の種類を選択してください。カテゴリがない場合は新しく作成できます。
 					</p>
 				</div>
 
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 					<div>
-						<Label htmlFor="brand" className="text-slate-700">
+						<Label htmlFor="brand" className={themeClasses.label}>
 							ブランド
 						</Label>
 						<Input
@@ -250,14 +266,14 @@ export default function AddClothingForm({
 							}
 							placeholder="例: ユニクロ"
 							aria-describedby="brand-help"
-							className="border-slate-300 focus:border-blue-500"
+							className={themeClasses.input}
 						/>
-						<p id="brand-help" className="mt-1 text-slate-500 text-xs">
+						<p id="brand-help" className={`mt-1 text-xs ${themeClasses.helpText}`}>
 							ブランド名（任意）
 						</p>
 					</div>
 					<div>
-						<Label htmlFor="color" className="text-slate-700">
+						<Label htmlFor="color" className={themeClasses.label}>
 							色
 						</Label>
 						<Input
@@ -268,9 +284,9 @@ export default function AddClothingForm({
 							}
 							placeholder="例: 白、ネイビー"
 							aria-describedby="color-help"
-							className="border-slate-300 focus:border-blue-500"
+							className={themeClasses.input}
 						/>
-						<p id="color-help" className="mt-1 text-slate-500 text-xs">
+						<p id="color-help" className={`mt-1 text-xs ${themeClasses.helpText}`}>
 							色の名前（任意）
 						</p>
 					</div>
@@ -278,7 +294,7 @@ export default function AddClothingForm({
 
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 					<div>
-						<Label htmlFor="size" className="text-slate-700">
+						<Label htmlFor="size" className={themeClasses.label}>
 							サイズ
 						</Label>
 						<Input
@@ -289,14 +305,14 @@ export default function AddClothingForm({
 							}
 							placeholder="例: M、L"
 							aria-describedby="size-help"
-							className="border-slate-300 focus:border-blue-500"
+							className={themeClasses.input}
 						/>
-						<p id="size-help" className="mt-1 text-slate-500 text-xs">
+						<p id="size-help" className={`mt-1 text-xs ${themeClasses.helpText}`}>
 							サイズ（任意）
 						</p>
 					</div>
 					<div>
-						<Label htmlFor="season" className="text-slate-700">
+						<Label htmlFor="season" className={themeClasses.label}>
 							季節
 						</Label>
 						<Select
@@ -307,7 +323,7 @@ export default function AddClothingForm({
 						>
 							<SelectTrigger
 								aria-describedby="season-help"
-								className="border-slate-300 focus:border-blue-500"
+								className={themeClasses.input}
 							>
 								<SelectValue placeholder="季節を選択してください" />
 							</SelectTrigger>
@@ -319,14 +335,14 @@ export default function AddClothingForm({
 								<SelectItem value="all">オールシーズン</SelectItem>
 							</SelectContent>
 						</Select>
-						<p id="season-help" className="mt-1 text-slate-500 text-xs">
+						<p id="season-help" className={`mt-1 text-xs ${themeClasses.helpText}`}>
 							着用する季節（任意）
 						</p>
 					</div>
 				</div>
 
 				<div>
-					<Label htmlFor="imageUrl" className="text-slate-700">
+					<Label htmlFor="imageUrl" className={themeClasses.label}>
 						画像URL
 					</Label>
 					<Input
@@ -338,16 +354,16 @@ export default function AddClothingForm({
 						}
 						placeholder="https://example.com/image.jpg"
 						aria-describedby="imageUrl-help"
-						className="border-slate-300 focus:border-blue-500"
+						className={themeClasses.input}
 					/>
-					<p id="imageUrl-help" className="mt-1 text-slate-500 text-xs">
+					<p id="imageUrl-help" className={`mt-1 text-xs ${themeClasses.helpText}`}>
 						画像のURL（任意）
 					</p>
 				</div>
 
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 					<div>
-						<Label htmlFor="price" className="text-slate-700">
+						<Label htmlFor="price" className={themeClasses.label}>
 							価格（円）
 						</Label>
 						<Input
@@ -359,15 +375,15 @@ export default function AddClothingForm({
 							}
 							placeholder="2980"
 							aria-describedby="price-help"
-							className="border-slate-300 focus:border-blue-500"
+							className={themeClasses.input}
 							min="0"
 						/>
-						<p id="price-help" className="mt-1 text-slate-500 text-xs">
+						<p id="price-help" className={`mt-1 text-xs ${themeClasses.helpText}`}>
 							購入価格（任意）
 						</p>
 					</div>
 					<div>
-						<Label htmlFor="purchaseDate" className="text-slate-700">
+						<Label htmlFor="purchaseDate" className={themeClasses.label}>
 							購入日
 						</Label>
 						<Input
@@ -378,16 +394,16 @@ export default function AddClothingForm({
 								setFormData({ ...formData, purchaseDate: e.target.value })
 							}
 							aria-describedby="date-help"
-							className="border-slate-300 focus:border-blue-500"
+							className={themeClasses.input}
 						/>
-						<p id="date-help" className="mt-1 text-slate-500 text-xs">
+						<p id="date-help" className={`mt-1 text-xs ${themeClasses.helpText}`}>
 							購入した日付（任意）
 						</p>
 					</div>
 				</div>
 
 				<div>
-					<Label htmlFor="tags" className="text-slate-700">
+					<Label htmlFor="tags" className={themeClasses.label}>
 						タグ（カンマ区切り）
 					</Label>
 					<Input
@@ -396,15 +412,15 @@ export default function AddClothingForm({
 						onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
 						placeholder="例: カジュアル, お気に入り, 夏用"
 						aria-describedby="tags-help"
-						className="border-slate-300 focus:border-blue-500"
+						className={themeClasses.input}
 					/>
-					<p id="tags-help" className="mt-1 text-slate-500 text-xs">
+					<p id="tags-help" className={`mt-1 text-xs ${themeClasses.helpText}`}>
 						タグをカンマで区切って入力（任意）
 					</p>
 				</div>
 
 				<div>
-					<Label htmlFor="notes" className="text-slate-700">
+					<Label htmlFor="notes" className={themeClasses.label}>
 						メモ
 					</Label>
 					<Textarea
@@ -416,19 +432,19 @@ export default function AddClothingForm({
 						rows={3}
 						placeholder="この服についてのメモや着こなしのポイントなど..."
 						aria-describedby="notes-help"
-						className="border-slate-300 focus:border-blue-500"
+						className={themeClasses.input}
 					/>
-					<p id="notes-help" className="mt-1 text-slate-500 text-xs">
+					<p id="notes-help" className={`mt-1 text-xs ${themeClasses.helpText}`}>
 						自由にメモを記入（任意）
 					</p>
 				</div>
 
-				<div className="flex flex-col justify-end gap-3 border-slate-200 border-t pt-4 sm:flex-row">
+				<div className={`flex flex-col justify-end gap-3 border-t pt-4 sm:flex-row ${themeClasses.border}`}>
 					<Button
 						type="button"
 						variant="outline"
 						onClick={onCancel}
-						className="w-full border-slate-300 text-slate-700 hover:bg-slate-50 sm:w-auto"
+						className="w-full border-theme-border text-theme-text hover:bg-theme-surface sm:w-auto"
 					>
 						キャンセル
 					</Button>
@@ -439,7 +455,7 @@ export default function AddClothingForm({
 							!formData.name ||
 							!formData.categoryId
 						}
-						className="w-full bg-blue-600 text-white hover:bg-blue-700 sm:w-auto"
+						className="w-full bg-theme-primary text-theme-background hover:bg-theme-secondary sm:w-auto"
 					>
 						{createClothingItem.isPending ? "追加中..." : "服を追加"}
 					</Button>
