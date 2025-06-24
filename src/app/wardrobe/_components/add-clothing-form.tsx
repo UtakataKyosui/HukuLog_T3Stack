@@ -112,7 +112,7 @@ export default function AddClothingForm({
 
 	return (
 		<div className="max-h-[70vh] overflow-y-auto">
-			<form onSubmit={handleSubmit} className="space-y-4">
+			<form onSubmit={handleSubmit} className="space-y-4 bg-theme-background">
 				<div>
 					<Label htmlFor="name" className={themeClasses.label}>
 						名前 *
