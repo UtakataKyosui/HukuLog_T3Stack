@@ -23,16 +23,6 @@ export function Navigation() {
 
 	// リダイレクトはmiddlewareに委ねる（無限ループ防止）
 
-	// ローディング中は何も表示しない
-	if (isLoading) {
-		return null;
-	}
-
-	// ログインしていない場合は表示しない（リダイレクト処理中）
-	if (!session) {
-		return null;
-	}
-
 	return (
 		<nav className="theme-bg theme-border border-b shadow-lg">
 			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -62,45 +52,31 @@ export function Navigation() {
 
 					{/* Right side - Add button, user menu, auth */}
 					<div className="flex items-center space-x-4">
-						{/* Add button for quick access */}
-						<div className="hidden space-x-2 lg:flex">
-							<Button
-								onClick={() => router.push("/outfits?create=true")}
-								size="sm"
-								className="bg-theme-primary text-theme-background hover:bg-theme-secondary"
-							>
-								<Plus className="mr-1 h-4 w-4" />
-								コーデ作成
-							</Button>
-							<Button
-								onClick={() => router.push("/wardrobe?add=true")}
-								variant="outline"
-								size="sm"
-								className="border-theme-border text-theme-text hover:bg-theme-surface"
-							>
-								<Plus className="mr-1 h-4 w-4" />
-								服を追加
-							</Button>
-						</div>
+						{/* Add button for quick access - セッションがある場合のみ表示 */}
+						{session && (
+							<div className="hidden space-x-2 lg:flex">
+								<Button
+									onClick={() => router.push("/outfits?create=true")}
+									size="sm"
+									className="bg-theme-primary text-theme-background hover:bg-theme-secondary"
+								>
+									<Plus className="mr-1 h-4 w-4" />
+									コーデ作成
+								</Button>
+								<Button
+									onClick={() => router.push("/wardrobe?add=true")}
+									variant="outline"
+									size="sm"
+									className="border-theme-border text-theme-text hover:bg-theme-surface"
+								>
+									<Plus className="mr-1 h-4 w-4" />
+									服を追加
+								</Button>
+							</div>
+						)}
 
-						{/* User menu with avatar */}
+						{/* テーマセレクター - 常に表示 */}
 						<div className="flex items-center space-x-3">
-							<span className="hidden max-w-20 truncate text-theme-text text-sm sm:block lg:max-w-none">
-								{session.user.name}さん
-							</span>
-
-							{session.user?.image ? (
-								<img
-									src={session.user.image}
-									alt="プロフィール"
-									className="h-8 w-8 rounded-full"
-								/>
-							) : (
-								<div className="flex h-8 w-8 items-center justify-center rounded-full bg-theme-surface border border-theme-border">
-									<User className="h-5 w-5 text-theme-text-secondary" />
-								</div>
-							)}
-
 							{/* お気に入りテーマセレクター */}
 							<div className="hidden lg:block">
 								<FavoriteThemeSelector />
@@ -108,25 +84,56 @@ export function Navigation() {
 
 							{/* クイックテーマセレクター */}
 							<QuickThemeSelector />
-
-							<Link
-								href="/settings"
-								className="rounded-md p-2 text-theme-text-secondary transition-colors hover:text-theme-text"
-								title="設定"
-							>
-								<Settings className="h-5 w-5" />
-							</Link>
 						</div>
 
-						{/* Auth button */}
-						<Button
-							onClick={handleSignOut}
-							variant="outline"
-							size="sm"
-							className="border-theme-border text-theme-text hover:bg-theme-surface"
-						>
-							ログアウト
-						</Button>
+						{/* User menu with avatar - セッションがある場合のみ表示 */}
+						{session && (
+							<div className="flex items-center space-x-3">
+								{/* ユーザー名 - ローディング中はスケルトン表示 */}
+								{isLoading ? (
+									<div className="hidden h-4 w-16 animate-pulse rounded bg-theme-surface sm:block" />
+								) : (
+									<span className="hidden max-w-20 truncate text-theme-text text-sm sm:block lg:max-w-none">
+										{session.user.name ? `${session.user.name}さん` : "ゲストさん"}
+									</span>
+								)}
+
+								{/* アバター - ローディング中はスケルトン表示 */}
+								{isLoading ? (
+									<div className="h-8 w-8 animate-pulse rounded-full bg-theme-surface" />
+								) : session.user?.image ? (
+									<img
+										src={session.user.image}
+										alt="プロフィール"
+										className="h-8 w-8 rounded-full"
+									/>
+								) : (
+									<div className="flex h-8 w-8 items-center justify-center rounded-full bg-theme-surface border border-theme-border">
+										<User className="h-5 w-5 text-theme-text-secondary" />
+									</div>
+								)}
+
+								<Link
+									href="/settings"
+									className="rounded-md p-2 text-theme-text-secondary transition-colors hover:text-theme-text"
+									title="設定"
+								>
+									<Settings className="h-5 w-5" />
+								</Link>
+							</div>
+						)}
+
+						{/* Auth button - セッションがある場合のみ表示 */}
+						{session && (
+							<Button
+								onClick={handleSignOut}
+								variant="outline"
+								size="sm"
+								className="border-theme-border text-theme-text hover:bg-theme-surface"
+							>
+								ログアウト
+							</Button>
+						)}
 
 						{/* Mobile menu button */}
 						<button
@@ -146,51 +153,62 @@ export function Navigation() {
 				{isMobileMenuOpen && (
 					<div className="border-theme-border border-t md:hidden">
 						<div className="space-y-1 px-2 pt-2 pb-3">
-							<Link
-								href="/outfits"
-								className="block rounded-md px-3 py-2 font-medium text-base text-theme-text hover:bg-theme-surface hover:text-theme-primary"
-								onClick={() => setIsMobileMenuOpen(false)}
-							>
-								コーディネート
-							</Link>
-							<Link
-								href="/wardrobe"
-								className="block rounded-md px-3 py-2 font-medium text-base text-theme-text hover:bg-theme-surface hover:text-theme-primary"
-								onClick={() => setIsMobileMenuOpen(false)}
-							>
-								服の管理
-							</Link>
-							<Link
-								href="/subscription"
-								className="block rounded-md px-3 py-2 font-medium text-base text-theme-text hover:bg-theme-surface hover:text-theme-primary"
-								onClick={() => setIsMobileMenuOpen(false)}
-							>
-								プレミアム
-							</Link>
+							{/* ナビゲーションリンク - セッションがある場合のみ表示 */}
+							{session && (
+								<>
+									<Link
+										href="/outfits"
+										className="block rounded-md px-3 py-2 font-medium text-base text-theme-text hover:bg-theme-surface hover:text-theme-primary"
+										onClick={() => setIsMobileMenuOpen(false)}
+									>
+										コーディネート
+									</Link>
+									<Link
+										href="/wardrobe"
+										className="block rounded-md px-3 py-2 font-medium text-base text-theme-text hover:bg-theme-surface hover:text-theme-primary"
+										onClick={() => setIsMobileMenuOpen(false)}
+									>
+										服の管理
+									</Link>
+									<Link
+										href="/subscription"
+										className="block rounded-md px-3 py-2 font-medium text-base text-theme-text hover:bg-theme-surface hover:text-theme-primary"
+										onClick={() => setIsMobileMenuOpen(false)}
+									>
+										プレミアム
+									</Link>
+								</>
+							)}
+							
 							<div className="space-y-2 pt-2">
-								<Button
-									onClick={() => {
-										router.push("/outfits?create=true");
-										setIsMobileMenuOpen(false);
-									}}
-									className="w-full bg-theme-primary text-theme-background hover:bg-theme-secondary"
-								>
-									<Plus className="mr-1 h-4 w-4" />
-									コーデ作成
-								</Button>
-								<Button
-									onClick={() => {
-										router.push("/wardrobe?add=true");
-										setIsMobileMenuOpen(false);
-									}}
-									variant="outline"
-									className="w-full border-theme-border text-theme-text hover:bg-theme-surface"
-								>
-									<Plus className="mr-1 h-4 w-4" />
-									服を追加
-								</Button>
+								{/* アクションボタン - セッションがある場合のみ表示 */}
+								{session && (
+									<>
+										<Button
+											onClick={() => {
+												router.push("/outfits?create=true");
+												setIsMobileMenuOpen(false);
+											}}
+											className="w-full bg-theme-primary text-theme-background hover:bg-theme-secondary"
+										>
+											<Plus className="mr-1 h-4 w-4" />
+											コーデ作成
+										</Button>
+										<Button
+											onClick={() => {
+												router.push("/wardrobe?add=true");
+												setIsMobileMenuOpen(false);
+											}}
+											variant="outline"
+											className="w-full border-theme-border text-theme-text hover:bg-theme-surface"
+										>
+											<Plus className="mr-1 h-4 w-4" />
+											服を追加
+										</Button>
+									</>
+								)}
 								
-								{/* モバイル用テーマセレクター */}
+								{/* モバイル用テーマセレクター - 常に表示 */}
 								<div className="pt-2 border-t border-theme-border space-y-2">
 									<div className="flex items-center justify-center">
 										<FavoriteThemeSelector />

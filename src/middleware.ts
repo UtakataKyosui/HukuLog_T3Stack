@@ -26,6 +26,8 @@ export async function middleware(request: NextRequest) {
 		"/wardrobe",
 		"/settings",
 		"/subscription",
+		"/setup-profile",
+		"/setup-passkey",
 	];
 	const isProtectedRoute = protectedPaths.some((path) =>
 		pathname.startsWith(path),

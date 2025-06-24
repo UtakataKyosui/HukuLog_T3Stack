@@ -48,8 +48,8 @@ export function AuthForm() {
 			// Better Authのパスキー追加は成功時にvoidを返すか、エラー時にthrowする
 			console.log("Passkey added successfully");
 			
-			// 成功後、ホームページにリダイレクト
-			router.push("/");
+			// 成功後、プロフィール設定ページにリダイレクト
+			router.push("/setup-profile");
 			
 		} catch (error) {
 			console.error("Passkey signup error:", error);
@@ -83,7 +83,7 @@ export function AuthForm() {
 		try {
 			await authClient.signIn.social({
 				provider: "google",
-				callbackURL: "/",
+				callbackURL: "/setup-profile",
 			});
 		} catch (error) {
 			console.error("Google auth error:", error);
