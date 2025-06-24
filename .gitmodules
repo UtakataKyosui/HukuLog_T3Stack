@@ -1,0 +1,3 @@
+[submodule ".devcontainer"]
+	path = .devcontainer
+	url = https://github.com/UtakataKyosui/T3Stack_Claude_DevContainer.git
