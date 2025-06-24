@@ -59,16 +59,11 @@ export const auth = betterAuth({
 					? `${process.env.CODESPACE_NAME}-3000.${process.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}`
 					: "localhost",
 			rpName: "Workspace App",
-			origin: [
-				...(process.env.NODE_ENV === "production" && process.env.NEXT_PUBLIC_APP_URL
-					? [process.env.NEXT_PUBLIC_APP_URL]
-					: []),
-				...(process.env.CODESPACE_NAME 
-					? [`https://${process.env.CODESPACE_NAME}-3000.${process.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}`]
-					: []),
-				"http://localhost:3000",
-				"https://localhost:3000",
-			],
+			origin: process.env.NODE_ENV === "production" && process.env.NEXT_PUBLIC_APP_URL
+				? process.env.NEXT_PUBLIC_APP_URL
+				: process.env.CODESPACE_NAME 
+					? `https://${process.env.CODESPACE_NAME}-3000.${process.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}`
+					: "http://localhost:3000",
 		}),
 		nextCookies()
 	],
