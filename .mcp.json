@@ -2,7 +2,7 @@
 	"mcpServers": {
 		"file-system": {
 			"command": "npx",
-			"args": ["-y", "@modelcontextprotocol/server-filesystem", "~/Documents"]
+			"args": ["-y", "@modelcontextprotocol/server-filesystem", "/workspace"]
 		},
 		"github": {
 			"command": "npx",
@@ -18,10 +18,6 @@
 		"docker": {
 			"command": "npx",
 			"args": ["-y", "@modelcontextprotocol/server-docker"]
-		},
-		"sqlite": {
-			"command": "npx",
-			"args": ["-y", "@modelcontextprotocol/server-sqlite"]
 		},
 		"playwright": {
 			"command": "npx",

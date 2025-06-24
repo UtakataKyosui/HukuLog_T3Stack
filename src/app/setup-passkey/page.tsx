@@ -9,7 +9,7 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { authClient } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function SetupPasskeyPage() {
@@ -17,18 +17,8 @@ export default function SetupPasskeyPage() {
 	const [isSetupComplete, setIsSetupComplete] = useState(false);
 	const [session, setSession] = useState<any>(null);
 	const router = useRouter();
-
-	useEffect(() => {
-		const checkSession = async () => {
-			const sessionData = await authClient.getSession();
-			if (!sessionData) {
-				router.push("/login");
-				return;
-			}
-			setSession(sessionData);
-		};
-		checkSession();
-	}, [router]);
+	const searchParams = useSearchParams();
+	const isAuto = searchParams.get("auto") === "true";
 
 	const handleSetupPasskey = async () => {
 		setIsLoading(true);
@@ -42,6 +32,23 @@ export default function SetupPasskeyPage() {
 			setIsLoading(false);
 		}
 	};
+
+	useEffect(() => {
+		const checkSession = async () => {
+			const sessionData = await authClient.getSession();
+			if (!sessionData) {
+				router.push("/login");
+				return;
+			}
+			setSession(sessionData);
+			
+			// 自動モードの場合、自動的にパスキー設定を開始
+			if (isAuto && !isLoading) {
+				setTimeout(() => handleSetupPasskey(), 500);
+			}
+		};
+		checkSession();
+	}, [router, isAuto, isLoading]);
 
 	const handleSkip = () => {
 		router.push("/");
@@ -94,8 +101,8 @@ export default function SetupPasskeyPage() {
 						パスキーを設定しませんか？
 					</CardTitle>
 					<CardDescription className="text-slate-600">
-						ようこそ、{session.user.name}さん！<br />
-						パスキーを設定すると次回からより簡単にログインできます
+						ようこそ、{session?.user?.name || "ユーザー"}さん！<br />
+						パスキーを設定すると、次回からGoogleアカウント不要で簡単にログインできます
 					</CardDescription>
 				</CardHeader>
 				<CardContent className="space-y-4">

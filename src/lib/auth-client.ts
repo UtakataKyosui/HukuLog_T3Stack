@@ -1,4 +1,4 @@
-import { passkeyClient } from "better-auth/client/plugins";
+import { passkeyClient, anonymousClient } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
 
 // Function to get the correct base URL for the current environment
@@ -23,7 +23,7 @@ function getBaseURL() {
 
 export const authClient = createAuthClient({
 	baseURL: getBaseURL(),
-	plugins: [passkeyClient()],
+	plugins: [anonymousClient(), passkeyClient()],
 });
 
 export const { signIn, signOut, signUp, useSession, getSession } = authClient;

@@ -45,6 +45,7 @@ export const users = createTable("user", (d) => ({
 	email: d.varchar({ length: 255 }).notNull(),
 	emailVerified: d.boolean().notNull().default(false),
 	image: d.varchar({ length: 255 }),
+	isAnonymous: d.boolean().notNull().default(false),
 	createdAt: d
 		.timestamp({ withTimezone: true })
 		.default(sql`CURRENT_TIMESTAMP`)
@@ -116,7 +117,7 @@ export const verifications = createTable("verification", (d) => ({
 	updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
 }));
 
-// Passkey tables for WebAuthn
+// Better Auth Passkey tables
 export const passkeys = createTable("passkey", (d) => ({
 	id: d.varchar({ length: 255 }).notNull().primaryKey(),
 	name: d.varchar({ length: 255 }),

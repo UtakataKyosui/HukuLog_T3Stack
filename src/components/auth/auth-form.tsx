@@ -14,22 +14,65 @@ import { useState } from "react";
 
 export function AuthForm() {
 	const [isLoading, setIsLoading] = useState(false);
-	const [isSignUp, setIsSignUp] = useState(false);
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const isExpired = searchParams.get("expired") === "true";
+	const [isSignUp, setIsSignUp] = useState(searchParams.get("mode") === "signup");
 
 	const handlePasskeySignUp = async () => {
 		setIsLoading(true);
 		try {
-			// Googleで登録してからパスキー設定ページにリダイレクト
-			await authClient.signIn.social({
-				provider: "google",
-				callbackURL: "/setup-passkey",
+			console.log("Starting Better Auth passkey signup...");
+			
+			// ステップ1: 匿名ユーザーとしてサインイン
+			const anonymousResult = await authClient.signIn.anonymous();
+			
+			if (!anonymousResult?.data) {
+				console.error("Anonymous signin result:", anonymousResult);
+				throw new Error("匿名ユーザーの作成に失敗しました");
+			}
+			
+			console.log("Anonymous user created successfully:", anonymousResult.data.user.id);
+			
+			// 少し待機してセッション確立を確実にする
+			await new Promise(resolve => setTimeout(resolve, 500));
+			
+			// ステップ2: パスキーを追加（Better Authの推奨方法）
+			console.log("Adding passkey...");
+			const passkeyResult = await authClient.passkey.addPasskey({
+				name: "メインパスキー"
 			});
+			
+			console.log("Passkey result:", passkeyResult);
+			
+			// Better Authのパスキー追加は成功時にvoidを返すか、エラー時にthrowする
+			console.log("Passkey added successfully");
+			
+			// 成功後、ホームページにリダイレクト
+			router.push("/");
+			
 		} catch (error) {
-			console.error("Google signup error:", error);
-			alert("Googleでの登録に失敗しました。");
+			console.error("Passkey signup error:", error);
+			const errorMessage = error instanceof Error ? error.message : 'パスキー登録に失敗しました';
+			
+			// WebAuthnエラーのハンドリング
+			if (errorMessage.includes('NotAllowedError') || errorMessage.includes('InvalidStateError')) {
+				alert("パスキーの作成がキャンセルされました。もう一度お試しください。");
+			} else if (errorMessage.includes('NotSupportedError')) {
+				alert("お使いのブラウザまたはデバイスはパスキーをサポートしていません。Googleアカウントでの登録をお試しください。");
+				// フォールバック: Googleで登録
+				try {
+					await authClient.signIn.social({
+						provider: "google",
+						callbackURL: "/setup-passkey",
+					});
+				} catch (googleError) {
+					console.error("Google signup error:", googleError);
+					alert("Googleでの登録も失敗しました。");
+				}
+			} else {
+				alert(`パスキー登録エラー: ${errorMessage}`);
+			}
 		} finally {
 			setIsLoading(false);
 		}
@@ -99,8 +142,8 @@ export function AuthForm() {
 						<div className="space-y-4">
 							<div className="rounded-lg border border-blue-200 bg-blue-50 p-3">
 								<p className="text-blue-800 text-sm">
-									🔑 Googleアカウントで登録後、パスキーを設定できます<br />
-									より安全で簡単なログイン体験をお楽しみください
+									🔑 パスキーのみでアカウント作成が可能<br />
+									メールアドレス不要で、生体認証による安全な登録
 								</p>
 							</div>
 							<Button
@@ -108,7 +151,7 @@ export function AuthForm() {
 								className="w-full bg-slate-800 text-white hover:bg-slate-700"
 								disabled={isLoading}
 							>
-								{isLoading ? "登録中..." : "🔑 Google登録 + パスキー設定"}
+								{isLoading ? "登録中..." : "🔑 パスキーのみで新規登録"}
 							</Button>
 							
 							<div className="relative">

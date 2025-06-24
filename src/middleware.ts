@@ -40,8 +40,8 @@ export async function middleware(request: NextRequest) {
 	const sessionCookie = getSessionCookie(request);
 
 	if (!sessionCookie) {
-		// セッションがない場合はホームページにリダイレクト
-		return NextResponse.redirect(new URL("/", request.url));
+		// セッションがない場合はログインページにリダイレクト
+		return NextResponse.redirect(new URL("/login?expired=true", request.url));
 	}
 
 	// セッションがあれば続行

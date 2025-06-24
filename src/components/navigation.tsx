@@ -7,11 +7,12 @@ import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 import { Menu, Plus, Settings, User, X } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export function Navigation() {
 	const router = useRouter();
+	const pathname = usePathname();
 	const { session, isLoading } = useSession();
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -20,12 +21,7 @@ export function Navigation() {
 		router.push("/login");
 	};
 
-	// セッションがない場合はログインページにリダイレクト
-	useEffect(() => {
-		if (!isLoading && !session) {
-			router.push("/login?expired=true");
-		}
-	}, [isLoading, session, router]);
+	// リダイレクトはmiddlewareに委ねる（無限ループ防止）
 
 	// ローディング中は何も表示しない
 	if (isLoading) {
