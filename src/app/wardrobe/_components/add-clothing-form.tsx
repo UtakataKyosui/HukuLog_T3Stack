@@ -44,8 +44,13 @@ export default function AddClothingForm({
 		type: "tops",
 	});
 
-	const { data: categories, refetch: refetchCategories } =
+	const { data: categories, refetch: refetchCategories, isLoading, error } =
 		api.clothing.getCategories.useQuery();
+	
+	// デバッグ用ログ
+	console.log('Categories loading state:', isLoading);
+	console.log('Categories error:', error);
+	console.log('Categories data:', categories);
 	const createCategory = api.clothing.createCategory.useMutation({
 		onSuccess: () => {
 			refetchCategories();
@@ -231,10 +236,26 @@ export default function AddClothingForm({
 							aria-describedby="category-help"
 							className={themeClasses.input}
 						>
-							<SelectValue placeholder="カテゴリを選択してください" />
+							<SelectValue 
+								placeholder={
+									isLoading 
+										? "カテゴリ読み込み中..." 
+										: error 
+											? "カテゴリ読み込みエラー" 
+											: "カテゴリを選択してください"
+								} 
+							/>
 						</SelectTrigger>
 						<SelectContent>
-							{categories?.length === 0 ? (
+							{isLoading ? (
+								<SelectItem value="loading" disabled>
+									読み込み中...
+								</SelectItem>
+							) : error ? (
+								<SelectItem value="error" disabled>
+									エラー: {error.message}
+								</SelectItem>
+							) : categories?.length === 0 ? (
 								<SelectItem value="no-categories" disabled>
 									カテゴリがありません。上の「+
 									新しいカテゴリ」から作成してください。
