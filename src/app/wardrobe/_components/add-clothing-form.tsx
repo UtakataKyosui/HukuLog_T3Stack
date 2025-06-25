@@ -66,9 +66,11 @@ export default function AddClothingForm({
 	const getThemeClasses = () => {
 		const isDark = theme === 'dark' || theme === 'high-contrast';
 		return {
-			label: isDark ? 'text-theme-text' : 'text-theme-text',
-			input: isDark ? 'border-theme-border focus:border-theme-primary text-gray-900' : 'border-theme-border focus:border-theme-primary text-gray-900',
-			helpText: isDark ? 'text-theme-text-secondary' : 'text-theme-text-secondary',
+			label: 'text-theme-text',
+			input: isDark 
+				? 'border-theme-border focus:border-theme-primary text-theme-text bg-theme-surface' 
+				: 'border-theme-border focus:border-theme-primary text-theme-text bg-theme-background',
+			helpText: 'text-theme-text-secondary',
 			categoryBox: isDark ? 'border-theme-primary bg-theme-primary/10' : 'border-blue-200 bg-blue-50',
 			border: isDark ? 'border-theme-border' : 'border-slate-200',
 		};
