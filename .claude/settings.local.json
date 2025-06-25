@@ -58,7 +58,8 @@
       "Bash(docker run:*)",
       "Bash(npm run:*)",
       "WebFetch(domain:www.better-auth.com)",
-      "Bash(kill:*)"
+      "Bash(kill:*)",
+      "Bash(git config:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
@@ -67,7 +68,6 @@
     "github",
     "fetch",
     "docker",
-    "sqlite",
     "playwright"
   ]
 }

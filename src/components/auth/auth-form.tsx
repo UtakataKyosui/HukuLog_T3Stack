@@ -92,6 +92,21 @@ export function AuthForm() {
 		}
 	};
 
+	const handleNotionAuth = async () => {
+		setIsLoading(true);
+		try {
+			await authClient.signIn.oauth2({
+				providerId: "notion",
+				callbackURL: "/setup-profile",
+			});
+		} catch (error) {
+			console.error("Notion auth error:", error);
+			alert("Notionでのログインに失敗しました。");
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
 	const handlePasskeyAuth = async () => {
 		setIsLoading(true);
 		try {
@@ -173,6 +188,15 @@ export function AuthForm() {
 							>
 								{isLoading ? "登録中..." : "Googleのみで新規登録"}
 							</Button>
+							
+							<Button
+								onClick={handleNotionAuth}
+								variant="outline"
+								className="w-full border-slate-300 hover:bg-slate-50"
+								disabled={isLoading}
+							>
+								{isLoading ? "登録中..." : "Notionで新規登録"}
+							</Button>
 						</div>
 					)}
 
@@ -206,6 +230,15 @@ export function AuthForm() {
 								disabled={isLoading}
 							>
 								{isLoading ? "ログイン中..." : "Googleでログイン"}
+							</Button>
+
+							<Button
+								onClick={handleNotionAuth}
+								variant="outline"
+								className="w-full border-slate-300 hover:bg-slate-50"
+								disabled={isLoading}
+							>
+								{isLoading ? "ログイン中..." : "Notionでログイン"}
 							</Button>
 						</div>
 					)}
