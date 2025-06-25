@@ -37,6 +37,7 @@ async function seed() {
 						{ name: "帽子", type: "accessories" },
 						{ name: "アクセサリー", type: "accessories" },
 					])
+					.onConflictDoNothing()
 					.returning(),
 
 				// Insert subscription plans with conflict handling
