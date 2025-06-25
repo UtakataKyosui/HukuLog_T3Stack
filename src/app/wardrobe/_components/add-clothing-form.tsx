@@ -46,11 +46,6 @@ export default function AddClothingForm({
 
 	const { data: categories, refetch: refetchCategories, isLoading, error } =
 		api.clothing.getCategories.useQuery();
-	
-	// デバッグ用ログ
-	console.log('Categories loading state:', isLoading);
-	console.log('Categories error:', error);
-	console.log('Categories data:', categories);
 	const createCategory = api.clothing.createCategory.useMutation({
 		onSuccess: () => {
 			refetchCategories();
