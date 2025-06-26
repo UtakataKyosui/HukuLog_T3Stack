@@ -101,7 +101,8 @@ export function AuthForm() {
 			});
 		} catch (error) {
 			console.error("Notion auth error:", error);
-			alert("Notionでのログインに失敗しました。");
+			const message = error instanceof Error ? error.message : "不明なエラーが発生しました。";
+			alert(`Notionでのログインに失敗しました。\n理由: ${message}`);
 		} finally {
 			setIsLoading(false);
 		}

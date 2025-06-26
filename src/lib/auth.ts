@@ -87,7 +87,7 @@ export const auth = betterAuth({
 								tokenUrl: "https://api.notion.com/v1/oauth/token",
 								userInfoUrl: "https://api.notion.com/v1/users/me",
 								scopes: ["read"],
-								pkce: false,
+								pkce: true,
 							},
 						],
 					}),
