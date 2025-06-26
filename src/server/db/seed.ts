@@ -37,6 +37,7 @@ async function seed() {
 						{ name: "帽子", type: "accessories" },
 						{ name: "アクセサリー", type: "accessories" },
 					])
+					.onConflictDoNothing()
 					.returning(),
 
 				// Insert subscription plans with conflict handling
@@ -262,29 +263,29 @@ async function seed() {
 				await tx.insert(outfitItems).values([
 					// カジュアルデイリー outfit (白Tシャツ + ジーンズ + スニーカー)
 					{
-						outfitId: sampleOutfits[0]!.id,
-						clothingItemId: sampleClothingItems[0]!.id,
+						outfitId: sampleOutfits[0]?.id,
+						clothingItemId: sampleClothingItems[0]?.id,
 					},
 					{
-						outfitId: sampleOutfits[0]!.id,
-						clothingItemId: sampleClothingItems[1]!.id,
+						outfitId: sampleOutfits[0]?.id,
+						clothingItemId: sampleClothingItems[1]?.id,
 					},
 					{
-						outfitId: sampleOutfits[0]!.id,
-						clothingItemId: sampleClothingItems[2]!.id,
+						outfitId: sampleOutfits[0]?.id,
+						clothingItemId: sampleClothingItems[2]?.id,
 					},
 					// オフィスカジュアル outfit (シャツ + チノパン + ジャケット)
 					{
-						outfitId: sampleOutfits[1]!.id,
-						clothingItemId: sampleClothingItems[3]!.id,
+						outfitId: sampleOutfits[1]?.id,
+						clothingItemId: sampleClothingItems[3]?.id,
 					},
 					{
-						outfitId: sampleOutfits[1]!.id,
-						clothingItemId: sampleClothingItems[4]!.id,
+						outfitId: sampleOutfits[1]?.id,
+						clothingItemId: sampleClothingItems[4]?.id,
 					},
 					{
-						outfitId: sampleOutfits[1]!.id,
-						clothingItemId: sampleClothingItems[5]!.id,
+						outfitId: sampleOutfits[1]?.id,
+						clothingItemId: sampleClothingItems[5]?.id,
 					},
 				]);
 

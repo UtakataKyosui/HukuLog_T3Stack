@@ -162,7 +162,8 @@
 	textarea:focus,
 	select:focus {
 		border-color: var(--theme-primary, #3b82f6);
-		box-shadow: 0 0 0 3px color-mix(in srgb, var(--theme-primary, #3b82f6) 10%, transparent);
+		box-shadow: 0 0 0 3px
+			color-mix(in srgb, var(--theme-primary, #3b82f6) 10%, transparent);
 		outline: none;
 	}
 
@@ -202,26 +203,46 @@
 	}
 
 	::-webkit-scrollbar-thumb {
-		background: linear-gradient(135deg, var(--theme-border, #475569), var(--theme-text-secondary, #334155));
+		background: linear-gradient(
+			135deg,
+			var(--theme-border, #475569),
+			var(--theme-text-secondary, #334155)
+		);
 		border-radius: 4px;
 	}
 
 	::-webkit-scrollbar-thumb:hover {
-		background: linear-gradient(135deg, var(--theme-text-secondary, #334155), var(--theme-text, #1e293b));
+		background: linear-gradient(
+			135deg,
+			var(--theme-text-secondary, #334155),
+			var(--theme-text, #1e293b)
+		);
 	}
 }
 
 /* Clean gradient classes */
 .gradient-neutral {
-	background: linear-gradient(135deg, var(--theme-primary, #3b82f6) 0%, var(--theme-secondary, #64748b) 100%);
+	background: linear-gradient(
+		135deg,
+		var(--theme-primary, #3b82f6) 0%,
+		var(--theme-secondary, #64748b) 100%
+	);
 }
 
 .gradient-light {
-	background: linear-gradient(135deg, var(--theme-surface, #f8fafc) 0%, var(--theme-background, #ffffff) 100%);
+	background: linear-gradient(
+		135deg,
+		var(--theme-surface, #f8fafc) 0%,
+		var(--theme-background, #ffffff) 100%
+	);
 }
 
 .gradient-soft {
-	background: linear-gradient(135deg, var(--theme-background, #ffffff) 0%, var(--theme-surface, #f8fafc) 100%);
+	background: linear-gradient(
+		135deg,
+		var(--theme-background, #ffffff) 0%,
+		var(--theme-surface, #f8fafc) 100%
+	);
 }
 
 /* Clean design system */
@@ -243,7 +264,11 @@
 }
 
 .clean-button {
-	background: linear-gradient(135deg, var(--theme-primary, #3b82f6), var(--theme-secondary, #64748b));
+	background: linear-gradient(
+		135deg,
+		var(--theme-primary, #3b82f6),
+		var(--theme-secondary, #64748b)
+	);
 	border-radius: 8px;
 	border: none;
 	color: var(--theme-background, #ffffff);
@@ -253,7 +278,11 @@
 }
 
 .clean-button:hover {
-	background: linear-gradient(135deg, var(--theme-secondary, #64748b), var(--theme-primary, #3b82f6));
+	background: linear-gradient(
+		135deg,
+		var(--theme-secondary, #64748b),
+		var(--theme-primary, #3b82f6)
+	);
 	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px
 		rgba(0, 0, 0, 0.06);
 	transform: translateY(-1px);
@@ -274,7 +303,8 @@
 
 .clean-input:focus {
 	border-color: var(--theme-primary, #3b82f6);
-	box-shadow: 0 0 0 3px color-mix(in srgb, var(--theme-primary, #3b82f6) 10%, transparent);
+	box-shadow: 0 0 0 3px
+		color-mix(in srgb, var(--theme-primary, #3b82f6) 10%, transparent);
 	outline: none;
 }
 
@@ -517,7 +547,8 @@ html[data-theme] body {
 }
 
 html[data-theme] * {
-	transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+	transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s
+		ease;
 }
 
 /* 主要要素への強制適用 */
@@ -693,7 +724,11 @@ html[data-theme] .clean-card p {
 
 /* ボタンスタイルのテーマ適用 */
 html[data-theme] .clean-button {
-	background: linear-gradient(135deg, var(--theme-primary), var(--theme-secondary)) !important;
+	background: linear-gradient(
+		135deg,
+		var(--theme-primary),
+		var(--theme-secondary)
+	) !important;
 	color: var(--theme-background) !important;
 }
 

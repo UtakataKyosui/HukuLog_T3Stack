@@ -1,5 +1,6 @@
 "use client";
 
+import { useTheme } from "@/components/providers/theme-provider";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -9,7 +10,6 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useTheme } from "@/components/providers/theme-provider";
 import { authClient } from "@/lib/auth-client";
 import { api } from "@/trpc/react";
 import { Check, Edit2, Upload, User, X } from "lucide-react";
@@ -22,7 +22,11 @@ interface ProfileEditorProps {
 	userEmail?: string | null;
 }
 
-export function ProfileEditor({ initialName, authMethod, userEmail }: ProfileEditorProps) {
+export function ProfileEditor({
+	initialName,
+	authMethod,
+	userEmail,
+}: ProfileEditorProps) {
 	const [isUploading, setIsUploading] = useState(false);
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 	const [isEditingName, setIsEditingName] = useState(false);
@@ -145,13 +149,11 @@ export function ProfileEditor({ initialName, authMethod, userEmail }: ProfileEdi
 	// テーマに応じたテキスト色を決定
 	const getInputTextColor = () => {
 		switch (theme) {
-			case 'dark':
-			case 'high-contrast':
-				return 'text-gray-900'; // ダークテーマでは濃いグレー
-			case 'light':
-			case 'eye-friendly':
+			case "dark":
+			case "high-contrast":
+				return "text-gray-900"; // ダークテーマでは濃いグレー
 			default:
-				return 'text-gray-900'; // ライトテーマでは濃いグレー
+				return "text-gray-900"; // ライトテーマでは濃いグレー
 		}
 	};
 
@@ -208,7 +210,7 @@ export function ProfileEditor({ initialName, authMethod, userEmail }: ProfileEdi
 									onClick={handleRemoveImage}
 									disabled={updateProfile.isPending}
 									size="sm"
-									className="border-red-200 text-red-600 hover:bg-red-50 text-xs"
+									className="border-red-200 text-red-600 text-xs hover:bg-red-50"
 								>
 									<X className="mr-1 h-3 w-3" />
 									削除
@@ -218,7 +220,7 @@ export function ProfileEditor({ initialName, authMethod, userEmail }: ProfileEdi
 					</div>
 
 					{/* ユーザー情報とアカウント情報 */}
-					<div className="flex-1 space-y-4 w-full sm:w-auto">
+					<div className="w-full flex-1 space-y-4 sm:w-auto">
 						{/* ユーザー名編集 */}
 						<div>
 							<h3 className="mb-2 font-medium text-theme-text">ユーザー名</h3>
@@ -252,7 +254,9 @@ export function ProfileEditor({ initialName, authMethod, userEmail }: ProfileEdi
 									</>
 								) : (
 									<>
-										<div className={`flex-1 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm ${getInputTextColor()}`}>
+										<div
+											className={`flex-1 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm ${getInputTextColor()}`}
+										>
 											{name || "名前が設定されていません"}
 										</div>
 										<Button
@@ -276,26 +280,26 @@ export function ProfileEditor({ initialName, authMethod, userEmail }: ProfileEdi
 							<div className="space-y-2 text-sm">
 								{authMethod !== "passkey-only" && userEmail && (
 									<div className="flex items-center gap-2">
-										<span className="text-slate-600 w-16">メール:</span>
+										<span className="w-16 text-slate-600">メール:</span>
 										<span className="text-theme-text">{userEmail}</span>
 									</div>
 								)}
 								<div className="flex items-center gap-2">
-									<span className="text-slate-600 w-16">認証:</span>
+									<span className="w-16 text-slate-600">認証:</span>
 									{authMethod === "passkey-only" ? (
-										<span className="inline-flex items-center gap-1 rounded-full bg-theme-primary/10 border border-theme-primary px-2 py-1 text-theme-primary text-xs">
+										<span className="inline-flex items-center gap-1 rounded-full border border-theme-primary bg-theme-primary/10 px-2 py-1 text-theme-primary text-xs">
 											🔑 パスキーのみ
 										</span>
 									) : authMethod === "google-with-passkey" ? (
-										<span className="inline-flex items-center gap-1 rounded-full bg-theme-success/10 border border-theme-success px-2 py-1 text-theme-success text-xs">
+										<span className="inline-flex items-center gap-1 rounded-full border border-theme-success bg-theme-success/10 px-2 py-1 text-theme-success text-xs">
 											Google + パスキー
 										</span>
 									) : authMethod === "google-only" ? (
-										<span className="inline-flex items-center gap-1 rounded-full bg-theme-success/10 border border-theme-success px-2 py-1 text-theme-success text-xs">
+										<span className="inline-flex items-center gap-1 rounded-full border border-theme-success bg-theme-success/10 px-2 py-1 text-theme-success text-xs">
 											Google
 										</span>
 									) : (
-										<span className="inline-flex items-center gap-1 rounded-full bg-theme-surface border border-theme-border px-2 py-1 text-theme-text-secondary text-xs">
+										<span className="inline-flex items-center gap-1 rounded-full border border-theme-border bg-theme-surface px-2 py-1 text-theme-text-secondary text-xs">
 											不明
 										</span>
 									)}
@@ -305,9 +309,10 @@ export function ProfileEditor({ initialName, authMethod, userEmail }: ProfileEdi
 
 						{/* パスキー認証の説明（控えめなスタイル） */}
 						{authMethod === "passkey-only" && (
-							<div className="rounded-md bg-theme-primary/5 border border-theme-primary/20 p-3">
+							<div className="rounded-md border border-theme-primary/20 bg-theme-primary/5 p-3">
 								<p className="text-theme-text-secondary text-xs leading-relaxed">
-									🔑 パスキー認証でセキュリティを強化しています。パスワードを覚える必要がなく、フィッシング攻撃からも保護されています。
+									🔑
+									パスキー認証でセキュリティを強化しています。パスワードを覚える必要がなく、フィッシング攻撃からも保護されています。
 								</p>
 							</div>
 						)}
@@ -325,15 +330,15 @@ export function ProfileEditor({ initialName, authMethod, userEmail }: ProfileEdi
 
 				{isSavingName && (
 					<div className="rounded-lg bg-blue-50 p-3">
-						<p className="text-blue-800 text-sm">
-							✏️ 名前を更新中です...
-						</p>
+						<p className="text-blue-800 text-sm">✏️ 名前を更新中です...</p>
 					</div>
 				)}
 
 				{/* 注意事項 */}
 				<div className="space-y-1 text-slate-500 text-xs">
-					<p><strong>画像について:</strong></p>
+					<p>
+						<strong>画像について:</strong>
+					</p>
 					<p>• 対応ファイル形式: JPEG, PNG, GIF, WebP</p>
 					<p>• ファイルサイズ: 最大5MB</p>
 					<p>• 推奨サイズ: 400x400px以上の正方形</p>

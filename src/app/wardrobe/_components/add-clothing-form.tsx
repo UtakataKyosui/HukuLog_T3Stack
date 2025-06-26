@@ -1,5 +1,6 @@
 "use client";
 
+import { useTheme } from "@/components/providers/theme-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,7 +12,6 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { useTheme } from "@/components/providers/theme-provider";
 import { api } from "@/trpc/react";
 import { useState } from "react";
 
@@ -44,8 +44,12 @@ export default function AddClothingForm({
 		type: "tops",
 	});
 
-	const { data: categories, refetch: refetchCategories } =
-		api.clothing.getCategories.useQuery();
+	const {
+		data: categories,
+		refetch: refetchCategories,
+		isLoading,
+		error,
+	} = api.clothing.getCategories.useQuery();
 	const createCategory = api.clothing.createCategory.useMutation({
 		onSuccess: () => {
 			refetchCategories();
@@ -64,13 +68,15 @@ export default function AddClothingForm({
 
 	// テーマに応じたクラス名を決定
 	const getThemeClasses = () => {
-		const isDark = theme === 'dark' || theme === 'high-contrast';
+		const isDark = theme === "dark" || theme === "high-contrast";
 		return {
-			label: isDark ? 'text-theme-text' : 'text-theme-text',
-			input: isDark ? 'border-theme-border focus:border-theme-primary text-gray-900' : 'border-theme-border focus:border-theme-primary text-gray-900',
-			helpText: isDark ? 'text-theme-text-secondary' : 'text-theme-text-secondary',
-			categoryBox: isDark ? 'border-theme-primary bg-theme-primary/10' : 'border-blue-200 bg-blue-50',
-			border: isDark ? 'border-theme-border' : 'border-slate-200',
+			label: "text-theme-text",
+			input: `border-theme-border focus:border-theme-primary text-theme-text bg-${isDark ? "theme-surface" : "theme-background"}`,
+			helpText: "text-theme-text-secondary",
+			categoryBox: isDark
+				? "border-theme-primary bg-theme-primary/10"
+				: "border-blue-200 bg-blue-50",
+			border: isDark ? "border-theme-border" : "border-slate-200",
 		};
 	};
 
@@ -231,10 +237,26 @@ export default function AddClothingForm({
 							aria-describedby="category-help"
 							className={themeClasses.input}
 						>
-							<SelectValue placeholder="カテゴリを選択してください" />
+							<SelectValue
+								placeholder={
+									isLoading
+										? "カテゴリ読み込み中..."
+										: error
+											? "カテゴリ読み込みエラー"
+											: "カテゴリを選択してください"
+								}
+							/>
 						</SelectTrigger>
 						<SelectContent>
-							{categories?.length === 0 ? (
+							{isLoading ? (
+								<SelectItem value="loading" disabled>
+									読み込み中...
+								</SelectItem>
+							) : error ? (
+								<SelectItem value="error" disabled>
+									エラー: {error.message}
+								</SelectItem>
+							) : categories?.length === 0 ? (
 								<SelectItem value="no-categories" disabled>
 									カテゴリがありません。上の「+
 									新しいカテゴリ」から作成してください。
@@ -248,7 +270,10 @@ export default function AddClothingForm({
 							)}
 						</SelectContent>
 					</Select>
-					<p id="category-help" className={`mt-1 text-xs ${themeClasses.helpText}`}>
+					<p
+						id="category-help"
+						className={`mt-1 text-xs ${themeClasses.helpText}`}
+					>
 						服の種類を選択してください。カテゴリがない場合は新しく作成できます。
 					</p>
 				</div>
@@ -268,7 +293,10 @@ export default function AddClothingForm({
 							aria-describedby="brand-help"
 							className={themeClasses.input}
 						/>
-						<p id="brand-help" className={`mt-1 text-xs ${themeClasses.helpText}`}>
+						<p
+							id="brand-help"
+							className={`mt-1 text-xs ${themeClasses.helpText}`}
+						>
 							ブランド名（任意）
 						</p>
 					</div>
@@ -286,7 +314,10 @@ export default function AddClothingForm({
 							aria-describedby="color-help"
 							className={themeClasses.input}
 						/>
-						<p id="color-help" className={`mt-1 text-xs ${themeClasses.helpText}`}>
+						<p
+							id="color-help"
+							className={`mt-1 text-xs ${themeClasses.helpText}`}
+						>
 							色の名前（任意）
 						</p>
 					</div>
@@ -307,7 +338,10 @@ export default function AddClothingForm({
 							aria-describedby="size-help"
 							className={themeClasses.input}
 						/>
-						<p id="size-help" className={`mt-1 text-xs ${themeClasses.helpText}`}>
+						<p
+							id="size-help"
+							className={`mt-1 text-xs ${themeClasses.helpText}`}
+						>
 							サイズ（任意）
 						</p>
 					</div>
@@ -335,7 +369,10 @@ export default function AddClothingForm({
 								<SelectItem value="all">オールシーズン</SelectItem>
 							</SelectContent>
 						</Select>
-						<p id="season-help" className={`mt-1 text-xs ${themeClasses.helpText}`}>
+						<p
+							id="season-help"
+							className={`mt-1 text-xs ${themeClasses.helpText}`}
+						>
 							着用する季節（任意）
 						</p>
 					</div>
@@ -356,7 +393,10 @@ export default function AddClothingForm({
 						aria-describedby="imageUrl-help"
 						className={themeClasses.input}
 					/>
-					<p id="imageUrl-help" className={`mt-1 text-xs ${themeClasses.helpText}`}>
+					<p
+						id="imageUrl-help"
+						className={`mt-1 text-xs ${themeClasses.helpText}`}
+					>
 						画像のURL（任意）
 					</p>
 				</div>
@@ -378,7 +418,10 @@ export default function AddClothingForm({
 							className={themeClasses.input}
 							min="0"
 						/>
-						<p id="price-help" className={`mt-1 text-xs ${themeClasses.helpText}`}>
+						<p
+							id="price-help"
+							className={`mt-1 text-xs ${themeClasses.helpText}`}
+						>
 							購入価格（任意）
 						</p>
 					</div>
@@ -396,7 +439,10 @@ export default function AddClothingForm({
 							aria-describedby="date-help"
 							className={themeClasses.input}
 						/>
-						<p id="date-help" className={`mt-1 text-xs ${themeClasses.helpText}`}>
+						<p
+							id="date-help"
+							className={`mt-1 text-xs ${themeClasses.helpText}`}
+						>
 							購入した日付（任意）
 						</p>
 					</div>
@@ -434,12 +480,17 @@ export default function AddClothingForm({
 						aria-describedby="notes-help"
 						className={themeClasses.input}
 					/>
-					<p id="notes-help" className={`mt-1 text-xs ${themeClasses.helpText}`}>
+					<p
+						id="notes-help"
+						className={`mt-1 text-xs ${themeClasses.helpText}`}
+					>
 						自由にメモを記入（任意）
 					</p>
 				</div>
 
-				<div className={`flex flex-col justify-end gap-3 border-t pt-4 sm:flex-row ${themeClasses.border}`}>
+				<div
+					className={`flex flex-col justify-end gap-3 border-t pt-4 sm:flex-row ${themeClasses.border}`}
+				>
 					<Button
 						type="button"
 						variant="outline"
