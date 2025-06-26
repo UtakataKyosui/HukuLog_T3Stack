@@ -51,10 +51,11 @@ export function Modal({
 	// テーマに応じたスタイルクラスを決定
 	const getThemeClasses = () => {
 		return {
-			modalBg: 'bg-theme-background',
-			border: 'border-theme-border',
-			title: 'text-theme-text',
-			closeButton: 'text-theme-text-secondary hover:bg-theme-surface hover:text-theme-text',
+			modalBg: "bg-theme-background",
+			border: "border-theme-border",
+			title: "text-theme-text",
+			closeButton:
+				"text-theme-text-secondary hover:bg-theme-surface hover:text-theme-text",
 		};
 	};
 
@@ -71,8 +72,12 @@ export function Modal({
 			>
 				{/* Header */}
 				{title && (
-					<div className={`flex flex-shrink-0 items-center justify-between border-b p-4 sm:p-6 ${themeClasses.border}`}>
-						<h2 className={`font-bold text-lg sm:text-xl ${themeClasses.title}`}>
+					<div
+						className={`flex flex-shrink-0 items-center justify-between border-b p-4 sm:p-6 ${themeClasses.border}`}
+					>
+						<h2
+							className={`font-bold text-lg sm:text-xl ${themeClasses.title}`}
+						>
 							{title}
 						</h2>
 						<button

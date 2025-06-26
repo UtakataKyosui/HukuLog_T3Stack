@@ -41,7 +41,7 @@ export default function SetupPasskeyPage() {
 				return;
 			}
 			setSession(sessionData);
-			
+
 			// 自動モードの場合、自動的にパスキー設定を開始
 			if (isAuto && !isLoading) {
 				setTimeout(() => handleSetupPasskey(), 500);
@@ -101,7 +101,8 @@ export default function SetupPasskeyPage() {
 						パスキーを設定しませんか？
 					</CardTitle>
 					<CardDescription className="text-slate-600">
-						ようこそ、{session?.user?.name || "ユーザー"}さん！<br />
+						ようこそ、{session?.user?.name || "ユーザー"}さん！
+						<br />
 						パスキーを設定すると、次回からGoogleアカウント不要で簡単にログインできます
 					</CardDescription>
 				</CardHeader>
@@ -137,7 +138,8 @@ export default function SetupPasskeyPage() {
 
 					<div className="rounded-lg border border-blue-200 bg-blue-50 p-3">
 						<p className="text-blue-800 text-xs">
-							💡 パスキーは一度設定すると、Googleアカウントなしでもログインできるようになります
+							💡
+							パスキーは一度設定すると、Googleアカウントなしでもログインできるようになります
 						</p>
 					</div>
 				</CardContent>
