@@ -46,6 +46,10 @@ export const users = createTable("user", (d) => ({
 	emailVerified: d.boolean().notNull().default(false),
 	image: d.varchar({ length: 255 }),
 	isAnonymous: d.boolean().notNull().default(false),
+	storageType: d.varchar({ length: 50 }).notNull().default("postgresql"), // postgresql, notion
+	notionAccessToken: d.text(),
+	notionClothingDatabaseId: d.varchar({ length: 255 }),
+	notionOutfitsDatabaseId: d.varchar({ length: 255 }),
 	createdAt: d
 		.timestamp({ withTimezone: true })
 		.default(sql`CURRENT_TIMESTAMP`)

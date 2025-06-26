@@ -11,12 +11,19 @@ import {
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { api } from "@/trpc/react";
 
 export default function SetupProfilePage() {
 	const [name, setName] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 	const [session, setSession] = useState<any>(null);
+	const [checkingStorage, setCheckingStorage] = useState(true);
 	const router = useRouter();
+
+	const { data: storagePreferences } = api.userStorage.getStoragePreferences.useQuery(
+		undefined,
+		{ enabled: !!session }
+	);
 
 	useEffect(() => {
 		const checkSession = async () => {
@@ -35,6 +42,25 @@ export default function SetupProfilePage() {
 		checkSession();
 	}, [router]);
 
+	useEffect(() => {
+		if (storagePreferences) {
+			// データベース設定が未完了の場合、ストレージ選択ページにリダイレクト
+			if (!storagePreferences.storageType || storagePreferences.storageType === "postgresql") {
+				// PostgreSQLの場合は追加設定不要なのでそのまま進む
+				setCheckingStorage(false);
+			} else if (storagePreferences.storageType === "notion") {
+				// Notionの場合、必要な設定が揃っているかチェック
+				if (!storagePreferences.notionAccessToken || 
+					!storagePreferences.notionClothingDatabaseId || 
+					!storagePreferences.notionOutfitsDatabaseId) {
+					router.push("/setup-storage");
+					return;
+				}
+				setCheckingStorage(false);
+			}
+		}
+	}, [storagePreferences, router]);
+
 	const handleSave = async () => {
 		if (!name.trim()) {
 			alert("名前を入力してください");
@@ -47,8 +73,8 @@ export default function SetupProfilePage() {
 				name: name.trim(),
 			});
 			
-			// プロフィール設定完了後、メインページにリダイレクト
-			router.push("/outfits");
+			// プロフィール設定完了後、ストレージ選択ページにリダイレクト
+			router.push("/setup-storage");
 		} catch (error) {
 			console.error("Profile setup error:", error);
 			alert("プロフィールの設定に失敗しました");
@@ -58,13 +84,16 @@ export default function SetupProfilePage() {
 	};
 
 	const handleSkip = () => {
-		router.push("/outfits");
+		router.push("/setup-storage");
 	};
 
-	if (!session) {
+	if (!session || checkingStorage) {
 		return (
 			<div className="flex min-h-screen items-center justify-center">
-				<div>読み込み中...</div>
+				<div className="text-center">
+					<div className="animate-spin rounded-full h-8 w-8 border-b-2 border-theme-primary mx-auto mb-4"></div>
+					<div>{!session ? "読み込み中..." : "設定を確認中..."}</div>
+				</div>
 			</div>
 		);
 	}

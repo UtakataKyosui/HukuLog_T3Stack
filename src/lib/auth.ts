@@ -13,6 +13,7 @@ import { nextCookies } from "better-auth/next-js";
 import { openAPI } from "better-auth/plugins";
 import { anonymous } from "better-auth/plugins/anonymous";
 import { passkey } from "better-auth/plugins/passkey";
+import { genericOAuth } from "better-auth/plugins/generic-oauth";
 
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {
@@ -74,6 +75,24 @@ export const auth = betterAuth({
 						? `https://${process.env.CODESPACE_NAME}-3000.${process.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}`
 						: "http://localhost:3000",
 		}),
+		...(env.NOTION_CLIENT_ID && env.NOTION_CLIENT_SECRET
+			? [
+					genericOAuth({
+						config: [
+							{
+								providerId: "notion",
+								clientId: env.NOTION_CLIENT_ID,
+								clientSecret: env.NOTION_CLIENT_SECRET,
+								authorizationUrl: "https://api.notion.com/v1/oauth/authorize",
+								tokenUrl: "https://api.notion.com/v1/oauth/token",
+								userInfoUrl: "https://api.notion.com/v1/users/me",
+								scopes: ["read"],
+								pkce: false,
+							},
+						],
+					}),
+				]
+			: []),
 		nextCookies(),
 	],
 	session: {

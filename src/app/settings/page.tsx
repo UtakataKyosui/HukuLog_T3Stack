@@ -2,6 +2,7 @@ import { PasskeyManager } from "@/components/auth/passkey-manager";
 import { PasskeySetupPrompt } from "@/components/auth/passkey-setup-prompt";
 import { HearingAccessibilitySettings } from "@/components/accessibility/hearing-accessibility-settings";
 import { AccessibilitySettings } from "@/components/settings/accessibility-settings";
+import { StorageSettings } from "@/components/settings/storage-settings";
 import { ThemeSelector } from "@/components/settings/theme-selector";
 import { ProfileEditor } from "@/components/user/profile-editor";
 import { getServerSession } from "@/server/auth";
@@ -41,6 +42,8 @@ export default async function SettingsPage() {
 					{!hasPasskeys && hasGoogleAccount && <PasskeySetupPrompt />}
 
 					<PasskeyManager />
+
+					<StorageSettings />
 
 					<HearingAccessibilitySettings />
 
