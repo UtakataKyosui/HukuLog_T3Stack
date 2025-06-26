@@ -181,6 +181,18 @@ export function VisualFeedbackSystem() {
 			document.removeEventListener("keydown", handleKeyboardShortcut);
 	}, []);
 
+	// 緊急通知ハンドラーの抽出
+	const handleEmergencyNotification = () => {
+		addNotification({
+			type: "warning",
+			title: "緊急アクセシビリティモード",
+			message:
+				"ハイコントラストテーマに切り替えました。視認性が最大化されています。",
+			icon: <Eye className="h-5 w-5" />,
+			duration: 6000,
+		});
+	};
+
 	// 緊急時のEscape×3の検出
 	useEffect(() => {
 		let escapeCount = 0;
@@ -191,14 +203,7 @@ export function VisualFeedbackSystem() {
 				escapeCount++;
 
 				if (escapeCount === 3) {
-					addNotification({
-						type: "warning",
-						title: "緊急アクセシビリティモード",
-						message:
-							"ハイコントラストテーマに切り替えました。視認性が最大化されています。",
-						icon: <Eye className="h-5 w-5" />,
-						duration: 6000,
-					});
+					handleEmergencyNotification();
 					escapeCount = 0;
 					clearTimeout(escapeTimer);
 				} else if (escapeCount === 1) {

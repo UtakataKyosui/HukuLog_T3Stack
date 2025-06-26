@@ -63,7 +63,7 @@ async function deduplicateCategories() {
 			.delete(clothingCategories)
 			.where(not(inArray(clothingCategories.id, keepIds)));
 
-		console.log(`✅ Deleted duplicate categories`);
+		console.log("✅ Deleted duplicate categories");
 
 		// 最終確認
 		const finalCategories = await db.select().from(clothingCategories);

@@ -73,25 +73,38 @@ export function AccessibilityThemeManager() {
 	useEffect(() => {
 		if (!settings.enableKeyboardShortcuts) return;
 
+		// テーマ切り替えのヘルパー関数
+		const handleAccessibilityThemeSwitch = () => {
+			switchToAccessibilityTheme();
+		};
+
+		const handleHighContrastThemeSwitch = () => {
+			setTheme("high-contrast");
+			announceThemeChange("ハイコントラスト");
+		};
+
+		const handleEyeFriendlyThemeSwitch = () => {
+			setTheme("eye-friendly");
+			announceThemeChange("目に優しい");
+		};
+
 		const handleGlobalKeyboard = (e: KeyboardEvent) => {
 			// Ctrl + Shift + A: アクセシビリティテーマ切り替え
 			if (e.ctrlKey && e.shiftKey && e.key === "A") {
 				e.preventDefault();
-				switchToAccessibilityTheme();
+				handleAccessibilityThemeSwitch();
 			}
 
 			// Ctrl + Shift + H: ハイコントラストに即切り替え
 			if (e.ctrlKey && e.shiftKey && e.key === "H") {
 				e.preventDefault();
-				setTheme("high-contrast");
-				announceThemeChange("ハイコントラスト");
+				handleHighContrastThemeSwitch();
 			}
 
 			// Ctrl + Shift + E: 目に優しいテーマに即切り替え
 			if (e.ctrlKey && e.shiftKey && e.key === "E") {
 				e.preventDefault();
-				setTheme("eye-friendly");
-				announceThemeChange("目に優しい");
+				handleEyeFriendlyThemeSwitch();
 			}
 
 			// Ctrl + Shift + L: ライトテーマに即切り替え
@@ -156,7 +169,7 @@ export function AccessibilityThemeManager() {
 				aria-live="polite"
 				aria-atomic="true"
 				className="sr-only"
-			></div>
+			/>
 
 			{/* キーボードショートカットのヘルプ（スクリーンリーダー用） */}
 			<div className="sr-only">

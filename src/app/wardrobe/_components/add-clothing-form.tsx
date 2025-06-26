@@ -71,9 +71,7 @@ export default function AddClothingForm({
 		const isDark = theme === "dark" || theme === "high-contrast";
 		return {
 			label: "text-theme-text",
-			input: isDark
-				? "border-theme-border focus:border-theme-primary text-theme-text bg-theme-surface"
-				: "border-theme-border focus:border-theme-primary text-theme-text bg-theme-background",
+			input: `border-theme-border focus:border-theme-primary text-theme-text bg-${isDark ? 'theme-surface' : 'theme-background'}`,
 			helpText: "text-theme-text-secondary",
 			categoryBox: isDark
 				? "border-theme-primary bg-theme-primary/10"

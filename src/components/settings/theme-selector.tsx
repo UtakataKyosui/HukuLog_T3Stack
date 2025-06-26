@@ -137,9 +137,9 @@ export function ThemeSelector() {
 							セカンダリテキスト
 						</p>
 						<div className="mt-3 flex gap-2">
-							<div className="h-6 w-6 rounded bg-theme-primary"></div>
-							<div className="h-6 w-6 rounded bg-theme-accent"></div>
-							<div className="h-6 w-6 rounded bg-theme-success"></div>
+							<div className="h-6 w-6 rounded bg-theme-primary" />
+							<div className="h-6 w-6 rounded bg-theme-accent" />
+							<div className="h-6 w-6 rounded bg-theme-success" />
 						</div>
 					</div>
 				</div>

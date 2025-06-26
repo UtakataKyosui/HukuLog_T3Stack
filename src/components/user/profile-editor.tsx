@@ -152,8 +152,6 @@ export function ProfileEditor({
 			case "dark":
 			case "high-contrast":
 				return "text-gray-900"; // ダークテーマでは濃いグレー
-			case "light":
-			case "eye-friendly":
 			default:
 				return "text-gray-900"; // ライトテーマでは濃いグレー
 		}

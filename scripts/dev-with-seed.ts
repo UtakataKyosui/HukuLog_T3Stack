@@ -1,4 +1,4 @@
-import { spawn } from "child_process";
+import { spawn } from "node:child_process";
 import { checkSeedData } from "../src/server/db/check-seed";
 
 async function runSeed() {
@@ -37,13 +37,13 @@ async function startDevServer() {
 
 	// プロセス終了時のクリーンアップ
 	process.on("SIGINT", () => {
-		console.log("\n🛑 Shutting down development server...");
+		console.log("\n🛑 Shutting down development server due to SIGINT...");
 		devProcess.kill("SIGINT");
 		process.exit(0);
 	});
 
 	process.on("SIGTERM", () => {
-		console.log("\n🛑 Shutting down development server...");
+		console.log("\n🛑 Shutting down development server due to SIGTERM...");
 		devProcess.kill("SIGTERM");
 		process.exit(0);
 	});
