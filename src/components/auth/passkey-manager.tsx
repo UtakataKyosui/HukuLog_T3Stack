@@ -8,7 +8,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { authClient } from "@/lib/auth-client";
+import { addPasskey } from "@/lib/auth-utils";
 import { api } from "@/trpc/react";
 import { useState } from "react";
 
@@ -18,17 +18,17 @@ export function PasskeyManager() {
 	const { data: passkeys, refetch: refetchPasskeys } =
 		api.passkey.getMyPasskeys.useQuery();
 
-	const addPasskey = async () => {
-		setIsLoading(true);
-		try {
-			await authClient.passkey.addPasskey();
+	const handleAddPasskey = async () => {
+		const result = await addPasskey(
+			undefined,
+			() => setIsLoading(true),
+			() => setIsLoading(false),
+			undefined
+		);
+		
+		if (result) {
 			await refetchPasskeys();
 			alert("パスキーが追加されました！");
-		} catch (error) {
-			console.error("Failed to add passkey:", error);
-			alert("パスキーの追加に失敗しました。");
-		} finally {
-			setIsLoading(false);
 		}
 	};
 
@@ -71,7 +71,7 @@ export function PasskeyManager() {
 					)}
 				</div>
 
-				<Button onClick={addPasskey} disabled={isLoading} className="w-full">
+				<Button onClick={handleAddPasskey} disabled={isLoading} className="w-full">
 					{isLoading ? "追加中..." : "🔑 新しいパスキーを追加"}
 				</Button>
 

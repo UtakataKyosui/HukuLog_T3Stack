@@ -37,6 +37,7 @@ export const universalClothingRouter = createTRPCRouter({
       } else if (userConfig.storageType === "notion") {
         // Notionから取得
         if (!userConfig.notionAccessToken || !userConfig.notionClothingDatabaseId) {
+          console.error("Notion configuration is incomplete.", userConfig);
           throw new Error("Notion設定が不完全です");
         }
         
@@ -90,6 +91,7 @@ export const universalClothingRouter = createTRPCRouter({
       } else if (userConfig.storageType === "notion") {
         // Notionに保存
         if (!userConfig.notionAccessToken || !userConfig.notionClothingDatabaseId) {
+          console.error("Notion configuration is incomplete.", userConfig);
           throw new Error("Notion設定が不完全です");
         }
         
@@ -177,6 +179,7 @@ export const universalClothingRouter = createTRPCRouter({
       } else if (userConfig.storageType === "notion") {
         // Notionで更新
         if (!userConfig.notionAccessToken || !userConfig.notionClothingDatabaseId) {
+          console.error("Notion configuration is incomplete.", userConfig);
           throw new Error("Notion設定が不完全です");
         }
         
@@ -219,6 +222,7 @@ export const universalClothingRouter = createTRPCRouter({
       } else if (userConfig.storageType === "notion") {
         // Notionで削除
         if (!userConfig.notionAccessToken || !userConfig.notionClothingDatabaseId) {
+          console.error("Notion configuration is incomplete.", userConfig);
           throw new Error("Notion設定が不完全です");
         }
         

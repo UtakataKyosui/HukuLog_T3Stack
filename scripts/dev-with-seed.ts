@@ -36,17 +36,14 @@ async function startDevServer() {
 	});
 
 	// プロセス終了時のクリーンアップ
-	process.on("SIGINT", () => {
+	const shutdownDevServer = (signal: string) => {
 		console.log("\n🛑 Shutting down development server...");
-		devProcess.kill("SIGINT");
+		devProcess.kill(signal as NodeJS.Signals);
 		process.exit(0);
-	});
+	};
 
-	process.on("SIGTERM", () => {
-		console.log("\n🛑 Shutting down development server...");
-		devProcess.kill("SIGTERM");
-		process.exit(0);
-	});
+	process.on("SIGINT", () => shutdownDevServer("SIGINT"));
+	process.on("SIGTERM", () => shutdownDevServer("SIGTERM"));
 }
 
 async function main() {

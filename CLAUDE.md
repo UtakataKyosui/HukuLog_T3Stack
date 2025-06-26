@@ -235,3 +235,64 @@ npm run db:seed
 
 ## 開発サーバ起動チェック
 - タスク実行前に、localhost:3000が開発サーバとして起動しているかチェックして、それが別ターミナルで動いているならそれを使ってください
+
+## Notionデータベース選択システム実装知見
+
+### 概要
+PostgreSQLとNotionデータベースを選択できるマルチデータベース対応システムを実装。ユーザーはアカウント作成時にデータの保存方法を選択し、設定画面からいつでも変更可能。
+
+### 主要実装パターン
+
+#### 1. ユーザー設定管理
+```typescript
+// ユーザーテーブルにストレージ設定を追加
+storageType: "postgresql" | "notion"
+notionAccessToken: string
+notionClothingDatabaseId: string
+notionOutfitsDatabaseId: string
+```
+
+#### 2. Universal Routerパターン
+```typescript
+// ユーザー設定に基づく動的ルーティング
+const userConfig = await getUserStorageConfig(userId);
+if (userConfig.storageType === "postgresql") {
+  return await postgresqlOperation();
+} else {
+  return await notionOperation(userConfig);
+}
+```
+
+#### 3. Notion API統合パターン
+```typescript
+// データベース自動作成
+await notionClient.createDatabasesInPage(pageId);
+// 完全なスキーマ設定とリレーション作成を自動化
+```
+
+### セットアップフロー設計
+1. **プロフィール設定** → **ストレージ選択** → **利用開始**
+2. **自動セットアップ vs 手動セットアップ** の選択肢提供
+3. **段階的ウィザード** による直感的なセットアップ
+
+### セキュリティ考慮事項
+- Notionアクセストークンの安全な保存
+- ユーザーIDベースのデータ分離
+- ページアクセス権限の事前検証
+- エラーハンドリングと適切なフィードバック
+
+### UI/UX設計パターン
+- **比較表示**: PostgreSQL vs Notionの特徴を視覚的に比較
+- **段階的設定**: 複雑な設定を小さなステップに分割
+- **状態管理**: React useState + tRPCによるリアルタイム検証
+- **エラー表示**: ユーザーフレンドリーなエラーメッセージ
+
+### トラブルシューティング
+- **統合アクセス権限**: Notionページへの統合招待が必要
+- **データベースID取得**: URLからの32文字抽出方法
+- **API権限**: Read, Update, Insert権限の設定確認
+
+### 今後の改善可能性
+- **データ移行機能**: PostgreSQL ↔ Notion間のデータ移行
+- **同期機能**: 両方のデータベースでの同期保持
+- **バックアップ機能**: Notionデータの定期バックアップ

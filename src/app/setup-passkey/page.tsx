@@ -9,6 +9,7 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { authClient } from "@/lib/auth-client";
+import { addPasskey } from "@/lib/auth-utils";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -21,15 +22,15 @@ export default function SetupPasskeyPage() {
 	const isAuto = searchParams.get("auto") === "true";
 
 	const handleSetupPasskey = async () => {
-		setIsLoading(true);
-		try {
-			await authClient.passkey.addPasskey();
+		const result = await addPasskey(
+			undefined,
+			() => setIsLoading(true),
+			() => setIsLoading(false),
+			(error) => alert(`パスキーの設定に失敗しました: ${error}`)
+		);
+		
+		if (result) {
 			setIsSetupComplete(true);
-		} catch (error) {
-			console.error("Passkey setup error:", error);
-			alert("パスキーの設定に失敗しました。もう一度お試しください。");
-		} finally {
-			setIsLoading(false);
 		}
 	};
 

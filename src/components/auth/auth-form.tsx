@@ -8,7 +8,12 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { authClient } from "@/lib/auth-client";
+import {
+	handleNotionAuth,
+	handleGoogleAuth,
+	handlePasskeyAuth,
+	handlePasskeySignUp,
+} from "@/lib/auth-utils";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
@@ -19,109 +24,42 @@ export function AuthForm() {
 	const isExpired = searchParams.get("expired") === "true";
 	const [isSignUp, setIsSignUp] = useState(searchParams.get("mode") === "signup");
 
-	const handlePasskeySignUp = async () => {
-		setIsLoading(true);
-		try {
-			console.log("Starting Better Auth passkey signup...");
-			
-			// ステップ1: 匿名ユーザーとしてサインイン
-			const anonymousResult = await authClient.signIn.anonymous();
-			
-			if (!anonymousResult?.data) {
-				console.error("Anonymous signin result:", anonymousResult);
-				throw new Error("匿名ユーザーの作成に失敗しました");
-			}
-			
-			console.log("Anonymous user created successfully:", anonymousResult.data.user.id);
-			
-			// 少し待機してセッション確立を確実にする
-			await new Promise(resolve => setTimeout(resolve, 500));
-			
-			// ステップ2: パスキーを追加（Better Authの推奨方法）
-			console.log("Adding passkey...");
-			const passkeyResult = await authClient.passkey.addPasskey({
-				name: "メインパスキー"
-			});
-			
-			console.log("Passkey result:", passkeyResult);
-			
-			// Better Authのパスキー追加は成功時にvoidを返すか、エラー時にthrowする
-			console.log("Passkey added successfully");
-			
+	const handlePasskeySignUpClick = async () => {
+		const result = await handlePasskeySignUp(
+			() => setIsLoading(true),
+			() => setIsLoading(false)
+		);
+		
+		if (result) {
 			// 成功後、プロフィール設定ページにリダイレクト
 			router.push("/setup-profile");
-			
-		} catch (error) {
-			console.error("Passkey signup error:", error);
-			const errorMessage = error instanceof Error ? error.message : 'パスキー登録に失敗しました';
-			
-			// WebAuthnエラーのハンドリング
-			if (errorMessage.includes('NotAllowedError') || errorMessage.includes('InvalidStateError')) {
-				alert("パスキーの作成がキャンセルされました。もう一度お試しください。");
-			} else if (errorMessage.includes('NotSupportedError')) {
-				alert("お使いのブラウザまたはデバイスはパスキーをサポートしていません。Googleアカウントでの登録をお試しください。");
-				// フォールバック: Googleで登録
-				try {
-					await authClient.signIn.social({
-						provider: "google",
-						callbackURL: "/setup-passkey",
-					});
-				} catch (googleError) {
-					console.error("Google signup error:", googleError);
-					alert("Googleでの登録も失敗しました。");
-				}
-			} else {
-				alert(`パスキー登録エラー: ${errorMessage}`);
-			}
-		} finally {
-			setIsLoading(false);
 		}
 	};
 
-	const handleGoogleAuth = async () => {
-		setIsLoading(true);
-		try {
-			await authClient.signIn.social({
-				provider: "google",
-				callbackURL: "/setup-profile",
-			});
-		} catch (error) {
-			console.error("Google auth error:", error);
-		} finally {
-			setIsLoading(false);
-		}
+	const handleGoogleAuthClick = async () => {
+		await handleGoogleAuth(
+			"/setup-profile",
+			() => setIsLoading(true),
+			() => setIsLoading(false)
+		);
 	};
 
-	const handleNotionAuth = async () => {
-		setIsLoading(true);
-		try {
-			await authClient.signIn.oauth2({
-				providerId: "notion",
-				callbackURL: "/setup-profile",
-			});
-		} catch (error) {
-			console.error("Notion auth error:", error);
-			alert("Notionでのログインに失敗しました。");
-		} finally {
-			setIsLoading(false);
-		}
+	const handleNotionAuthClick = async () => {
+		await handleNotionAuth(
+			"/setup-profile",
+			() => setIsLoading(true),
+			() => setIsLoading(false)
+		);
 	};
 
-	const handlePasskeyAuth = async () => {
-		setIsLoading(true);
-		try {
-			const result = await authClient.signIn.passkey();
-			
-			if (result?.error) {
-				throw new Error(result.error.message);
-			}
-			
+	const handlePasskeyAuthClick = async () => {
+		const result = await handlePasskeyAuth(
+			() => setIsLoading(true),
+			() => setIsLoading(false)
+		);
+		
+		if (result) {
 			router.push("/");
-		} catch (error) {
-			console.error("Passkey auth error:", error);
-			alert("パスキーでのログインに失敗しました。パスキーが登録されているか確認してください。");
-		} finally {
-			setIsLoading(false);
 		}
 	};
 
@@ -162,7 +100,7 @@ export function AuthForm() {
 								</p>
 							</div>
 							<Button
-								onClick={handlePasskeySignUp}
+								onClick={handlePasskeySignUpClick}
 								className="w-full bg-slate-800 text-white hover:bg-slate-700"
 								disabled={isLoading}
 							>
@@ -181,7 +119,7 @@ export function AuthForm() {
 							</div>
 							
 							<Button
-								onClick={handleGoogleAuth}
+								onClick={handleGoogleAuthClick}
 								variant="outline"
 								className="w-full border-slate-300 hover:bg-slate-50"
 								disabled={isLoading}
@@ -190,7 +128,7 @@ export function AuthForm() {
 							</Button>
 							
 							<Button
-								onClick={handleNotionAuth}
+								onClick={handleNotionAuthClick}
 								variant="outline"
 								className="w-full border-slate-300 hover:bg-slate-50"
 								disabled={isLoading}
@@ -216,7 +154,7 @@ export function AuthForm() {
 					{!isSignUp && (
 						<div className="space-y-3">
 							<Button
-								onClick={handlePasskeyAuth}
+								onClick={handlePasskeyAuthClick}
 								className="w-full bg-slate-800 text-white hover:bg-slate-700"
 								disabled={isLoading}
 							>
@@ -224,7 +162,7 @@ export function AuthForm() {
 							</Button>
 
 							<Button
-								onClick={handleGoogleAuth}
+								onClick={handleGoogleAuthClick}
 								variant="outline"
 								className="w-full border-slate-300 hover:bg-slate-50"
 								disabled={isLoading}
@@ -233,7 +171,7 @@ export function AuthForm() {
 							</Button>
 
 							<Button
-								onClick={handleNotionAuth}
+								onClick={handleNotionAuthClick}
 								variant="outline"
 								className="w-full border-slate-300 hover:bg-slate-50"
 								disabled={isLoading}

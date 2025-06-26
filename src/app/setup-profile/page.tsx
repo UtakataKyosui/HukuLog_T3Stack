@@ -9,6 +9,7 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { authClient } from "@/lib/auth-client";
+import { updateUser } from "@/lib/auth-utils";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { api } from "@/trpc/react";
@@ -67,19 +68,16 @@ export default function SetupProfilePage() {
 			return;
 		}
 
-		setIsLoading(true);
-		try {
-			await authClient.updateUser({
-				name: name.trim(),
-			});
-			
+		const result = await updateUser(
+			{ name: name.trim() },
+			() => setIsLoading(true),
+			() => setIsLoading(false),
+			(error) => alert(`プロフィールの設定に失敗しました: ${error}`)
+		);
+		
+		if (result) {
 			// プロフィール設定完了後、ストレージ選択ページにリダイレクト
 			router.push("/setup-storage");
-		} catch (error) {
-			console.error("Profile setup error:", error);
-			alert("プロフィールの設定に失敗しました");
-		} finally {
-			setIsLoading(false);
 		}
 	};
 

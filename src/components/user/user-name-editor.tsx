@@ -8,7 +8,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { authClient } from "@/lib/auth-client";
+import { updateUser } from "@/lib/auth-utils";
 import { Edit, Save, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -29,19 +29,16 @@ export function UserNameEditor({ initialName }: UserNameEditorProps) {
 			return;
 		}
 
-		setIsLoading(true);
-		try {
-			await authClient.updateUser({
-				name: name.trim(),
-			});
-			
+		const result = await updateUser(
+			{ name: name.trim() },
+			() => setIsLoading(true),
+			() => setIsLoading(false),
+			(error) => alert(`名前の更新に失敗しました: ${error}`)
+		);
+		
+		if (result) {
 			setIsEditing(false);
 			router.refresh(); // ページをリフレッシュしてデータを更新
-		} catch (error) {
-			console.error("Name update error:", error);
-			alert("名前の更新に失敗しました");
-		} finally {
-			setIsLoading(false);
 		}
 	};
 
