@@ -3,11 +3,11 @@ import "@/styles/globals.css";
 import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 
+import { VisualFeedbackSystem } from "@/components/accessibility/visual-feedback-system";
 import { Navigation } from "@/components/navigation";
 import { SessionProvider } from "@/components/providers/session-provider";
-import { AccessibilityThemeManager } from "@/components/theme/accessibility-theme-manager";
-import { VisualFeedbackSystem } from "@/components/accessibility/visual-feedback-system";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { AccessibilityThemeManager } from "@/components/theme/accessibility-theme-manager";
 import { TRPCReactProvider } from "@/trpc/react";
 
 export const metadata: Metadata = {

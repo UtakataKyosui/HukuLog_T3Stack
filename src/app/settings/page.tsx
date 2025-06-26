@@ -1,11 +1,16 @@
+import { HearingAccessibilitySettings } from "@/components/accessibility/hearing-accessibility-settings";
 import { PasskeyManager } from "@/components/auth/passkey-manager";
 import { PasskeySetupPrompt } from "@/components/auth/passkey-setup-prompt";
-import { HearingAccessibilitySettings } from "@/components/accessibility/hearing-accessibility-settings";
 import { AccessibilitySettings } from "@/components/settings/accessibility-settings";
 import { ThemeSelector } from "@/components/settings/theme-selector";
 import { ProfileEditor } from "@/components/user/profile-editor";
 import { getServerSession } from "@/server/auth";
-import { userHasPasskeys, userHasGoogleAccount, getUserAuthMethod, getUserAccountInfo } from "@/server/queries/user";
+import {
+	getUserAccountInfo,
+	getUserAuthMethod,
+	userHasGoogleAccount,
+	userHasPasskeys,
+} from "@/server/queries/user";
 import { redirect } from "next/navigation";
 
 export default async function SettingsPage() {
@@ -31,8 +36,8 @@ export default async function SettingsPage() {
 				</div>
 
 				<div className="mx-auto max-w-2xl space-y-6">
-					<ProfileEditor 
-						initialName={session.user?.name} 
+					<ProfileEditor
+						initialName={session.user?.name}
 						authMethod={authMethod}
 						userEmail={session.user?.email}
 					/>
@@ -62,14 +67,17 @@ export default async function SettingsPage() {
 									<strong>認証方法判定:</strong> {authMethod}
 								</div>
 								<div>
-									<strong>パスキー有無:</strong> {accountInfo.hasPasskeys ? "あり" : "なし"} ({accountInfo.passkeyCount}個)
+									<strong>パスキー有無:</strong>{" "}
+									{accountInfo.hasPasskeys ? "あり" : "なし"} (
+									{accountInfo.passkeyCount}個)
 								</div>
 								<div>
-									<strong>Google有無:</strong> {accountInfo.hasGoogle ? "あり" : "なし"}
+									<strong>Google有無:</strong>{" "}
+									{accountInfo.hasGoogle ? "あり" : "なし"}
 								</div>
 								<div>
 									<strong>アカウント情報:</strong>
-									<pre className="mt-2 overflow-auto rounded bg-theme-surface border border-theme-border p-2 text-theme-text text-xs">
+									<pre className="mt-2 overflow-auto rounded border border-theme-border bg-theme-surface p-2 text-theme-text text-xs">
 										{JSON.stringify(accountInfo.accounts, null, 2)}
 									</pre>
 								</div>

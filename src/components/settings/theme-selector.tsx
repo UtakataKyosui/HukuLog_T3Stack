@@ -44,7 +44,7 @@ export function ThemeSelector() {
 						>
 							{theme === themeConfig.id && (
 								<div className="absolute top-2 right-2">
-									<Check className="h-5 w-5 theme-text-primary" />
+									<Check className="theme-text-primary h-5 w-5" />
 								</div>
 							)}
 
@@ -63,7 +63,7 @@ export function ThemeSelector() {
 									<Label className="cursor-pointer font-semibold text-sm">
 										{themeConfig.name}
 									</Label>
-									<p className="mt-1 theme-text-secondary text-xs">
+									<p className="theme-text-secondary mt-1 text-xs">
 										{themeConfig.description}
 									</p>
 								</div>
@@ -102,11 +102,11 @@ export function ThemeSelector() {
 				</div>
 
 				{/* アクセシビリティ情報 */}
-				<div className="mt-6 rounded-lg theme-bg-primary/10 p-4">
-					<h4 className="mb-2 font-medium theme-text text-sm">
+				<div className="theme-bg-primary/10 mt-6 rounded-lg p-4">
+					<h4 className="theme-text mb-2 font-medium text-sm">
 						💡 アクセシビリティテーマについて
 					</h4>
-					<ul className="space-y-1 theme-text-secondary text-xs">
+					<ul className="theme-text-secondary space-y-1 text-xs">
 						<li>
 							• <strong>目に優しい</strong>: ブルーライトを抑えた暖色系のテーマ
 						</li>
@@ -127,29 +127,32 @@ export function ThemeSelector() {
 				</div>
 
 				{/* テーマプレビューエリア */}
-				<div className="bg-theme-background border-theme-border text-theme-text rounded-lg border-2 p-4">
-					<h4 className="text-theme-text mb-3 font-medium text-sm">
+				<div className="rounded-lg border-2 border-theme-border bg-theme-background p-4 text-theme-text">
+					<h4 className="mb-3 font-medium text-sm text-theme-text">
 						🎨 テーマプレビュー
 					</h4>
-					<div className="bg-theme-surface border-theme-border rounded-lg border p-3">
-						<p className="text-theme-text mb-2 font-medium">メインテキスト</p>
-						<p className="text-theme-text-secondary text-sm">セカンダリテキスト</p>
+					<div className="rounded-lg border border-theme-border bg-theme-surface p-3">
+						<p className="mb-2 font-medium text-theme-text">メインテキスト</p>
+						<p className="text-sm text-theme-text-secondary">
+							セカンダリテキスト
+						</p>
 						<div className="mt-3 flex gap-2">
-							<div className="bg-theme-primary h-6 w-6 rounded"></div>
-							<div className="bg-theme-accent h-6 w-6 rounded"></div>
-							<div className="bg-theme-success h-6 w-6 rounded"></div>
+							<div className="h-6 w-6 rounded bg-theme-primary"></div>
+							<div className="h-6 w-6 rounded bg-theme-accent"></div>
+							<div className="h-6 w-6 rounded bg-theme-success"></div>
 						</div>
 					</div>
 				</div>
 
 				{/* 現在のテーマ確認 */}
 				<div className="theme-bg-surface theme-border rounded-lg border p-4">
-					<h4 className="mb-3 font-medium theme-text text-sm">
+					<h4 className="theme-text mb-3 font-medium text-sm">
 						🔍 現在適用中のテーマ
 					</h4>
 					<div className="space-y-2 text-sm">
 						<div>
-							<strong>テーマID:</strong> <code className="rounded theme-bg-surface px-1">{theme}</code>
+							<strong>テーマID:</strong>{" "}
+							<code className="theme-bg-surface rounded px-1">{theme}</code>
 						</div>
 						<div>
 							<strong>テーマ名:</strong> {themeConfig.name}
@@ -158,8 +161,8 @@ export function ThemeSelector() {
 							<div>
 								<strong>プライマリ:</strong>
 								<div className="mt-1 flex items-center gap-2">
-									<div 
-										className="h-4 w-8 rounded border" 
+									<div
+										className="h-4 w-8 rounded border"
 										style={{ backgroundColor: themeConfig.colors.primary }}
 									/>
 									<code className="text-xs">{themeConfig.colors.primary}</code>
@@ -168,11 +171,13 @@ export function ThemeSelector() {
 							<div>
 								<strong>背景:</strong>
 								<div className="mt-1 flex items-center gap-2">
-									<div 
-										className="h-4 w-8 rounded border" 
+									<div
+										className="h-4 w-8 rounded border"
 										style={{ backgroundColor: themeConfig.colors.background }}
 									/>
-									<code className="text-xs">{themeConfig.colors.background}</code>
+									<code className="text-xs">
+										{themeConfig.colors.background}
+									</code>
 								</div>
 							</div>
 						</div>

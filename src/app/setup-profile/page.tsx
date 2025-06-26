@@ -26,7 +26,7 @@ export default function SetupProfilePage() {
 				return;
 			}
 			setSession(sessionData);
-			
+
 			// すでに名前が設定されている場合はホームにリダイレクト
 			if (sessionData.user?.name) {
 				router.push("/outfits");
@@ -46,7 +46,7 @@ export default function SetupProfilePage() {
 			await authClient.updateUser({
 				name: name.trim(),
 			});
-			
+
 			// プロフィール設定完了後、メインページにリダイレクト
 			router.push("/outfits");
 		} catch (error) {
@@ -83,7 +83,10 @@ export default function SetupProfilePage() {
 				</CardHeader>
 				<CardContent className="space-y-4">
 					<div>
-						<label htmlFor="name" className="block text-sm font-medium text-theme-text mb-2">
+						<label
+							htmlFor="name"
+							className="mb-2 block font-medium text-sm text-theme-text"
+						>
 							名前 <span className="text-red-500">*</span>
 						</label>
 						<input
@@ -101,7 +104,7 @@ export default function SetupProfilePage() {
 								}
 							}}
 						/>
-						<p className="mt-1 text-xs text-theme-text-secondary">
+						<p className="mt-1 text-theme-text-secondary text-xs">
 							最大50文字まで入力できます
 						</p>
 					</div>

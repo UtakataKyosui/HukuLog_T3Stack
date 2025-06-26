@@ -44,18 +44,18 @@ export function FavoriteThemeSelector() {
 	// お気に入りテーマでテーマ変更
 	const handleFavoriteThemeChange = (favoriteId: string) => {
 		if (favoriteId === "none") return;
-		
-		const favorite = favoriteThemes.find(f => f.id === favoriteId);
+
+		const favorite = favoriteThemes.find((f) => f.id === favoriteId);
 		if (favorite) {
 			setTheme(favorite.id as any);
-			
+
 			// 視覚的フィードバック
-			const event = new CustomEvent('accessibility-setting-changed', {
+			const event = new CustomEvent("accessibility-setting-changed", {
 				detail: {
-					type: 'success',
-					title: 'お気に入りテーマ適用',
+					type: "success",
+					title: "お気に入りテーマ適用",
 					message: `「${favorite.name}」に切り替えました`,
-				}
+				},
 			});
 			document.dispatchEvent(event);
 		}
@@ -63,51 +63,51 @@ export function FavoriteThemeSelector() {
 
 	// お気に入りから削除
 	const removeFavorite = (favoriteId: string) => {
-		const favorite = favoriteThemes.find(f => f.id === favoriteId);
+		const favorite = favoriteThemes.find((f) => f.id === favoriteId);
 		if (!favorite) return;
 
-		const updated = favoriteThemes.filter(f => f.id !== favoriteId);
+		const updated = favoriteThemes.filter((f) => f.id !== favoriteId);
 		saveFavoriteThemes(updated);
 
 		// 視覚的フィードバック
-		const event = new CustomEvent('accessibility-setting-changed', {
+		const event = new CustomEvent("accessibility-setting-changed", {
 			detail: {
-				type: 'info',
-				title: 'お気に入りから削除',
+				type: "info",
+				title: "お気に入りから削除",
 				message: `「${favorite.name}」をお気に入りから削除しました`,
-			}
+			},
 		});
 		document.dispatchEvent(event);
 	};
 
 	// 現在のテーマがお気に入りに登録されているかチェック
-	const currentThemeIsFavorite = favoriteThemes.some(f => f.id === theme);
+	const currentThemeIsFavorite = favoriteThemes.some((f) => f.id === theme);
 	const currentFavoriteValue = currentThemeIsFavorite ? theme : "none";
 
 	// キーボードショートカット（Alt + 1,2,3）
 	useEffect(() => {
 		const handleKeyPress = (e: KeyboardEvent) => {
-			if (e.altKey && ['1', '2', '3'].includes(e.key)) {
+			if (e.altKey && ["1", "2", "3"].includes(e.key)) {
 				e.preventDefault();
-				const index = parseInt(e.key) - 1;
+				const index = Number.parseInt(e.key) - 1;
 				if (favoriteThemes[index]) {
 					setTheme(favoriteThemes[index].id as any);
-					
+
 					// 視覚的フィードバック
-					const event = new CustomEvent('accessibility-setting-changed', {
+					const event = new CustomEvent("accessibility-setting-changed", {
 						detail: {
-							type: 'success',
+							type: "success",
 							title: `お気に入り${e.key}番適用`,
 							message: `「${favoriteThemes[index].name}」に切り替えました`,
-						}
+						},
 					});
 					document.dispatchEvent(event);
 				}
 			}
 		};
 
-		document.addEventListener('keydown', handleKeyPress);
-		return () => document.removeEventListener('keydown', handleKeyPress);
+		document.addEventListener("keydown", handleKeyPress);
+		return () => document.removeEventListener("keydown", handleKeyPress);
 	}, [favoriteThemes, setTheme]);
 
 	// お気に入りテーマがない場合は何も表示しない
@@ -117,30 +117,30 @@ export function FavoriteThemeSelector() {
 
 	return (
 		<div className="flex items-center gap-2">
-			<div className="flex items-center gap-2 min-w-0">
-				<Heart className="h-4 w-4 text-theme-accent flex-shrink-0" />
+			<div className="flex min-w-0 items-center gap-2">
+				<Heart className="h-4 w-4 flex-shrink-0 text-theme-accent" />
 				<Select
 					value={currentFavoriteValue}
 					onValueChange={handleFavoriteThemeChange}
 				>
-					<SelectTrigger 
-						className="w-[140px] h-8 text-xs border-theme-border bg-theme-surface"
+					<SelectTrigger
+						className="h-8 w-[140px] border-theme-border bg-theme-surface text-xs"
 						aria-label="お気に入りテーマを選択"
 					>
 						<SelectValue placeholder="お気に入り選択" />
 					</SelectTrigger>
-					<SelectContent className="bg-theme-surface border-theme-border">
+					<SelectContent className="border-theme-border bg-theme-surface">
 						<SelectItem value="none" className="text-theme-text-secondary">
 							選択してください
 						</SelectItem>
 						{favoriteThemes.map((favorite, index) => (
-							<SelectItem 
-								key={favorite.id} 
+							<SelectItem
+								key={favorite.id}
 								value={favorite.id}
 								className="text-theme-text hover:bg-theme-primary/10"
 							>
-								<div className="flex items-center gap-2 w-full">
-									<span className="font-mono text-xs text-theme-text-secondary">
+								<div className="flex w-full items-center gap-2">
+									<span className="font-mono text-theme-text-secondary text-xs">
 										{index + 1}
 									</span>
 									<span className="truncate">{favorite.name}</span>
@@ -157,8 +157,8 @@ export function FavoriteThemeSelector() {
 					size="sm"
 					variant="ghost"
 					onClick={() => removeFavorite(theme)}
-					className="h-8 w-8 p-0 text-theme-text-secondary hover:text-theme-error hover:bg-theme-error/10"
-					aria-label={`現在のテーマ「${allThemes.find(t => t.id === theme)?.name}」をお気に入りから削除`}
+					className="h-8 w-8 p-0 text-theme-text-secondary hover:bg-theme-error/10 hover:text-theme-error"
+					aria-label={`現在のテーマ「${allThemes.find((t) => t.id === theme)?.name}」をお気に入りから削除`}
 					title="お気に入りから削除"
 				>
 					<Trash2 className="h-3 w-3" />

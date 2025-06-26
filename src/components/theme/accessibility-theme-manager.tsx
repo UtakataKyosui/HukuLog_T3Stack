@@ -24,7 +24,7 @@ export function AccessibilityThemeManager() {
 		if (saved) {
 			try {
 				const parsed = JSON.parse(saved);
-				setSettings(prev => ({ ...prev, ...parsed }));
+				setSettings((prev) => ({ ...prev, ...parsed }));
 			} catch (error) {
 				console.error("Failed to parse accessibility settings:", error);
 			}
@@ -34,30 +34,36 @@ export function AccessibilityThemeManager() {
 	// テーマ変更時の音声アナウンス
 	const announceThemeChange = (themeName: string) => {
 		if (!settings.announceThemeChanges) return;
-		
+
 		// スクリーンリーダー向けのアナウンス
 		const announcement = `テーマが ${themeName} に変更されました`;
-		
+
 		// aria-live領域を使ったアナウンス
-		const announcer = document.getElementById('theme-announcer');
+		const announcer = document.getElementById("theme-announcer");
 		if (announcer) {
 			announcer.textContent = announcement;
 			// 少し後にクリア（スクリーンリーダーが読み終わるまで）
 			setTimeout(() => {
-				announcer.textContent = '';
+				announcer.textContent = "";
 			}, 3000);
 		}
 	};
 
 	// アクセシビリティテーマへのクイック切り替え
 	const switchToAccessibilityTheme = () => {
-		const accessibilityThemes = ['high-contrast', 'eye-friendly', 'deuteranopia', 'protanopia', 'tritanopia'];
+		const accessibilityThemes = [
+			"high-contrast",
+			"eye-friendly",
+			"deuteranopia",
+			"protanopia",
+			"tritanopia",
+		];
 		const currentIndex = accessibilityThemes.indexOf(theme);
 		const nextIndex = (currentIndex + 1) % accessibilityThemes.length;
 		const nextTheme = accessibilityThemes[nextIndex];
-		
+
 		setTheme(nextTheme as any);
-		const themeConfig = allThemes.find(t => t.id === nextTheme);
+		const themeConfig = allThemes.find((t) => t.id === nextTheme);
 		if (themeConfig) {
 			announceThemeChange(themeConfig.name);
 		}
@@ -69,42 +75,42 @@ export function AccessibilityThemeManager() {
 
 		const handleGlobalKeyboard = (e: KeyboardEvent) => {
 			// Ctrl + Shift + A: アクセシビリティテーマ切り替え
-			if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+			if (e.ctrlKey && e.shiftKey && e.key === "A") {
 				e.preventDefault();
 				switchToAccessibilityTheme();
 			}
-			
+
 			// Ctrl + Shift + H: ハイコントラストに即切り替え
-			if (e.ctrlKey && e.shiftKey && e.key === 'H') {
+			if (e.ctrlKey && e.shiftKey && e.key === "H") {
 				e.preventDefault();
-				setTheme('high-contrast');
-				announceThemeChange('ハイコントラスト');
+				setTheme("high-contrast");
+				announceThemeChange("ハイコントラスト");
 			}
 
 			// Ctrl + Shift + E: 目に優しいテーマに即切り替え
-			if (e.ctrlKey && e.shiftKey && e.key === 'E') {
+			if (e.ctrlKey && e.shiftKey && e.key === "E") {
 				e.preventDefault();
-				setTheme('eye-friendly');
-				announceThemeChange('目に優しい');
+				setTheme("eye-friendly");
+				announceThemeChange("目に優しい");
 			}
 
 			// Ctrl + Shift + L: ライトテーマに即切り替え
-			if (e.ctrlKey && e.shiftKey && e.key === 'L') {
+			if (e.ctrlKey && e.shiftKey && e.key === "L") {
 				e.preventDefault();
-				setTheme('light');
-				announceThemeChange('ライト');
+				setTheme("light");
+				announceThemeChange("ライト");
 			}
 
 			// Ctrl + Shift + D: ダークテーマに即切り替え
-			if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+			if (e.ctrlKey && e.shiftKey && e.key === "D") {
 				e.preventDefault();
-				setTheme('dark');
-				announceThemeChange('ダーク');
+				setTheme("dark");
+				announceThemeChange("ダーク");
 			}
 		};
 
-		document.addEventListener('keydown', handleGlobalKeyboard);
-		return () => document.removeEventListener('keydown', handleGlobalKeyboard);
+		document.addEventListener("keydown", handleGlobalKeyboard);
+		return () => document.removeEventListener("keydown", handleGlobalKeyboard);
 	}, [settings.enableKeyboardShortcuts, theme, setTheme, allThemes]);
 
 	// 緊急時の高コントラストモード切り替え（連続でEscapeキー）
@@ -113,19 +119,19 @@ export function AccessibilityThemeManager() {
 		let escapeTimer: NodeJS.Timeout;
 
 		const handleEscapeSequence = (e: KeyboardEvent) => {
-			if (e.key === 'Escape') {
+			if (e.key === "Escape") {
 				escapeCount++;
-				
+
 				if (escapeCount === 1) {
 					escapeTimer = setTimeout(() => {
 						escapeCount = 0;
 					}, 2000); // 2秒以内に3回押す必要がある
 				}
-				
+
 				if (escapeCount === 3) {
 					// 緊急時のアクセシビリティモード
-					setTheme('high-contrast');
-					announceThemeChange('緊急アクセシビリティモード: ハイコントラスト');
+					setTheme("high-contrast");
+					announceThemeChange("緊急アクセシビリティモード: ハイコントラスト");
 					escapeCount = 0;
 					clearTimeout(escapeTimer);
 				}
@@ -135,9 +141,9 @@ export function AccessibilityThemeManager() {
 			}
 		};
 
-		document.addEventListener('keydown', handleEscapeSequence);
+		document.addEventListener("keydown", handleEscapeSequence);
 		return () => {
-			document.removeEventListener('keydown', handleEscapeSequence);
+			document.removeEventListener("keydown", handleEscapeSequence);
 			clearTimeout(escapeTimer);
 		};
 	}, [setTheme]);
