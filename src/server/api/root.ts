@@ -1,13 +1,13 @@
 import { clothingRouter } from "@/server/api/routers/clothing";
-import { outfitRouter } from "@/server/api/routers/outfit";
 import { notionClothingRouter } from "@/server/api/routers/notion-clothing";
 import { notionOutfitRouter } from "@/server/api/routers/notion-outfit";
 import { notionSetupRouter } from "@/server/api/routers/notion-setup";
-import { universalClothingRouter } from "@/server/api/routers/universal-clothing";
-import { universalOutfitRouter } from "@/server/api/routers/universal-outfit";
+import { outfitRouter } from "@/server/api/routers/outfit";
 import { passkeyRouter } from "@/server/api/routers/passkey";
 import { postRouter } from "@/server/api/routers/post";
 import { subscriptionRouter } from "@/server/api/routers/subscription";
+import { universalClothingRouter } from "@/server/api/routers/universal-clothing";
+import { universalOutfitRouter } from "@/server/api/routers/universal-outfit";
 import { userRouter } from "@/server/api/routers/user";
 import { userStorageRouter } from "@/server/api/routers/user-storage";
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";

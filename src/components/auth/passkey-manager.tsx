@@ -23,9 +23,9 @@ export function PasskeyManager() {
 			undefined,
 			() => setIsLoading(true),
 			() => setIsLoading(false),
-			undefined
+			undefined,
 		);
-		
+
 		if (result) {
 			await refetchPasskeys();
 			alert("パスキーが追加されました！");
@@ -71,7 +71,11 @@ export function PasskeyManager() {
 					)}
 				</div>
 
-				<Button onClick={handleAddPasskey} disabled={isLoading} className="w-full">
+				<Button
+					onClick={handleAddPasskey}
+					disabled={isLoading}
+					className="w-full"
+				>
 					{isLoading ? "追加中..." : "🔑 新しいパスキーを追加"}
 				</Button>
 

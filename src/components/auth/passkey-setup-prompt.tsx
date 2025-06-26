@@ -28,9 +28,9 @@ export function PasskeySetupPrompt({
 			undefined,
 			() => setIsLoading(true),
 			() => setIsLoading(false),
-			(error) => alert(`パスキーの設定に失敗しました: ${error}`)
+			(error) => alert(`パスキーの設定に失敗しました: ${error}`),
 		);
-		
+
 		if (result) {
 			setIsSetupComplete(true);
 			onComplete?.();

@@ -40,7 +40,7 @@ export function VisualFeedbackSystem() {
 		if (saved) {
 			try {
 				const parsed = JSON.parse(saved);
-				setPreferences(prev => ({ ...prev, ...parsed }));
+				setPreferences((prev) => ({ ...prev, ...parsed }));
 			} catch (error) {
 				console.error("Failed to parse accessibility preferences:", error);
 			}
@@ -50,14 +50,17 @@ export function VisualFeedbackSystem() {
 	// 設定の保存
 	const savePreferences = (newPreferences: AccessibilityPreferences) => {
 		setPreferences(newPreferences);
-		localStorage.setItem("accessibility-preferences", JSON.stringify(newPreferences));
+		localStorage.setItem(
+			"accessibility-preferences",
+			JSON.stringify(newPreferences),
+		);
 	};
 
 	// バイブレーション機能
 	const triggerVibration = (pattern: number[] = [200]) => {
 		if (!preferences.enableVibration) return;
-		
-		if ('vibrate' in navigator) {
+
+		if ("vibrate" in navigator) {
 			navigator.vibrate(pattern);
 		}
 	};
@@ -65,13 +68,15 @@ export function VisualFeedbackSystem() {
 	// フラッシュインジケーター
 	const triggerFlashIndicator = () => {
 		if (!preferences.enableFlashIndicator) return;
-		
+
 		setFlashIndicator(true);
 		setTimeout(() => setFlashIndicator(false), 300);
 	};
 
 	// 通知の追加
-	const addNotification = (notification: Omit<NotificationMessage, "id" | "timestamp">) => {
+	const addNotification = (
+		notification: Omit<NotificationMessage, "id" | "timestamp">,
+	) => {
 		if (!preferences.enableVisualNotifications) return;
 
 		const id = Math.random().toString(36).substr(2, 9);
@@ -82,7 +87,7 @@ export function VisualFeedbackSystem() {
 			duration: notification.duration || preferences.notificationDuration,
 		};
 
-		setNotifications(prev => [...prev, newNotification]);
+		setNotifications((prev) => [...prev, newNotification]);
 
 		// バイブレーション
 		const vibrationPatterns = {
@@ -104,7 +109,7 @@ export function VisualFeedbackSystem() {
 
 	// 通知の削除
 	const removeNotification = (id: string) => {
-		setNotifications(prev => prev.filter(n => n.id !== id));
+		setNotifications((prev) => prev.filter((n) => n.id !== id));
 	};
 
 	// テーマ変更の監視
@@ -114,7 +119,7 @@ export function VisualFeedbackSystem() {
 			addNotification({
 				type: "success",
 				title: "テーマ変更完了",
-				message: preferences.showDetailedMessages 
+				message: preferences.showDetailedMessages
 					? `テーマが「${themeConfig.name}」に変更されました。${themeConfig.description}`
 					: `「${themeConfig.name}」に変更`,
 				icon: <Palette className="h-5 w-5" />,
@@ -129,33 +134,33 @@ export function VisualFeedbackSystem() {
 			let shortcutUsed = false;
 			let shortcutName = "";
 
-			if (e.altKey && e.key === 't') {
+			if (e.altKey && e.key === "t") {
 				shortcutUsed = true;
 				shortcutName = "クイックテーマセレクター";
 			} else if (e.ctrlKey && e.shiftKey) {
 				switch (e.key) {
-					case 'A':
+					case "A":
 						shortcutUsed = true;
 						shortcutName = "アクセシビリティテーマ切り替え";
 						break;
-					case 'H':
+					case "H":
 						shortcutUsed = true;
 						shortcutName = "ハイコントラストテーマ";
 						break;
-					case 'E':
+					case "E":
 						shortcutUsed = true;
 						shortcutName = "目に優しいテーマ";
 						break;
-					case 'L':
+					case "L":
 						shortcutUsed = true;
 						shortcutName = "ライトテーマ";
 						break;
-					case 'D':
+					case "D":
 						shortcutUsed = true;
 						shortcutName = "ダークテーマ";
 						break;
 				}
-			} else if (e.altKey && ['1', '2', '3'].includes(e.key)) {
+			} else if (e.altKey && ["1", "2", "3"].includes(e.key)) {
 				shortcutUsed = true;
 				shortcutName = `お気に入りテーマ ${e.key}`;
 			}
@@ -171,8 +176,9 @@ export function VisualFeedbackSystem() {
 			}
 		};
 
-		document.addEventListener('keydown', handleKeyboardShortcut);
-		return () => document.removeEventListener('keydown', handleKeyboardShortcut);
+		document.addEventListener("keydown", handleKeyboardShortcut);
+		return () =>
+			document.removeEventListener("keydown", handleKeyboardShortcut);
 	}, []);
 
 	// 緊急時のEscape×3の検出
@@ -181,14 +187,15 @@ export function VisualFeedbackSystem() {
 		let escapeTimer: NodeJS.Timeout;
 
 		const handleEmergencyEscape = (e: KeyboardEvent) => {
-			if (e.key === 'Escape') {
+			if (e.key === "Escape") {
 				escapeCount++;
-				
+
 				if (escapeCount === 3) {
 					addNotification({
 						type: "warning",
 						title: "緊急アクセシビリティモード",
-						message: "ハイコントラストテーマに切り替えました。視認性が最大化されています。",
+						message:
+							"ハイコントラストテーマに切り替えました。視認性が最大化されています。",
 						icon: <Eye className="h-5 w-5" />,
 						duration: 6000,
 					});
@@ -205,9 +212,9 @@ export function VisualFeedbackSystem() {
 			}
 		};
 
-		document.addEventListener('keydown', handleEmergencyEscape);
+		document.addEventListener("keydown", handleEmergencyEscape);
 		return () => {
-			document.removeEventListener('keydown', handleEmergencyEscape);
+			document.removeEventListener("keydown", handleEmergencyEscape);
 			clearTimeout(escapeTimer);
 		};
 	}, []);
@@ -236,21 +243,34 @@ export function VisualFeedbackSystem() {
 			});
 		};
 
-		document.addEventListener('accessibility-setting-changed', handleCustomNotification as EventListener);
-		document.addEventListener('accessibility-test-flash', handleTestFlash);
-		document.addEventListener('accessibility-test-notification', handleTestNotification as EventListener);
+		document.addEventListener(
+			"accessibility-setting-changed",
+			handleCustomNotification as EventListener,
+		);
+		document.addEventListener("accessibility-test-flash", handleTestFlash);
+		document.addEventListener(
+			"accessibility-test-notification",
+			handleTestNotification as EventListener,
+		);
 
 		return () => {
-			document.removeEventListener('accessibility-setting-changed', handleCustomNotification as EventListener);
-			document.removeEventListener('accessibility-test-flash', handleTestFlash);
-			document.removeEventListener('accessibility-test-notification', handleTestNotification as EventListener);
+			document.removeEventListener(
+				"accessibility-setting-changed",
+				handleCustomNotification as EventListener,
+			);
+			document.removeEventListener("accessibility-test-flash", handleTestFlash);
+			document.removeEventListener(
+				"accessibility-test-notification",
+				handleTestNotification as EventListener,
+			);
 		};
 	}, []);
 
 	// 通知アイテムのスタイル
 	const getNotificationStyle = (type: NotificationMessage["type"]) => {
-		const baseClasses = "relative p-4 rounded-lg border-l-4 shadow-lg transition-all duration-300 ease-in-out";
-		
+		const baseClasses =
+			"relative p-4 rounded-lg border-l-4 shadow-lg transition-all duration-300 ease-in-out";
+
 		switch (type) {
 			case "success":
 				return `${baseClasses} bg-theme-success/10 border-theme-success text-theme-success`;
@@ -269,8 +289,8 @@ export function VisualFeedbackSystem() {
 		<>
 			{/* フラッシュインジケーター */}
 			{flashIndicator && (
-				<div 
-					className="fixed inset-0 bg-theme-primary/20 pointer-events-none z-[9999] animate-pulse"
+				<div
+					className="pointer-events-none fixed inset-0 z-[9999] animate-pulse bg-theme-primary/20"
 					aria-hidden="true"
 				/>
 			)}
@@ -286,25 +306,23 @@ export function VisualFeedbackSystem() {
 						aria-atomic="true"
 					>
 						<div className="flex items-start space-x-3">
-							<div className="flex-shrink-0 mt-1">
-								{notification.icon}
-							</div>
-							<div className="flex-1 min-w-0">
-								<h4 className="font-semibold text-sm">
-									{notification.title}
-								</h4>
-								<p className="text-sm mt-1 opacity-90">
+							<div className="mt-1 flex-shrink-0">{notification.icon}</div>
+							<div className="min-w-0 flex-1">
+								<h4 className="font-semibold text-sm">{notification.title}</h4>
+								<p className="mt-1 text-sm opacity-90">
 									{notification.message}
 								</p>
 								{preferences.showDetailedMessages && (
-									<p className="text-xs mt-2 opacity-75">
-										{new Date(notification.timestamp).toLocaleTimeString('ja-JP')}
+									<p className="mt-2 text-xs opacity-75">
+										{new Date(notification.timestamp).toLocaleTimeString(
+											"ja-JP",
+										)}
 									</p>
 								)}
 							</div>
 							<button
 								onClick={() => removeNotification(notification.id)}
-								className="flex-shrink-0 p-1 rounded hover:bg-current hover:bg-opacity-20 transition-colors"
+								className="flex-shrink-0 rounded p-1 transition-colors hover:bg-current hover:bg-opacity-20"
 								aria-label="通知を閉じる"
 							>
 								<X className="h-4 w-4" />
@@ -315,7 +333,7 @@ export function VisualFeedbackSystem() {
 			</div>
 
 			{/* 状態表示バー（画面下部） */}
-			<div className="fixed bottom-0 left-0 right-0 bg-theme-surface border-t border-theme-border p-2 z-40">
+			<div className="fixed right-0 bottom-0 left-0 z-40 border-theme-border border-t bg-theme-surface p-2">
 				<div className="container mx-auto flex items-center justify-between text-sm">
 					<div className="flex items-center space-x-4">
 						<span className="flex items-center space-x-2">
@@ -340,19 +358,23 @@ export function VisualFeedbackSystem() {
 			{/* アクセシビリティ設定の非表示入力（設定保存用） */}
 			<div className="sr-only">
 				<button
-					onClick={() => savePreferences({
-						...preferences,
-						enableVisualNotifications: !preferences.enableVisualNotifications
-					})}
+					onClick={() =>
+						savePreferences({
+							...preferences,
+							enableVisualNotifications: !preferences.enableVisualNotifications,
+						})
+					}
 					aria-label="視覚的通知の有効/無効を切り替え"
 				>
 					視覚的通知: {preferences.enableVisualNotifications ? "有効" : "無効"}
 				</button>
 				<button
-					onClick={() => savePreferences({
-						...preferences,
-						enableVibration: !preferences.enableVibration
-					})}
+					onClick={() =>
+						savePreferences({
+							...preferences,
+							enableVibration: !preferences.enableVibration,
+						})
+					}
 					aria-label="バイブレーションの有効/無効を切り替え"
 				>
 					バイブレーション: {preferences.enableVibration ? "有効" : "無効"}

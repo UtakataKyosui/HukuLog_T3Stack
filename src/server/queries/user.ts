@@ -22,7 +22,7 @@ export async function userHasGoogleAccount(userId: string): Promise<boolean> {
 		.from(accounts)
 		.where(eq(accounts.userId, userId));
 
-	return googleAccount.some(account => account.providerId === "google");
+	return googleAccount.some((account) => account.providerId === "google");
 }
 
 export async function userIsPasskeyOnly(userId: string): Promise<boolean> {
@@ -33,15 +33,19 @@ export async function userIsPasskeyOnly(userId: string): Promise<boolean> {
 
 	// パスキーが存在し、かつGoogleアカウントが存在しない場合
 	const hasPasskey = await userHasPasskeys(userId);
-	const hasGoogle = userAccounts.some(account => account.providerId === "google");
-	
+	const hasGoogle = userAccounts.some(
+		(account) => account.providerId === "google",
+	);
+
 	return hasPasskey && !hasGoogle;
 }
 
-export async function getUserAuthMethod(userId: string): Promise<"passkey-only" | "google-with-passkey" | "google-only" | "unknown"> {
+export async function getUserAuthMethod(
+	userId: string,
+): Promise<"passkey-only" | "google-with-passkey" | "google-only" | "unknown"> {
 	const hasPasskey = await userHasPasskeys(userId);
 	const hasGoogle = await userHasGoogleAccount(userId);
-	
+
 	if (hasPasskey && !hasGoogle) {
 		return "passkey-only";
 	} else if (hasGoogle && hasPasskey) {
@@ -64,11 +68,11 @@ export async function getUserAccountInfo(userId: string) {
 		.where(eq(accounts.userId, userId));
 
 	const userPasskeysCount = await getUserPasskeyCount(userId);
-	
+
 	return {
 		accounts: userAccounts,
 		passkeyCount: userPasskeysCount,
-		hasGoogle: userAccounts.some(acc => acc.providerId === "google"),
+		hasGoogle: userAccounts.some((acc) => acc.providerId === "google"),
 		hasPasskeys: userPasskeysCount > 0,
 	};
 }

@@ -9,8 +9,8 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import {
-	handleNotionAuth,
 	handleGoogleAuth,
+	handleNotionAuth,
 	handlePasskeyAuth,
 	handlePasskeySignUp,
 } from "@/lib/auth-utils";
@@ -22,14 +22,16 @@ export function AuthForm() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const isExpired = searchParams.get("expired") === "true";
-	const [isSignUp, setIsSignUp] = useState(searchParams.get("mode") === "signup");
+	const [isSignUp, setIsSignUp] = useState(
+		searchParams.get("mode") === "signup",
+	);
 
 	const handlePasskeySignUpClick = async () => {
 		const result = await handlePasskeySignUp(
 			() => setIsLoading(true),
-			() => setIsLoading(false)
+			() => setIsLoading(false),
 		);
-		
+
 		if (result) {
 			// 成功後、プロフィール設定ページにリダイレクト
 			router.push("/setup-profile");
@@ -40,7 +42,7 @@ export function AuthForm() {
 		await handleGoogleAuth(
 			"/setup-profile",
 			() => setIsLoading(true),
-			() => setIsLoading(false)
+			() => setIsLoading(false),
 		);
 	};
 
@@ -48,16 +50,16 @@ export function AuthForm() {
 		await handleNotionAuth(
 			"/setup-profile",
 			() => setIsLoading(true),
-			() => setIsLoading(false)
+			() => setIsLoading(false),
 		);
 	};
 
 	const handlePasskeyAuthClick = async () => {
 		const result = await handlePasskeyAuth(
 			() => setIsLoading(true),
-			() => setIsLoading(false)
+			() => setIsLoading(false),
 		);
-		
+
 		if (result) {
 			router.push("/");
 		}
@@ -95,7 +97,8 @@ export function AuthForm() {
 						<div className="space-y-4">
 							<div className="rounded-lg border border-blue-200 bg-blue-50 p-3">
 								<p className="text-blue-800 text-sm">
-									🔑 パスキーのみでアカウント作成が可能<br />
+									🔑 パスキーのみでアカウント作成が可能
+									<br />
 									メールアドレス不要で、生体認証による安全な登録
 								</p>
 							</div>
@@ -106,18 +109,16 @@ export function AuthForm() {
 							>
 								{isLoading ? "登録中..." : "🔑 パスキーのみで新規登録"}
 							</Button>
-							
+
 							<div className="relative">
 								<div className="absolute inset-0 flex items-center">
 									<div className="w-full border-slate-300 border-t" />
 								</div>
 								<div className="relative flex justify-center text-xs">
-									<span className="bg-white px-2 text-slate-500">
-										または
-									</span>
+									<span className="bg-white px-2 text-slate-500">または</span>
 								</div>
 							</div>
-							
+
 							<Button
 								onClick={handleGoogleAuthClick}
 								variant="outline"
@@ -126,7 +127,7 @@ export function AuthForm() {
 							>
 								{isLoading ? "登録中..." : "Googleのみで新規登録"}
 							</Button>
-							
+
 							<Button
 								onClick={handleNotionAuthClick}
 								variant="outline"

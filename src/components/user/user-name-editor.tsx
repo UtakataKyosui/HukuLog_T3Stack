@@ -33,9 +33,9 @@ export function UserNameEditor({ initialName }: UserNameEditorProps) {
 			{ name: name.trim() },
 			() => setIsLoading(true),
 			() => setIsLoading(false),
-			(error) => alert(`名前の更新に失敗しました: ${error}`)
+			(error) => alert(`名前の更新に失敗しました: ${error}`),
 		);
-		
+
 		if (result) {
 			setIsEditing(false);
 			router.refresh(); // ページをリフレッシュしてデータを更新
@@ -72,7 +72,10 @@ export function UserNameEditor({ initialName }: UserNameEditorProps) {
 				{isEditing ? (
 					<div className="space-y-4">
 						<div>
-							<label htmlFor="name" className="block text-sm font-medium text-theme-text mb-2">
+							<label
+								htmlFor="name"
+								className="mb-2 block font-medium text-sm text-theme-text"
+							>
 								名前
 							</label>
 							<input
@@ -85,7 +88,7 @@ export function UserNameEditor({ initialName }: UserNameEditorProps) {
 								disabled={isLoading}
 								maxLength={50}
 							/>
-							<p className="mt-1 text-xs text-theme-text-secondary">
+							<p className="mt-1 text-theme-text-secondary text-xs">
 								最大50文字まで入力できます
 							</p>
 						</div>

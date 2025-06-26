@@ -31,7 +31,9 @@ test.describe("サブスクリプションシステム", () => {
 		// Premiumプランの詳細を確認
 		const premiumSection = page.locator("text=Premium").locator("..");
 		await expect(premiumSection.locator("text=200 アイテム")).toBeVisible();
-		await expect(premiumSection.locator("text=50 コーディネート")).toBeVisible();
+		await expect(
+			premiumSection.locator("text=50 コーディネート"),
+		).toBeVisible();
 		await expect(premiumSection.locator("text=画像アップロード")).toBeVisible();
 
 		// Proプランの詳細を確認
@@ -53,19 +55,26 @@ test.describe("サブスクリプションシステム", () => {
 
 	test("プランアップグレード", async ({ page }) => {
 		// Premiumプランのアップグレードボタンをクリック
-		const premiumUpgradeButton = page.locator("text=Premium").locator("..").locator("text=アップグレード");
+		const premiumUpgradeButton = page
+			.locator("text=Premium")
+			.locator("..")
+			.locator("text=アップグレード");
 		if (await premiumUpgradeButton.isVisible()) {
 			await premiumUpgradeButton.click();
 
 			// 確認ダイアログが表示されることを確認
-			await expect(page.locator("text=プランをアップグレードしますか？")).toBeVisible();
+			await expect(
+				page.locator("text=プランをアップグレードしますか？"),
+			).toBeVisible();
 			await expect(page.locator("text=月額 ¥980")).toBeVisible();
 
 			// アップグレードを確認
 			await page.click("text=アップグレード");
 
 			// 成功メッセージが表示されることを確認
-			await expect(page.locator("text=プランがアップグレードされました")).toBeVisible();
+			await expect(
+				page.locator("text=プランがアップグレードされました"),
+			).toBeVisible();
 		}
 	});
 
@@ -76,7 +85,9 @@ test.describe("サブスクリプションシステム", () => {
 			await downgradeButton.click();
 
 			// 確認ダイアログが表示されることを確認
-			await expect(page.locator("text=プランをダウングレードしますか？")).toBeVisible();
+			await expect(
+				page.locator("text=プランをダウングレードしますか？"),
+			).toBeVisible();
 			await expect(page.locator("text=無料プラン")).toBeVisible();
 
 			// 注意事項が表示されることを確認
@@ -86,7 +97,9 @@ test.describe("サブスクリプションシステム", () => {
 			await page.click("text=ダウングレード");
 
 			// 成功メッセージが表示されることを確認
-			await expect(page.locator("text=プランがダウングレードされました")).toBeVisible();
+			await expect(
+				page.locator("text=プランがダウングレードされました"),
+			).toBeVisible();
 		}
 	});
 
@@ -100,7 +113,7 @@ test.describe("サブスクリプションシステム", () => {
 
 		// パーセンテージが表示されることを確認
 		const percentageText = page.locator("text=/%/");
-		if (await percentageText.count() > 0) {
+		if ((await percentageText.count()) > 0) {
 			await expect(percentageText.first()).toBeVisible();
 		}
 	});
@@ -117,7 +130,9 @@ test.describe("サブスクリプションシステム", () => {
 		const limitMessage = page.locator("text=制限に達しました");
 		if (await limitMessage.isVisible()) {
 			await expect(limitMessage).toBeVisible();
-			await expect(page.locator("text=新しいアイテムを追加できません")).toBeVisible();
+			await expect(
+				page.locator("text=新しいアイテムを追加できません"),
+			).toBeVisible();
 		}
 	});
 });
@@ -130,7 +145,7 @@ test.describe("サブスクリプション制限の動作", () => {
 		// 無料プランの制限（20アイテム）に達している場合
 		// 新しい服の追加ボタンが無効化されることを確認
 		const addButton = page.locator("text=新しいお洋服を追加");
-		
+
 		// 制限に達している場合の表示を確認
 		const limitWarning = page.locator("text=無料プランの制限");
 		if (await limitWarning.isVisible()) {
@@ -158,7 +173,9 @@ test.describe("サブスクリプション制限の動作", () => {
 		await page.click("text=新しいお洋服を追加");
 
 		// 画像アップロードが無効化されているか、制限メッセージが表示されることを確認
-		const uploadRestriction = page.locator("text=画像アップロードはPremiumプラン");
+		const uploadRestriction = page.locator(
+			"text=画像アップロードはPremiumプラン",
+		);
 		if (await uploadRestriction.isVisible()) {
 			await expect(uploadRestriction).toBeVisible();
 			await expect(page.locator("text=アップグレード")).toBeVisible();
@@ -171,7 +188,7 @@ test.describe("サブスクリプション制限の動作", () => {
 
 		// 無料プランの制限（5コーディネート）に達している場合
 		const addButton = page.locator("text=新しいコーディネートを作成");
-		
+
 		// 制限に達している場合の表示を確認
 		const limitWarning = page.locator("text=コーディネート制限");
 		if (await limitWarning.isVisible()) {
@@ -201,10 +218,10 @@ test.describe("支払い関連のUI", () => {
 		const historySection = page.locator("text=請求履歴");
 		if (await historySection.isVisible()) {
 			await expect(historySection).toBeVisible();
-			
+
 			// 履歴項目が表示されることを確認
 			const historyItems = page.locator(".invoice-item, .billing-history-item");
-			if (await historyItems.count() > 0) {
+			if ((await historyItems.count()) > 0) {
 				await expect(historyItems.first()).toBeVisible();
 			}
 		}
@@ -219,14 +236,18 @@ test.describe("支払い関連のUI", () => {
 			await cancelButton.click();
 
 			// 確認ダイアログが表示されることを確認
-			await expect(page.locator("text=サブスクリプションをキャンセルしますか？")).toBeVisible();
+			await expect(
+				page.locator("text=サブスクリプションをキャンセルしますか？"),
+			).toBeVisible();
 			await expect(page.locator("text=期間終了まで利用可能")).toBeVisible();
 
 			// キャンセルを確認
 			await page.click("text=キャンセルする");
 
 			// 成功メッセージが表示されることを確認
-			await expect(page.locator("text=サブスクリプションがキャンセルされました")).toBeVisible();
+			await expect(
+				page.locator("text=サブスクリプションがキャンセルされました"),
+			).toBeVisible();
 		}
 	});
 });
