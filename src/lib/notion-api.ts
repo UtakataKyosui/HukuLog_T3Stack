@@ -16,6 +16,198 @@ export class NotionAPIClient {
     this.config = config;
   }
 
+  async createDatabasesInPage(pageId: string) {
+    try {
+      // 服データベースを作成
+      const clothingDatabase = await this.client.databases.create({
+        parent: {
+          type: "page_id",
+          page_id: pageId,
+        },
+        title: [
+          {
+            type: "text",
+            text: {
+              content: "HukuLog - 服データベース",
+            },
+          },
+        ],
+        properties: {
+          Name: {
+            title: {},
+          },
+          Brand: {
+            rich_text: {},
+          },
+          Color: {
+            select: {
+              options: [
+                { name: "Black", color: "default" },
+                { name: "White", color: "gray" },
+                { name: "Red", color: "red" },
+                { name: "Blue", color: "blue" },
+                { name: "Green", color: "green" },
+                { name: "Yellow", color: "yellow" },
+                { name: "Orange", color: "orange" },
+                { name: "Pink", color: "pink" },
+                { name: "Purple", color: "purple" },
+                { name: "Brown", color: "brown" },
+              ],
+            },
+          },
+          Size: {
+            select: {
+              options: [
+                { name: "XS", color: "default" },
+                { name: "S", color: "default" },
+                { name: "M", color: "default" },
+                { name: "L", color: "default" },
+                { name: "XL", color: "default" },
+                { name: "XXL", color: "default" },
+                { name: "Free", color: "gray" },
+              ],
+            },
+          },
+          Season: {
+            multi_select: {
+              options: [
+                { name: "Spring", color: "green" },
+                { name: "Summer", color: "yellow" },
+                { name: "Fall", color: "orange" },
+                { name: "Winter", color: "blue" },
+                { name: "All Season", color: "gray" },
+              ],
+            },
+          },
+          Price: {
+            number: {
+              format: "japanese_yen",
+            },
+          },
+          "Purchase Date": {
+            date: {},
+          },
+          Notes: {
+            rich_text: {},
+          },
+          Tags: {
+            multi_select: {
+              options: [],
+            },
+          },
+          "User ID": {
+            rich_text: {},
+          },
+          Image: {
+            files: {},
+          },
+        },
+      });
+
+      // コーデデータベースを作成
+      const outfitsDatabase = await this.client.databases.create({
+        parent: {
+          type: "page_id",
+          page_id: pageId,
+        },
+        title: [
+          {
+            type: "text",
+            text: {
+              content: "HukuLog - コーデデータベース",
+            },
+          },
+        ],
+        properties: {
+          Name: {
+            title: {},
+          },
+          Description: {
+            rich_text: {},
+          },
+          "Clothing Items": {
+            relation: {
+              database_id: clothingDatabase.id,
+            },
+          },
+          Occasion: {
+            select: {
+              options: [
+                { name: "Casual", color: "blue" },
+                { name: "Work", color: "gray" },
+                { name: "Formal", color: "default" },
+                { name: "Party", color: "pink" },
+                { name: "Date", color: "red" },
+                { name: "Travel", color: "green" },
+                { name: "Sports", color: "orange" },
+              ],
+            },
+          },
+          Season: {
+            multi_select: {
+              options: [
+                { name: "Spring", color: "green" },
+                { name: "Summer", color: "yellow" },
+                { name: "Fall", color: "orange" },
+                { name: "Winter", color: "blue" },
+                { name: "All Season", color: "gray" },
+              ],
+            },
+          },
+          Rating: {
+            select: {
+              options: [
+                { name: "⭐", color: "default" },
+                { name: "⭐⭐", color: "default" },
+                { name: "⭐⭐⭐", color: "default" },
+                { name: "⭐⭐⭐⭐", color: "default" },
+                { name: "⭐⭐⭐⭐⭐", color: "default" },
+              ],
+            },
+          },
+          "Last Worn": {
+            date: {},
+          },
+          Tags: {
+            multi_select: {
+              options: [],
+            },
+          },
+          "User ID": {
+            rich_text: {},
+          },
+        },
+      });
+
+      return {
+        clothingDatabaseId: clothingDatabase.id,
+        outfitsDatabaseId: outfitsDatabase.id,
+        clothingDatabaseUrl: clothingDatabase.url,
+        outfitsDatabaseUrl: outfitsDatabase.url,
+      };
+    } catch (error) {
+      console.error("Database creation error:", error);
+      throw error;
+    }
+  }
+
+  async validatePageAccess(pageId: string) {
+    try {
+      const page = await this.client.pages.retrieve({
+        page_id: pageId,
+      });
+      return {
+        success: true,
+        pageTitle: "properties" in page && page.properties?.title ? 
+          (page.properties.title as any)?.title?.[0]?.text?.content || "無題" : 
+          "無題",
+      };
+    } catch (error) {
+      console.error("Page access validation error:", error);
+      throw new Error("ページにアクセスできません。統合がページに招待されているか確認してください。");
+    }
+  }
+
   async createClothingItem(clothingData: {
     name: string;
     brand?: string;

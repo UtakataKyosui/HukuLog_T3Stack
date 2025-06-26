@@ -61,7 +61,8 @@
       "Bash(kill:*)",
       "Bash(git config:*)",
       "Bash(npx drizzle-kit:*)",
-      "Bash(./start-database.sh:*)"
+      "Bash(./start-database.sh:*)",
+      "Bash(gh pr create:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

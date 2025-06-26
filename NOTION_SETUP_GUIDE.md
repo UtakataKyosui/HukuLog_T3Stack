@@ -10,6 +10,13 @@ HukuLog_T3StackでNotionデータベースと連携し、服とコーデのデ�
 
 ## 🚀 セットアップ手順
 
+### セットアップ方法の選択
+
+HukuLog_T3Stackでは、2つの方法でNotionを設定できます：
+
+1. **🚀 自動セットアップ（推奨）**: アプリがNotionにデータベースを自動作成
+2. **⚙️ 手動セットアップ**: 事前にNotionでデータベースを作成してIDを入力
+
 ### 1. Notion統合の作成
 
 1. [Notion Developers](https://developers.notion.com/)にアクセス
@@ -50,9 +57,41 @@ NOTION_CLIENT_SECRET=your_notion_client_secret
 NOTION_DATABASE_IDS=clothing_db_id,outfits_db_id
 ```
 
-### 4. Notionワークスペースでデータベースを作成
+### 4A. 自動セットアップ（推奨）
 
-#### 4.1 服データベース（Clothing Items）の作成
+#### 4A.1 Notionページの準備
+
+1. Notionで新しいページを作成
+   - ワークスペースのサイドバーで「+ New page」をクリック
+   - ページ名を「HukuLog データベース」などに設定
+   - **重要**: ページは空のままにしておく
+
+2. 統合をページに招待
+   - ページの右上「...」メニューをクリック
+   - 「Add connections」を選択
+   - 作成したHukuLog統合を選択して招待
+
+3. ページIDを取得
+   - ページのURLをコピー
+   - URL末尾の32文字がページID
+   ```
+   https://notion.so/your-workspace/1234567890abcdef1234567890abcdef
+                                   ↑ここがページID
+   ```
+
+#### 4A.2 アプリでの自動セットアップ
+
+1. HukuLogアプリのセットアップ画面で「自動セットアップ」を選択
+2. 統合のアクセストークンとページIDを入力
+3. 「自動セットアップを開始」をクリック
+4. アプリが自動的に以下を実行：
+   - 服データベースの作成（完全なプロパティ設定付き）
+   - コーデデータベースの作成（服データベースとの関連付け付き）
+   - ユーザー設定への自動保存
+
+### 4B. 手動セットアップ
+
+#### 4B.1 服データベース（Clothing Items）の作成
 
 1. Notionで新しいページを作成
 2. データベースを追加

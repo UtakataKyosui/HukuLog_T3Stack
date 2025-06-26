@@ -1,6 +1,6 @@
 "use client";
 
-import { StorageSelection } from "@/components/setup/storage-selection";
+import { StorageSelectionEnhanced } from "@/components/setup/storage-selection-enhanced";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
@@ -45,5 +45,5 @@ export default function SetupStoragePage() {
     return null; // リダイレクト中
   }
 
-  return <StorageSelection />;
+  return <StorageSelectionEnhanced />;
 }

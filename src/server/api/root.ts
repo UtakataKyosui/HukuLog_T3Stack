@@ -2,6 +2,7 @@ import { clothingRouter } from "@/server/api/routers/clothing";
 import { outfitRouter } from "@/server/api/routers/outfit";
 import { notionClothingRouter } from "@/server/api/routers/notion-clothing";
 import { notionOutfitRouter } from "@/server/api/routers/notion-outfit";
+import { notionSetupRouter } from "@/server/api/routers/notion-setup";
 import { universalClothingRouter } from "@/server/api/routers/universal-clothing";
 import { universalOutfitRouter } from "@/server/api/routers/universal-outfit";
 import { passkeyRouter } from "@/server/api/routers/passkey";
@@ -22,6 +23,7 @@ export const appRouter = createTRPCRouter({
 	outfit: outfitRouter,
 	notionClothing: notionClothingRouter,
 	notionOutfit: notionOutfitRouter,
+	notionSetup: notionSetupRouter,
 	universalClothing: universalClothingRouter,
 	universalOutfit: universalOutfitRouter,
 	subscription: subscriptionRouter,
