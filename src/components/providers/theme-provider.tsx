@@ -204,14 +204,14 @@ export function ThemeProvider({
 		const root = document.documentElement;
 
 		// CSS カスタムプロパティを設定（Tailwind v4準拠）
-		Object.entries(config.colors).forEach(([key, value]) => {
+		for (const [key, value] of Object.entries(config.colors)) {
 			// キャメルケースをケバブケースに変換
 			const kebabKey = key.replace(/([A-Z])/g, "-$1").toLowerCase();
 			// Tailwind v4の@themeディレクティブ用の命名規則
 			root.style.setProperty(`--color-theme-${kebabKey}`, value);
 			// 後方互換性のための従来の命名規則
 			root.style.setProperty(`--theme-${kebabKey}`, value);
-		});
+		}
 
 		// データ属性も設定（CSS セレクターで使用可能）
 		root.setAttribute("data-theme", theme);

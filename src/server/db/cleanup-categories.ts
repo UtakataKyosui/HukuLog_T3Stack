@@ -37,12 +37,12 @@ async function cleanupCategories() {
 			.values(correctCategories)
 			.returning();
 
-		console.log(`✅ Inserted $insertedCategories.lengthclean categories:`);
-		insertedCategories.forEach((category, index) => {
+		console.log(`✅ Inserted ${insertedCategories.length} clean categories:`);
+		for (const [index, category] of insertedCategories.entries()) {
 			console.log(
-				`  $index + 1. ID: $category.id, Name: "${category.name}", Type: "${category.type}"`,
+				`  ${index + 1}. ID: ${category.id}, Name: "${category.name}", Type: "${category.type}"`,
 			);
-		});
+		}
 
 		console.log("🎉 Categories cleanup completed successfully!");
 

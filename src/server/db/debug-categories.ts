@@ -35,13 +35,13 @@ async function debugCategories() {
 					{} as Record<string, typeof categories>,
 				);
 
-				Object.entries(nameGroups).forEach(([name, items]) => {
+				for (const [name, items] of Object.entries(nameGroups)) {
 					if (items.length > 1) {
 						console.log(
 							`    "${name}": ${items.length} duplicates (IDs: ${items.map((i) => i.id).join(", ")})`,
 						);
 					}
-				});
+				}
 			}
 		} else {
 			console.log("❌ No categories found in database");

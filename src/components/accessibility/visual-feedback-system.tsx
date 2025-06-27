@@ -2,7 +2,7 @@
 
 import { useTheme } from "@/components/providers/theme-provider";
 import { Check, Eye, Palette, Vibrate, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface NotificationMessage {
 	id: string;
@@ -74,7 +74,7 @@ export function VisualFeedbackSystem() {
 	};
 
 	// 通知の追加
-	const addNotification = (
+	const addNotification = useCallback((
 		notification: Omit<NotificationMessage, "id" | "timestamp">,
 	) => {
 		if (!preferences.enableVisualNotifications) return;
@@ -105,7 +105,7 @@ export function VisualFeedbackSystem() {
 		setTimeout(() => {
 			removeNotification(id);
 		}, newNotification.duration);
-	};
+	}, [preferences.enableVisualNotifications, preferences.notificationDuration]);
 
 	// 通知の削除
 	const removeNotification = (id: string) => {
@@ -188,7 +188,7 @@ export function VisualFeedbackSystem() {
 	}, [addNotification]);
 
 	// 緊急通知ハンドラーの抽出
-	const handleEmergencyNotification = () => {
+	const handleEmergencyNotification = useCallback(() => {
 		addNotification({
 			type: "warning",
 			title: "緊急アクセシビリティモード",
@@ -197,7 +197,7 @@ export function VisualFeedbackSystem() {
 			icon: <Eye className="h-5 w-5" />,
 			duration: 6000,
 		});
-	};
+	}, [addNotification]);
 
 	// 緊急時のEscape×3の検出
 	useEffect(() => {
@@ -275,7 +275,7 @@ export function VisualFeedbackSystem() {
 				handleTestNotification as EventListener,
 			);
 		};
-	}, [addNotification]);
+	}, [addNotification, triggerFlashIndicator]);
 
 	// 通知アイテムのスタイル
 	const getNotificationStyle = (type: NotificationMessage["type"]) => {

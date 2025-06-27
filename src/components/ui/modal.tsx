@@ -64,8 +64,8 @@ export function Modal({
 	return (
 		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
 			{/* Overlay */}
-			<div 
-				className="absolute inset-0" 
+			<div
+				className="absolute inset-0"
 				onClick={onClose}
 				onKeyDown={(e) => {
 					if (e.key === "Enter" || e.key === " ") {

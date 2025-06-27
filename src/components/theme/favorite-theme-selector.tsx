@@ -47,7 +47,7 @@ export function FavoriteThemeSelector() {
 
 		const favorite = favoriteThemes.find((f) => f.id === favoriteId);
 		if (favorite) {
-			setTheme(favorite.id as any);
+			setTheme(favorite.id);
 
 			// 視覚的フィードバック
 			const event = new CustomEvent("accessibility-setting-changed", {

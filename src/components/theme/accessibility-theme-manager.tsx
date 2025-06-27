@@ -62,7 +62,7 @@ export function AccessibilityThemeManager() {
 		const nextIndex = (currentIndex + 1) % accessibilityThemes.length;
 		const nextTheme = accessibilityThemes[nextIndex];
 
-		setTheme(nextTheme as any);
+		setTheme(nextTheme);
 		const themeConfig = allThemes.find((t) => t.id === nextTheme);
 		if (themeConfig) {
 			announceThemeChange(themeConfig.name);
@@ -124,7 +124,7 @@ export function AccessibilityThemeManager() {
 
 		document.addEventListener("keydown", handleGlobalKeyboard);
 		return () => document.removeEventListener("keydown", handleGlobalKeyboard);
-	}, [settings.enableKeyboardShortcuts, theme, setTheme, allThemes]);
+	}, [settings.enableKeyboardShortcuts, setTheme, announceThemeChange, switchToAccessibilityTheme]);
 
 	// 緊急時の高コントラストモード切り替え（連続でEscapeキー）
 	useEffect(() => {
@@ -159,7 +159,7 @@ export function AccessibilityThemeManager() {
 			document.removeEventListener("keydown", handleEscapeSequence);
 			clearTimeout(escapeTimer);
 		};
-	}, [setTheme]);
+	}, [setTheme, announceThemeChange]);
 
 	return (
 		<>
