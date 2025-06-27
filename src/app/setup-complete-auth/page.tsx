@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { authClient } from "@/lib/auth-client";
-import { api } from "@/trpc/react";
+import { AuthStatusDisplay } from "@/components/auth/auth-status-display";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -12,28 +11,29 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AuthStatusDisplay } from "@/components/auth/auth-status-display";
-import { 
-	CheckCircle, 
-	Lock, 
-	Link, 
-	Star, 
+import { authClient } from "@/lib/auth-client";
+import { api } from "@/trpc/react";
+import {
+	AlertCircle,
 	ArrowRight,
-	AlertCircle 
+	CheckCircle,
+	Link,
+	Lock,
+	Star,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function SetupCompleteAuthPage() {
 	const router = useRouter();
 	const [session, setSession] = useState<any>(null);
 	const [isLoading, setIsLoading] = useState(true);
-	
-	const { 
-		data: authStatus, 
-		isLoading: authLoading, 
-		refetch: refetchAuthStatus 
+
+	const {
+		data: authStatus,
+		isLoading: authLoading,
+		refetch: refetchAuthStatus,
 	} = api.authState.getAuthStatus.useQuery();
 
 	useEffect(() => {
@@ -107,8 +107,8 @@ export default function SetupCompleteAuthPage() {
 		<div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-4">
 			<div className="mx-auto max-w-2xl space-y-6 pt-8">
 				{/* ヘッダー */}
-				<div className="text-center space-y-2">
-					<h1 className="text-3xl font-bold text-gray-900">
+				<div className="space-y-2 text-center">
+					<h1 className="font-bold text-3xl text-gray-900">
 						🎯 認証セットアップ
 					</h1>
 					<p className="text-gray-600">
@@ -128,7 +128,7 @@ export default function SetupCompleteAuthPage() {
 								<div className="flex items-center gap-3">
 									<Lock className="h-6 w-6 text-blue-600" />
 									<div className="flex-1">
-										<CardTitle className="text-lg text-blue-900">
+										<CardTitle className="text-blue-900 text-lg">
 											Passkeyを設定
 										</CardTitle>
 										<CardDescription className="text-blue-700">
@@ -157,7 +157,7 @@ export default function SetupCompleteAuthPage() {
 										<span>最高セキュリティ</span>
 									</div>
 								</div>
-								<Button 
+								<Button
 									onClick={handleSetupPasskey}
 									className="w-full bg-blue-600 hover:bg-blue-700"
 								>
@@ -204,7 +204,7 @@ export default function SetupCompleteAuthPage() {
 										<span>バックアップ</span>
 									</div>
 								</div>
-								<Button 
+								<Button
 									onClick={handleSetupNotion}
 									className="w-full bg-purple-600 hover:bg-purple-700"
 								>
@@ -222,7 +222,7 @@ export default function SetupCompleteAuthPage() {
 								<div className="flex items-center gap-3">
 									<Star className="h-6 w-6 text-green-600" />
 									<div className="flex-1">
-										<CardTitle className="text-lg text-green-900">
+										<CardTitle className="text-green-900 text-lg">
 											🎉 完全認証完了！
 										</CardTitle>
 										<CardDescription className="text-green-700">
@@ -233,10 +233,10 @@ export default function SetupCompleteAuthPage() {
 								</div>
 							</CardHeader>
 							<CardContent>
-								<p className="text-sm text-green-700 mb-3">
+								<p className="mb-3 text-green-700 text-sm">
 									おめでとうございます！最高レベルのセキュリティと利便性を実現できました。
 								</p>
-								<Button 
+								<Button
 									onClick={handleContinue}
 									className="w-full bg-green-600 hover:bg-green-700"
 								>
@@ -253,26 +253,35 @@ export default function SetupCompleteAuthPage() {
 					<Alert className="border-amber-200 bg-amber-50">
 						<AlertCircle className="h-4 w-4 text-amber-600" />
 						<AlertDescription className="text-amber-800">
-							<p className="font-medium mb-1">なぜ統合認証がおすすめなのか？</p>
+							<p className="mb-1 font-medium">なぜ統合認証がおすすめなのか？</p>
 							<ul className="space-y-1 text-sm">
-								<li>• <strong>Passkey</strong>: パスワードを覚える必要がなく、生体認証で瞬時にログイン</li>
-								<li>• <strong>Notion連携</strong>: データを自分で管理でき、他のツールとも自由に連携</li>
-								<li>• <strong>組み合わせ</strong>: セキュリティと利便性の両方を実現</li>
+								<li>
+									• <strong>Passkey</strong>:
+									パスワードを覚える必要がなく、生体認証で瞬時にログイン
+								</li>
+								<li>
+									• <strong>Notion連携</strong>:
+									データを自分で管理でき、他のツールとも自由に連携
+								</li>
+								<li>
+									• <strong>組み合わせ</strong>:
+									セキュリティと利便性の両方を実現
+								</li>
 							</ul>
 						</AlertDescription>
 					</Alert>
 				)}
 
 				{/* スキップオプション */}
-				<div className="text-center space-y-2">
-					<Button 
-						variant="outline" 
+				<div className="space-y-2 text-center">
+					<Button
+						variant="outline"
 						onClick={handleSkipForNow}
 						className="text-gray-600"
 					>
 						後で設定する
 					</Button>
-					<p className="text-xs text-gray-500">
+					<p className="text-gray-500 text-xs">
 						後からいつでも設定画面で追加できます
 					</p>
 				</div>

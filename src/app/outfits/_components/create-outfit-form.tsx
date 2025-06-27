@@ -1,5 +1,6 @@
 "use client";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,9 +15,8 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { api } from "@/trpc/react";
 import { AlertCircle, Star, X } from "lucide-react";
-import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useEffect, useState } from "react";
 
 interface CreateOutfitFormProps {
 	onSuccess: () => void;
@@ -43,7 +43,8 @@ export default function CreateOutfitForm({
 	);
 
 	// ユーザーのストレージ設定を取得
-	const { data: storageConfig } = api.userStorage.getStoragePreferences.useQuery();
+	const { data: storageConfig } =
+		api.userStorage.getStoragePreferences.useQuery();
 
 	// Notion未認証チェック
 	useEffect(() => {
@@ -142,12 +143,12 @@ export default function CreateOutfitForm({
 							<p>
 								Notionにデータを保存するには、Notionアカウントとの連携設定が必要です。
 							</p>
-							<div className="flex gap-2 mt-3">
+							<div className="mt-3 flex gap-2">
 								<Button
 									type="button"
 									size="sm"
 									onClick={() => router.push("/settings/storage")}
-									className="bg-amber-600 hover:bg-amber-700 text-white"
+									className="bg-amber-600 text-white hover:bg-amber-700"
 								>
 									設定画面へ
 								</Button>

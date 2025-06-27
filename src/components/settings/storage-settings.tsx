@@ -1,5 +1,6 @@
 "use client";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -11,9 +12,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { api } from "@/trpc/react";
+import { AlertCircle, CheckCircle, XCircle } from "lucide-react";
 import { useEffect, useState } from "react";
-import { CheckCircle, AlertCircle, XCircle } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export function StorageSettings() {
 	const [selectedStorage, setSelectedStorage] = useState<
@@ -164,7 +164,10 @@ export function StorageSettings() {
 
 	const getNotionAuthStatus = () => {
 		if (!storagePreferences || storagePreferences.storageType !== "notion") {
-			return { status: "inactive", message: "Notionストレージを使用していません" };
+			return {
+				status: "inactive",
+				message: "Notionストレージを使用していません",
+			};
 		}
 
 		const hasToken = !!storagePreferences.notionAccessToken;
@@ -172,9 +175,9 @@ export function StorageSettings() {
 		const hasOutfitsDb = !!storagePreferences.notionOutfitsDatabaseId;
 
 		if (hasToken && hasClothingDb && hasOutfitsDb) {
-			return { 
-				status: "complete", 
-				message: "Notion認証が完了しています" 
+			return {
+				status: "complete",
+				message: "Notion認証が完了しています",
 			};
 		}
 
@@ -183,9 +186,9 @@ export function StorageSettings() {
 		if (!hasClothingDb) missing.push("服データベースID");
 		if (!hasOutfitsDb) missing.push("コーデデータベースID");
 
-		return { 
-			status: "incomplete", 
-			message: `未設定項目: ${missing.join(", ")}` 
+		return {
+			status: "incomplete",
+			message: `未設定項目: ${missing.join(", ")}`,
 		};
 	};
 
@@ -194,20 +197,21 @@ export function StorageSettings() {
 	return (
 		<div className="space-y-6">
 			{/* Notion認証状態の警告表示 */}
-			{storagePreferences?.storageType === "notion" && authStatus.status === "incomplete" && (
-				<Alert className="border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950">
-					<AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-					<AlertDescription className="text-amber-800 dark:text-amber-200">
-						<strong>Notion認証が不完全です</strong>
-						<br />
-						{authStatus.message}
-						<br />
-						<span className="text-sm">
-							服やコーディネートの追加・編集機能を使用するには、下記の設定を完了してください。
-						</span>
-					</AlertDescription>
-				</Alert>
-			)}
+			{storagePreferences?.storageType === "notion" &&
+				authStatus.status === "incomplete" && (
+					<Alert className="border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950">
+						<AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+						<AlertDescription className="text-amber-800 dark:text-amber-200">
+							<strong>Notion認証が不完全です</strong>
+							<br />
+							{authStatus.message}
+							<br />
+							<span className="text-sm">
+								服やコーディネートの追加・編集機能を使用するには、下記の設定を完了してください。
+							</span>
+						</AlertDescription>
+					</Alert>
+				)}
 
 			{/* 現在の設定表示 */}
 			<Card>
@@ -232,27 +236,27 @@ export function StorageSettings() {
 										{storagePreferences.notionOutfitsDatabaseId || "未設定"}
 									</p>
 								</div>
-								
+
 								{/* 認証状態インジケーター */}
 								<div className="flex items-center gap-2">
 									{authStatus.status === "complete" ? (
 										<>
 											<CheckCircle className="h-4 w-4 text-green-600" />
-											<span className="text-green-700 text-sm font-medium">
+											<span className="font-medium text-green-700 text-sm">
 												認証完了
 											</span>
 										</>
 									) : authStatus.status === "incomplete" ? (
 										<>
 											<XCircle className="h-4 w-4 text-red-600" />
-											<span className="text-red-700 text-sm font-medium">
+											<span className="font-medium text-red-700 text-sm">
 												認証不完全
 											</span>
 										</>
 									) : (
 										<>
 											<AlertCircle className="h-4 w-4 text-gray-600" />
-											<span className="text-gray-700 text-sm font-medium">
+											<span className="font-medium text-gray-700 text-sm">
 												非アクティブ
 											</span>
 										</>

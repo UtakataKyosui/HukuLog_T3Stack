@@ -1,5 +1,7 @@
 "use client";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -8,18 +10,16 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import {
 	handleGoogleAuth,
 	handleNotionAuth,
 	handlePasskeyAuth,
 	handlePasskeySignUp,
 } from "@/lib/auth-utils";
+import { ArrowRight, CheckCircle, Link, Lock, Star } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { CheckCircle, Star, Lock, Link, ArrowRight } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export function AuthForm() {
 	const [isLoading, setIsLoading] = useState(false);
@@ -95,7 +95,9 @@ export function AuthForm() {
 							<Star className="h-4 w-4 text-blue-600" />
 							<AlertDescription className="text-blue-800">
 								<div className="space-y-2">
-									<p className="font-medium">🎯 推奨: Passkey + Notion 統合認証</p>
+									<p className="font-medium">
+										🎯 推奨: Passkey + Notion 統合認証
+									</p>
 									<div className="grid grid-cols-2 gap-2 text-xs">
 										<div className="flex items-center gap-1">
 											<Lock className="h-3 w-3" />
@@ -124,12 +126,14 @@ export function AuthForm() {
 						<div className="space-y-4">
 							{/* 推奨統合認証セクション */}
 							<div className="rounded-lg border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-purple-50 p-4">
-								<div className="flex items-center gap-2 mb-3">
+								<div className="mb-3 flex items-center gap-2">
 									<Star className="h-5 w-5 text-blue-600" />
-									<span className="font-semibold text-blue-800">推奨: 完全認証セットアップ</span>
+									<span className="font-semibold text-blue-800">
+										推奨: 完全認証セットアップ
+									</span>
 									<Badge className="bg-blue-600">おすすめ</Badge>
 								</div>
-								<p className="text-blue-700 text-sm mb-3">
+								<p className="mb-3 text-blue-700 text-sm">
 									Passkey + Notionで最高レベルのセキュリティと利便性を実現
 								</p>
 								<div className="grid grid-cols-2 gap-3 text-xs">
@@ -150,7 +154,7 @@ export function AuthForm() {
 										<span className="text-green-700">自由編集</span>
 									</div>
 								</div>
-								<p className="text-xs text-blue-600 mt-2">
+								<p className="mt-2 text-blue-600 text-xs">
 									※ 最初に基本認証を行い、後で追加認証を段階的に設定します
 								</p>
 							</div>
@@ -158,9 +162,11 @@ export function AuthForm() {
 							{/* 基本認証オプション */}
 							<div className="space-y-3">
 								<div className="text-center">
-									<span className="text-sm text-gray-600">まず基本認証から開始</span>
+									<span className="text-gray-600 text-sm">
+										まず基本認証から開始
+									</span>
 								</div>
-								
+
 								<Button
 									onClick={handlePasskeySignUpClick}
 									className="w-full bg-slate-800 text-white hover:bg-slate-700"
@@ -201,24 +207,32 @@ export function AuthForm() {
 
 							{/* 段階的セットアップの説明 */}
 							<div className="rounded-lg border border-gray-200 bg-gray-50 p-3">
-								<h4 className="font-medium text-gray-800 text-sm mb-2">
+								<h4 className="mb-2 font-medium text-gray-800 text-sm">
 									📋 セットアップフロー
 								</h4>
-								<div className="space-y-1 text-xs text-gray-600">
+								<div className="space-y-1 text-gray-600 text-xs">
 									<div className="flex items-center gap-2">
-										<span className="bg-blue-600 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">1</span>
+										<span className="flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-white text-xs">
+											1
+										</span>
 										<span>基本認証でアカウント作成</span>
 									</div>
 									<div className="flex items-center gap-2">
-										<span className="bg-gray-400 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">2</span>
+										<span className="flex h-4 w-4 items-center justify-center rounded-full bg-gray-400 text-white text-xs">
+											2
+										</span>
 										<span>プロフィール設定</span>
 									</div>
 									<div className="flex items-center gap-2">
-										<span className="bg-gray-400 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">3</span>
+										<span className="flex h-4 w-4 items-center justify-center rounded-full bg-gray-400 text-white text-xs">
+											3
+										</span>
 										<span>追加認証セットアップ（推奨）</span>
 									</div>
 									<div className="flex items-center gap-2">
-										<span className="bg-gray-400 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">4</span>
+										<span className="flex h-4 w-4 items-center justify-center rounded-full bg-gray-400 text-white text-xs">
+											4
+										</span>
 										<span>利用開始</span>
 									</div>
 								</div>

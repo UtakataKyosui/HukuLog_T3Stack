@@ -1,6 +1,6 @@
+import { env } from "@/env";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
-import { env } from "@/env";
 
 const migrationSQL = `
 -- Add all missing fields to users table
@@ -55,17 +55,17 @@ END;
 `;
 
 async function runMigration() {
-  console.log("🔄 Starting authentication fields migration...");
+	console.log("🔄 Starting authentication fields migration...");
 
-  const connection = postgres(env.DATABASE_URL);
-  const db = drizzle(connection);
+	const connection = postgres(env.DATABASE_URL);
+	const db = drizzle(connection);
 
-  try {
-    await connection.unsafe(migrationSQL);
-    console.log("✅ Migration completed successfully!");
+	try {
+		await connection.unsafe(migrationSQL);
+		console.log("✅ Migration completed successfully!");
 
-    // 結果を確認
-    const users = await connection`
+		// 結果を確認
+		const users = await connection`
       SELECT 
         id, 
         name,
@@ -78,10 +78,10 @@ async function runMigration() {
       LIMIT 5
     `;
 
-    console.log("\n📊 Sample user data after migration:");
-    console.table(users);
+		console.log("\n📊 Sample user data after migration:");
+		console.table(users);
 
-    const stats = await connection`
+		const stats = await connection`
       SELECT 
         "authLevel",
         COUNT(*) as count
@@ -90,17 +90,16 @@ async function runMigration() {
       ORDER BY "authLevel"
     `;
 
-    console.log("\n📈 User distribution by auth level:");
-    console.table(stats);
+		console.log("\n📈 User distribution by auth level:");
+		console.table(stats);
+	} catch (error) {
+		console.error("❌ Migration failed:", error);
+		process.exit(1);
+	} finally {
+		await connection.end();
+	}
 
-  } catch (error) {
-    console.error("❌ Migration failed:", error);
-    process.exit(1);
-  } finally {
-    await connection.end();
-  }
-
-  console.log("\n🎉 Migration process completed!");
+	console.log("\n🎉 Migration process completed!");
 }
 
 runMigration().catch(console.error);

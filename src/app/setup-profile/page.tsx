@@ -1,5 +1,6 @@
 "use client";
 
+import { AuthStatusDisplay } from "@/components/auth/auth-status-display";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -13,7 +14,6 @@ import { updateUser } from "@/lib/auth-utils";
 import { api } from "@/trpc/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { AuthStatusDisplay } from "@/components/auth/auth-status-display";
 
 export default function SetupProfilePage() {
 	const [name, setName] = useState("");
@@ -26,7 +26,7 @@ export default function SetupProfilePage() {
 		api.userStorage.getStoragePreferences.useQuery(undefined, {
 			enabled: !!session,
 		});
-	
+
 	const { data: authStatus } = api.authState.getAuthStatus.useQuery(undefined, {
 		enabled: !!session,
 	});
@@ -190,7 +190,8 @@ export default function SetupProfilePage() {
 							{authStatus.level < 4 && (
 								<div className="rounded-lg border border-amber-200 bg-amber-50 p-3">
 									<p className="text-amber-800 text-xs">
-										✨ プロフィール設定後、追加の認証セットアップで更に安全で便利になります
+										✨
+										プロフィール設定後、追加の認証セットアップで更に安全で便利になります
 									</p>
 								</div>
 							)}
