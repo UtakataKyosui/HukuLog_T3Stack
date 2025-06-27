@@ -165,6 +165,7 @@ export default function ClothingList() {
 					</div>
 				</div>
 				<button
+					type="button"
 					onClick={() => setShowAddForm(true)}
 					className="clean-button flex w-full items-center justify-center gap-2 px-4 py-3 font-bold text-white sm:w-auto sm:px-6"
 				>
