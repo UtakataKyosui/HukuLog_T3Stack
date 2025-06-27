@@ -23,23 +23,15 @@ export default function SetupPasskeyPage() {
 	const searchParams = useSearchParams();
 	const isAuto = searchParams.get("auto") === "true";
 
-<<<<<<< HEAD
-	const handleSetupPasskey = async () => {
-		const result = await addPasskey(
-			undefined,
-			() => setIsLoading(true),
-			() => setIsLoading(false),
-			(error) => alert(`パスキーの設定に失敗しました: ${error}`),
-		);
-
-		if (result) {
-=======
 	const handleSetupPasskey = useCallback(async () => {
 		setIsLoading(true);
 		try {
 			await authClient.passkey.addPasskey();
->>>>>>> 88bbefc8b4121de2dfeeefbd39f1d62fc5b8959e
 			setIsSetupComplete(true);
+		} catch (error) {
+			alert(`パスキーの設定に失敗しました: ${error}`);
+		} finally {
+			setIsLoading(false);
 		}
 	}, []);
 

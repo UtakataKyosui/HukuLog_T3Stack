@@ -36,16 +36,6 @@ async function startDevServer() {
 	});
 
 	// プロセス終了時のクリーンアップ
-<<<<<<< HEAD
-	const shutdownDevServer = (signal: string) => {
-		console.log("\n🛑 Shutting down development server...");
-		devProcess.kill(signal as NodeJS.Signals);
-		process.exit(0);
-	};
-
-	process.on("SIGINT", () => shutdownDevServer("SIGINT"));
-	process.on("SIGTERM", () => shutdownDevServer("SIGTERM"));
-=======
 	const shutdown = (signal: NodeJS.Signals) => {
 		console.log("\n🛑 Shutting down development server...");
 		devProcess.kill(signal);
@@ -54,7 +44,6 @@ async function startDevServer() {
 
 	process.on("SIGINT", () => shutdown("SIGINT"));
 	process.on("SIGTERM", () => shutdown("SIGTERM"));
->>>>>>> 88bbefc8b4121de2dfeeefbd39f1d62fc5b8959e
 }
 
 async function main() {
