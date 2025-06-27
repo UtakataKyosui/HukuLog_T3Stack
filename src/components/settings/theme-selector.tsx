@@ -47,7 +47,6 @@ export function ThemeSelector() {
 									setTheme(themeConfig.id);
 								}
 							}}
-							tabIndex={0}
 							aria-pressed={theme === themeConfig.id}
 						>
 							{theme === themeConfig.id && (
