@@ -45,7 +45,7 @@ export function AccessibilitySettings() {
 	);
 
 	const quickSwitchToTheme = (themeId: string) => {
-		setTheme(themeId as any);
+		setTheme(themeId);
 		// 音声フィードバック用
 		const themeConfig = allThemes.find((t) => t.id === themeId);
 		if (themeConfig) {

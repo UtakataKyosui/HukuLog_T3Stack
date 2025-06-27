@@ -104,7 +104,7 @@ export function QuickThemeSelector() {
 				e.preventDefault();
 				const index = Number.parseInt(e.key) - 1;
 				if (favoriteThemes[index]) {
-					setTheme(favoriteThemes[index].id as any);
+					setTheme(favoriteThemes[index].id);
 				}
 			}
 		};
@@ -218,7 +218,15 @@ export function QuickThemeSelector() {
 				<div
 					className="fixed inset-0 z-40"
 					onClick={() => setIsOpen(false)}
-					aria-hidden="true"
+					onKeyDown={(e) => {
+						if (e.key === "Enter" || e.key === " ") {
+							e.preventDefault();
+							setIsOpen(false);
+						}
+					}}
+					tabIndex={0}
+					role="button"
+					aria-label="テーマセレクターを閉じる"
 				/>
 			)}
 		</div>

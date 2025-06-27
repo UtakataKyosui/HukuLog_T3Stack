@@ -11,16 +11,19 @@ import {
 import { authClient } from "@/lib/auth-client";
 import { addPasskey } from "@/lib/auth-utils";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export default function SetupPasskeyPage() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isSetupComplete, setIsSetupComplete] = useState(false);
-	const [session, setSession] = useState<any>(null);
+	const [session, setSession] = useState<{
+		user?: { id: string; name?: string };
+	} | null>(null);
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const isAuto = searchParams.get("auto") === "true";
 
+<<<<<<< HEAD
 	const handleSetupPasskey = async () => {
 		const result = await addPasskey(
 			undefined,
@@ -30,9 +33,15 @@ export default function SetupPasskeyPage() {
 		);
 
 		if (result) {
+=======
+	const handleSetupPasskey = useCallback(async () => {
+		setIsLoading(true);
+		try {
+			await authClient.passkey.addPasskey();
+>>>>>>> 88bbefc8b4121de2dfeeefbd39f1d62fc5b8959e
 			setIsSetupComplete(true);
 		}
-	};
+	}, []);
 
 	useEffect(() => {
 		const checkSession = async () => {
@@ -49,7 +58,7 @@ export default function SetupPasskeyPage() {
 			}
 		};
 		checkSession();
-	}, [router, isAuto, isLoading]);
+	}, [router, isAuto, isLoading, handleSetupPasskey]);
 
 	const handleSkip = () => {
 		router.push("/");

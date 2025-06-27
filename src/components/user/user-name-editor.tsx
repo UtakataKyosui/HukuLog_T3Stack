@@ -29,6 +29,7 @@ export function UserNameEditor({ initialName }: UserNameEditorProps) {
 			return;
 		}
 
+<<<<<<< HEAD
 		const result = await updateUser(
 			{ name: name.trim() },
 			() => setIsLoading(true),
@@ -37,6 +38,14 @@ export function UserNameEditor({ initialName }: UserNameEditorProps) {
 		);
 
 		if (result) {
+=======
+		setIsLoading(true);
+		try {
+			await authClient.updateUser({
+				name: name.trim(),
+			});
+
+>>>>>>> 88bbefc8b4121de2dfeeefbd39f1d62fc5b8959e
 			setIsEditing(false);
 			router.refresh(); // ページをリフレッシュしてデータを更新
 		}

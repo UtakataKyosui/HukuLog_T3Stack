@@ -94,7 +94,7 @@ export function Pagination({
 
 				{/* ページ番号 */}
 				{pageNumbers.map((page, index) => (
-					<div key={index}>
+					<div key={page === "ellipsis" ? `ellipsis-${index}` : `page-${page}`}>
 						{page === "ellipsis" ? (
 							<Button variant="ghost" size="sm" disabled>
 								<MoreHorizontal className="h-4 w-4" />

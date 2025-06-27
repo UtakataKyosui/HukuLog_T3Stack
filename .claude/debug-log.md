@@ -464,6 +464,92 @@ psql $DATABASE_URL < backup_20250621.sql
 
 ---
 
-**最終更新**: 2025-06-21  
-**次回レビュー予定**: 2025-07-21  
+## [2025-06-25] ブラウザでデータが表示されない問題
+
+**症状**: 
+- データベースには服99着とコーデ33個が存在
+- ブラウザ（localhost:3000）でワードローブやコーデページを開いても何も表示されない
+- 新しく追加したテストデータ（夏服・夏コーデ）が見えない
+
+**環境**: 
+- Next.js 15.3.3
+- T3 Stack (tRPC + Drizzle ORM + Better Auth)
+- PostgreSQL
+- localhost:3000
+
+**再現手順**:
+1. テストスクリプトでデータベースに服とコーデを追加
+2. ブラウザでlocalhost:3000にアクセス
+3. ワードローブページ・コーデページを確認
+4. データが表示されない
+
+**試行錯誤**:
+❌ データベース確認 → データは正常に存在  
+❌ tRPCエンドポイント確認 → API実装は正常  
+❌ フロントエンド確認 → コンポーネント実装は正常  
+✅ ユーザーセッション調査 → **根本原因を発見**
+
+**調査結果**:
+```
+👥 登録ユーザー数: 16
+- demo-user-1: 服99着、コーデ33個（テストデータ豊富）
+- 泡沫: 服1着、コーデ0個
+- その他: PasskeyユーザーやAnonymousユーザー
+
+🔐 アクティブセッション:
+- demo-user-1: アクティブセッション0個 ❌
+- 泡沫: アクティブセッション1個 ✅
+```
+
+**根本原因**: 
+**ユーザーセッションの不一致**
+- データが豊富な`demo-user-1`にアクティブセッションがない
+- 実際にログインしているのは別のユーザー（"泡沫"）
+- T3 Stackの`protectedProcedure`により各ユーザーは自分のデータのみ閲覧可能
+
+**技術的詳細**:
+```typescript
+// 問題のあるクエリ例（src/server/api/routers/clothing.ts）
+getAll: protectedProcedure.query(({ ctx, input }) => {
+  return ctx.db
+    .select()
+    .from(clothingItems)
+    .where(eq(clothingItems.userId, ctx.session.user.id)) // ここでユーザー分離
+    .orderBy(desc(clothingItems.createdAt));
+});
+```
+
+**最終解決方法**:
+1. **セッション作成**: `demo-user-1`用の有効なセッションを作成
+2. **ブラウザ設定**: 適切なセッショントークンに変更
+
+```javascript
+// ブラウザのJavaScriptコンソールで実行
+document.cookie = "authjs.session-token=AZDi6KYhfmuwTpOfZjTkN0JMdELN5FEY; path=/; max-age=2592000";
+location.reload();
+```
+
+**予防策**:
+1. **テストデータ作成時の注意**: データ作成と同時に対応するセッションも作成
+2. **ユーザー切り替え確認**: データが見えない場合はまず認証状態を疑う
+3. **デバッグ手順の標準化**: データベース vs ブラウザ表示の整合性確認
+
+**学んだこと**:
+- T3 Stackの認証システムによるデータ分離が確実に機能
+- Better Authのセッション管理の重要性
+- `protectedProcedure`のセキュリティ効果
+- テスト環境でのユーザー管理の重要性
+
+**関連ファイル**:
+- `/src/server/api/routers/clothing.ts`
+- `/src/server/api/routers/outfit.ts`
+- `/src/server/db/schema.ts` (sessions table)
+- `/src/server/auth.ts`
+
+**解決時間**: 約30分
+
+---
+
+**最終更新**: 2025-06-25  
+**次回レビュー予定**: 2025-07-25  
 **メンテナンス担当**: 開発者

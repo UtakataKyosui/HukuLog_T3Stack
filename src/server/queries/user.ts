@@ -48,13 +48,14 @@ export async function getUserAuthMethod(
 
 	if (hasPasskey && !hasGoogle) {
 		return "passkey-only";
-	} else if (hasGoogle && hasPasskey) {
-		return "google-with-passkey";
-	} else if (hasGoogle && !hasPasskey) {
-		return "google-only";
-	} else {
-		return "unknown";
 	}
+	if (hasGoogle && hasPasskey) {
+		return "google-with-passkey";
+	}
+	if (hasGoogle && !hasPasskey) {
+		return "google-only";
+	}
+	return "unknown";
 }
 
 export async function getUserAccountInfo(userId: string) {
