@@ -15,7 +15,9 @@ import { useEffect, useState } from "react";
 export default function SetupProfilePage() {
 	const [name, setName] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
-	const [session, setSession] = useState<{ user?: { id: string; name?: string } } | null>(null);
+	const [session, setSession] = useState<{
+		user?: { id: string; name?: string };
+	} | null>(null);
 	const router = useRouter();
 
 	useEffect(() => {

@@ -210,7 +210,7 @@ export default function SubscriptionPlans() {
 								<ul className="space-y-1">
 									{plan.features.map((feature, index) => (
 										<li
-											key={`feature-${index}`}
+											key={`${plan.name}-feature-${index}`}
 											className="flex items-start gap-2 text-gray-600 text-sm"
 										>
 											<Check className="mt-0.5 h-3 w-3 flex-shrink-0 text-green-500" />

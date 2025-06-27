@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { authClient } from "@/lib/auth-client";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export default function SetupPasskeyPage() {
 	const [isLoading, setIsLoading] = useState(false);
@@ -22,7 +22,7 @@ export default function SetupPasskeyPage() {
 	const searchParams = useSearchParams();
 	const isAuto = searchParams.get("auto") === "true";
 
-	const handleSetupPasskey = async () => {
+	const handleSetupPasskey = useCallback(async () => {
 		setIsLoading(true);
 		try {
 			await authClient.passkey.addPasskey();
@@ -33,7 +33,7 @@ export default function SetupPasskeyPage() {
 		} finally {
 			setIsLoading(false);
 		}
-	};
+	}, []);
 
 	useEffect(() => {
 		const checkSession = async () => {

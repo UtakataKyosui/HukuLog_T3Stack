@@ -263,6 +263,7 @@ export function ClothingSearchFilters({
 						>
 							#{tag}
 							<button
+								type="button"
 								onClick={() => handleRemoveTag(tag)}
 								className="ml-1 rounded-full p-0.5 hover:bg-slate-300"
 							>
@@ -542,6 +543,7 @@ export function OutfitSearchFilters({
 						>
 							#{tag}
 							<button
+								type="button"
 								onClick={() => handleRemoveTag(tag)}
 								className="ml-1 rounded-full p-0.5 hover:bg-slate-300"
 							>

@@ -90,7 +90,7 @@ export default function CreateOutfitForm({
 			<div className="flex gap-1">
 				{Array.from({ length: 5 }, (_, i) => (
 					<button
-						key={`rating-${i}`}
+						key={`rating-star-${i + 1}`}
 						type="button"
 						onClick={() =>
 							setFormData({ ...formData, rating: (i + 1).toString() })
@@ -227,7 +227,6 @@ export default function CreateOutfitForm({
 											toggleClothingItem(item.id);
 										}
 									}}
-									tabIndex={0}
 									aria-pressed={selectedClothingItems.includes(item.id)}
 								>
 									<div className="flex items-center gap-3">
