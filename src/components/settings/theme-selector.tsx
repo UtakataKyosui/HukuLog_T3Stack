@@ -41,6 +41,15 @@ export function ThemeSelector() {
 									: "theme-border hover:theme-border-secondary"
 							}`}
 							onClick={() => setTheme(themeConfig.id)}
+							onKeyDown={(e) => {
+								if (e.key === "Enter" || e.key === " ") {
+									e.preventDefault();
+									setTheme(themeConfig.id);
+								}
+							}}
+							tabIndex={0}
+							role="button"
+							aria-pressed={theme === themeConfig.id}
 						>
 							{theme === themeConfig.id && (
 								<div className="absolute top-2 right-2">

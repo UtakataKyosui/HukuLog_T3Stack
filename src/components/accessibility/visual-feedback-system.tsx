@@ -57,55 +57,56 @@ export function VisualFeedbackSystem() {
 	};
 
 	// バイブレーション機能
-	const triggerVibration = (pattern: number[] = [200]) => {
+	const triggerVibration = useCallback((pattern: number[] = [200]) => {
 		if (!preferences.enableVibration) return;
 
 		if ("vibrate" in navigator) {
 			navigator.vibrate(pattern);
 		}
-	};
+	}, [preferences.enableVibration]);
 
 	// フラッシュインジケーター
-	const triggerFlashIndicator = () => {
+	const triggerFlashIndicator = useCallback(() => {
 		if (!preferences.enableFlashIndicator) return;
 
 		setFlashIndicator(true);
 		setTimeout(() => setFlashIndicator(false), 300);
-	};
+	}, [preferences.enableFlashIndicator]);
 
 	// 通知の追加
-	const addNotification = useCallback((
-		notification: Omit<NotificationMessage, "id" | "timestamp">,
-	) => {
-		if (!preferences.enableVisualNotifications) return;
+	const addNotification = useCallback(
+		(notification: Omit<NotificationMessage, "id" | "timestamp">) => {
+			if (!preferences.enableVisualNotifications) return;
 
-		const id = Math.random().toString(36).substr(2, 9);
-		const newNotification: NotificationMessage = {
-			...notification,
-			id,
-			timestamp: Date.now(),
-			duration: notification.duration || preferences.notificationDuration,
-		};
+			const id = Math.random().toString(36).substr(2, 9);
+			const newNotification: NotificationMessage = {
+				...notification,
+				id,
+				timestamp: Date.now(),
+				duration: notification.duration || preferences.notificationDuration,
+			};
 
-		setNotifications((prev) => [...prev, newNotification]);
+			setNotifications((prev) => [...prev, newNotification]);
 
-		// バイブレーション
-		const vibrationPatterns = {
-			success: [100, 50, 100],
-			info: [200],
-			warning: [100, 100, 100],
-			error: [200, 100, 200, 100, 200],
-		};
-		triggerVibration(vibrationPatterns[notification.type]);
+			// バイブレーション
+			const vibrationPatterns = {
+				success: [100, 50, 100],
+				info: [200],
+				warning: [100, 100, 100],
+				error: [200, 100, 200, 100, 200],
+			};
+			triggerVibration(vibrationPatterns[notification.type]);
 
-		// フラッシュインジケーター
-		triggerFlashIndicator();
+			// フラッシュインジケーター
+			triggerFlashIndicator();
 
-		// 自動削除
-		setTimeout(() => {
-			removeNotification(id);
-		}, newNotification.duration);
-	}, [preferences.enableVisualNotifications, preferences.notificationDuration]);
+			// 自動削除
+			setTimeout(() => {
+				removeNotification(id);
+			}, newNotification.duration);
+		},
+		[preferences.enableVisualNotifications, preferences.notificationDuration, triggerVibration, triggerFlashIndicator],
+	);
 
 	// 通知の削除
 	const removeNotification = (id: string) => {

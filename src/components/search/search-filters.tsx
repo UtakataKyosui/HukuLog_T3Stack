@@ -284,6 +284,7 @@ export function ClothingSearchFilters({
 							.slice(0, 10)
 							.map((tag) => (
 								<button
+									type="button"
 									key={tag}
 									onClick={() =>
 										onFiltersChange({
@@ -564,6 +565,7 @@ export function OutfitSearchFilters({
 							.slice(0, 10)
 							.map((tag) => (
 								<button
+									type="button"
 									key={tag}
 									onClick={() =>
 										onFiltersChange({

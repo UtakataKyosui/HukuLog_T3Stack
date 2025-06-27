@@ -1,7 +1,7 @@
 "use client";
 
 import { useTheme } from "@/components/providers/theme-provider";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface AccessibilitySettings {
 	announceThemeChanges: boolean;
@@ -32,7 +32,7 @@ export function AccessibilityThemeManager() {
 	}, []);
 
 	// テーマ変更時の音声アナウンス
-	const announceThemeChange = (themeName: string) => {
+	const announceThemeChange = useCallback((themeName: string) => {
 		if (!settings.announceThemeChanges) return;
 
 		// スクリーンリーダー向けのアナウンス
@@ -47,10 +47,10 @@ export function AccessibilityThemeManager() {
 				announcer.textContent = "";
 			}, 3000);
 		}
-	};
+	}, [settings.announceThemeChanges]);
 
 	// アクセシビリティテーマへのクイック切り替え
-	const switchToAccessibilityTheme = () => {
+	const switchToAccessibilityTheme = useCallback(() => {
 		const accessibilityThemes = [
 			"high-contrast",
 			"eye-friendly",
@@ -67,7 +67,7 @@ export function AccessibilityThemeManager() {
 		if (themeConfig) {
 			announceThemeChange(themeConfig.name);
 		}
-	};
+	}, [theme, setTheme, announceThemeChange]);
 
 	// グローバルキーボードショートカット
 	useEffect(() => {
@@ -124,7 +124,12 @@ export function AccessibilityThemeManager() {
 
 		document.addEventListener("keydown", handleGlobalKeyboard);
 		return () => document.removeEventListener("keydown", handleGlobalKeyboard);
-	}, [settings.enableKeyboardShortcuts, setTheme, announceThemeChange, switchToAccessibilityTheme]);
+	}, [
+		settings.enableKeyboardShortcuts,
+		setTheme,
+		announceThemeChange,
+		switchToAccessibilityTheme,
+	]);
 
 	// 緊急時の高コントラストモード切り替え（連続でEscapeキー）
 	useEffect(() => {

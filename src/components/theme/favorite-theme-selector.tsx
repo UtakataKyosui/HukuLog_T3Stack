@@ -91,7 +91,7 @@ export function FavoriteThemeSelector() {
 				e.preventDefault();
 				const index = Number.parseInt(e.key) - 1;
 				if (favoriteThemes[index]) {
-					setTheme(favoriteThemes[index].id as any);
+					setTheme(favoriteThemes[index].id);
 
 					// 視覚的フィードバック
 					const event = new CustomEvent("accessibility-setting-changed", {
