@@ -57,13 +57,16 @@ export function VisualFeedbackSystem() {
 	};
 
 	// バイブレーション機能
-	const triggerVibration = useCallback((pattern: number[] = [200]) => {
-		if (!preferences.enableVibration) return;
+	const triggerVibration = useCallback(
+		(pattern: number[] = [200]) => {
+			if (!preferences.enableVibration) return;
 
-		if ("vibrate" in navigator) {
-			navigator.vibrate(pattern);
-		}
-	}, [preferences.enableVibration]);
+			if ("vibrate" in navigator) {
+				navigator.vibrate(pattern);
+			}
+		},
+		[preferences.enableVibration],
+	);
 
 	// フラッシュインジケーター
 	const triggerFlashIndicator = useCallback(() => {
@@ -105,7 +108,12 @@ export function VisualFeedbackSystem() {
 				removeNotification(id);
 			}, newNotification.duration);
 		},
-		[preferences.enableVisualNotifications, preferences.notificationDuration, triggerVibration, triggerFlashIndicator],
+		[
+			preferences.enableVisualNotifications,
+			preferences.notificationDuration,
+			triggerVibration,
+			triggerFlashIndicator,
+		],
 	);
 
 	// 通知の削除

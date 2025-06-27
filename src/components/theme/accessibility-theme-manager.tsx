@@ -1,6 +1,7 @@
 "use client";
 
 import { useTheme } from "@/components/providers/theme-provider";
+import { allThemes } from "@/config/themes";
 import { useCallback, useEffect, useState } from "react";
 
 interface AccessibilitySettings {
@@ -32,22 +33,25 @@ export function AccessibilityThemeManager() {
 	}, []);
 
 	// テーマ変更時の音声アナウンス
-	const announceThemeChange = useCallback((themeName: string) => {
-		if (!settings.announceThemeChanges) return;
+	const announceThemeChange = useCallback(
+		(themeName: string) => {
+			if (!settings.announceThemeChanges) return;
 
-		// スクリーンリーダー向けのアナウンス
-		const announcement = `テーマが ${themeName} に変更されました`;
+			// スクリーンリーダー向けのアナウンス
+			const announcement = `テーマが ${themeName} に変更されました`;
 
-		// aria-live領域を使ったアナウンス
-		const announcer = document.getElementById("theme-announcer");
-		if (announcer) {
-			announcer.textContent = announcement;
-			// 少し後にクリア（スクリーンリーダーが読み終わるまで）
-			setTimeout(() => {
-				announcer.textContent = "";
-			}, 3000);
-		}
-	}, [settings.announceThemeChanges]);
+			// aria-live領域を使ったアナウンス
+			const announcer = document.getElementById("theme-announcer");
+			if (announcer) {
+				announcer.textContent = announcement;
+				// 少し後にクリア（スクリーンリーダーが読み終わるまで）
+				setTimeout(() => {
+					announcer.textContent = "";
+				}, 3000);
+			}
+		},
+		[settings.announceThemeChanges],
+	);
 
 	// アクセシビリティテーマへのクイック切り替え
 	const switchToAccessibilityTheme = useCallback(() => {
@@ -67,7 +71,7 @@ export function AccessibilityThemeManager() {
 		if (themeConfig) {
 			announceThemeChange(themeConfig.name);
 		}
-	}, [theme, setTheme, announceThemeChange]);
+	}, [theme, setTheme, announceThemeChange, allThemes]);
 
 	// グローバルキーボードショートカット
 	useEffect(() => {

@@ -227,7 +227,6 @@ export function QuickThemeSelector() {
 					tabIndex={0}
 					role="button"
 					aria-label="テーマセレクターを閉じる"
-					aria-hidden="true"
 				/>
 			)}
 		</div>

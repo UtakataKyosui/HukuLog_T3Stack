@@ -48,7 +48,6 @@ export function ThemeSelector() {
 								}
 							}}
 							tabIndex={0}
-							role="button"
 							aria-pressed={theme === themeConfig.id}
 						>
 							{theme === themeConfig.id && (
