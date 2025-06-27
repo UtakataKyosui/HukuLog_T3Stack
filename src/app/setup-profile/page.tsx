@@ -13,6 +13,7 @@ import { updateUser } from "@/lib/auth-utils";
 import { api } from "@/trpc/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { AuthStatusDisplay } from "@/components/auth/auth-status-display";
 
 export default function SetupProfilePage() {
 	const [name, setName] = useState("");
@@ -25,6 +26,10 @@ export default function SetupProfilePage() {
 		api.userStorage.getStoragePreferences.useQuery(undefined, {
 			enabled: !!session,
 		});
+	
+	const { data: authStatus } = api.authState.getAuthStatus.useQuery(undefined, {
+		enabled: !!session,
+	});
 
 	useEffect(() => {
 		const checkSession = async () => {
@@ -36,7 +41,7 @@ export default function SetupProfilePage() {
 			setSession(sessionData);
 
 			// すでに名前が設定されている場合はホームにリダイレクト
-			if (sessionData.user?.name) {
+			if (sessionData?.user?.name) {
 				router.push("/outfits");
 			}
 		};
@@ -81,8 +86,28 @@ export default function SetupProfilePage() {
 		);
 
 		if (result) {
-			// プロフィール設定完了後、ストレージ選択ページにリダイレクト
-			router.push("/setup-storage");
+			// プロフィール設定完了後、認証レベルに基づいてリダイレクト先を決定
+			if (authStatus) {
+				if (authStatus.level === 4) {
+					// 完全認証済み - メインページへ
+					router.push("/outfits");
+				} else if (authStatus.level === 1) {
+					// 基本認証のみ - 統合認証セットアップを推奨
+					router.push("/setup-complete-auth");
+				} else {
+					// 部分的認証 - 不足している認証の設定へ
+					if (!authStatus.passkeyEnabled) {
+						router.push("/setup-passkey?auto=true");
+					} else if (!authStatus.notionEnabled) {
+						router.push("/setup-storage");
+					} else {
+						router.push("/outfits");
+					}
+				}
+			} else {
+				// 認証状態が不明な場合はデフォルトのフロー
+				router.push("/setup-storage");
+			}
 		}
 	};
 
@@ -157,6 +182,20 @@ export default function SetupProfilePage() {
 							後で設定する
 						</Button>
 					</div>
+
+					{/* 認証状態の表示 */}
+					{authStatus && (
+						<div className="space-y-3">
+							<AuthStatusDisplay variant="compact" showPrompt={false} />
+							{authStatus.level < 4 && (
+								<div className="rounded-lg border border-amber-200 bg-amber-50 p-3">
+									<p className="text-amber-800 text-xs">
+										✨ プロフィール設定後、追加の認証セットアップで更に安全で便利になります
+									</p>
+								</div>
+							)}
+						</div>
+					)}
 
 					<div className="rounded-lg border border-blue-200 bg-blue-50 p-3">
 						<p className="text-blue-800 text-xs">

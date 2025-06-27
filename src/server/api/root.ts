@@ -1,3 +1,4 @@
+import { authStateRouter } from "@/server/api/routers/auth-state";
 import { clothingRouter } from "@/server/api/routers/clothing";
 import { notionClothingRouter } from "@/server/api/routers/notion-clothing";
 import { notionOutfitRouter } from "@/server/api/routers/notion-outfit";
@@ -30,6 +31,7 @@ export const appRouter = createTRPCRouter({
 	passkey: passkeyRouter,
 	user: userRouter,
 	userStorage: userStorageRouter,
+	authState: authStateRouter,
 });
 
 // export type definition of API

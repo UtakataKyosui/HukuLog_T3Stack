@@ -13,8 +13,10 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { api } from "@/trpc/react";
-import { Star, X } from "lucide-react";
-import { useState } from "react";
+import { AlertCircle, Star, X } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface CreateOutfitFormProps {
 	onSuccess: () => void;
@@ -25,6 +27,8 @@ export default function CreateOutfitForm({
 	onSuccess,
 	onCancel,
 }: CreateOutfitFormProps) {
+	const router = useRouter();
+	const [showNotionAuth, setShowNotionAuth] = useState(false);
 	const [formData, setFormData] = useState({
 		name: "",
 		description: "",
@@ -38,6 +42,20 @@ export default function CreateOutfitForm({
 		[],
 	);
 
+	// ユーザーのストレージ設定を取得
+	const { data: storageConfig } = api.userStorage.getStoragePreferences.useQuery();
+
+	// Notion未認証チェック
+	useEffect(() => {
+		if (storageConfig?.storageType === "notion") {
+			const isNotionIncomplete =
+				!storageConfig.notionAccessToken ||
+				!storageConfig.notionClothingDatabaseId ||
+				!storageConfig.notionOutfitsDatabaseId;
+			setShowNotionAuth(isNotionIncomplete);
+		}
+	}, [storageConfig]);
+
 	const { data: clothingItems } = api.clothing.getAll.useQuery();
 	const { data: categories } = api.clothing.getCategories.useQuery();
 	const createOutfit = api.outfit.create.useMutation({
@@ -46,6 +64,10 @@ export default function CreateOutfitForm({
 		},
 		onError: (error) => {
 			console.error("Failed to create outfit:", error);
+			// Notion認証エラーの場合は認証設定画面に案内
+			if (error.message.includes("Notion") && error.message.includes("認証")) {
+				setShowNotionAuth(true);
+			}
 		},
 	});
 
@@ -108,6 +130,42 @@ export default function CreateOutfitForm({
 
 	return (
 		<div className="max-h-[70vh] overflow-y-auto">
+			{/* Notion認証が必要な場合の警告 */}
+			{showNotionAuth && (
+				<Alert className="mb-4 border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950">
+					<AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+					<AlertDescription className="text-amber-800 dark:text-amber-200">
+						<div className="space-y-2">
+							<p>
+								<strong>Notion認証が必要です</strong>
+							</p>
+							<p>
+								Notionにデータを保存するには、Notionアカウントとの連携設定が必要です。
+							</p>
+							<div className="flex gap-2 mt-3">
+								<Button
+									type="button"
+									size="sm"
+									onClick={() => router.push("/settings/storage")}
+									className="bg-amber-600 hover:bg-amber-700 text-white"
+								>
+									設定画面へ
+								</Button>
+								<Button
+									type="button"
+									variant="outline"
+									size="sm"
+									onClick={() => setShowNotionAuth(false)}
+									className="border-amber-600 text-amber-600 hover:bg-amber-50 dark:border-amber-400 dark:text-amber-400 dark:hover:bg-amber-950"
+								>
+									後で設定
+								</Button>
+							</div>
+						</div>
+					</AlertDescription>
+				</Alert>
+			)}
+
 			<form onSubmit={handleSubmit} className="space-y-6">
 				<div>
 					<Label htmlFor="name">コーディネート名 *</Label>

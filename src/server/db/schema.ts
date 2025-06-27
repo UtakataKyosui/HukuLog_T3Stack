@@ -46,10 +46,20 @@ export const users = createTable("user", (d) => ({
 	emailVerified: d.boolean().notNull().default(false),
 	image: d.varchar({ length: 255 }),
 	isAnonymous: d.boolean().notNull().default(false),
+	
+	// ストレージ設定
 	storageType: d.varchar({ length: 50 }).notNull().default("postgresql"), // postgresql, notion
 	notionAccessToken: d.text(),
 	notionClothingDatabaseId: d.varchar({ length: 255 }),
 	notionOutfitsDatabaseId: d.varchar({ length: 255 }),
+	
+	// 認証状態管理
+	authLevel: d.integer().notNull().default(1), // 1: 基本, 2: セキュア, 3: データ連携, 4: 完全
+	passkeyEnabled: d.boolean().notNull().default(false),
+	notionEnabled: d.boolean().notNull().default(false),
+	preferredAuthMethod: d.varchar({ length: 50 }).default("passkey"), // passkey, google, notion
+	authCompletedAt: d.timestamp({ withTimezone: true }),
+	
 	createdAt: d
 		.timestamp({ withTimezone: true })
 		.default(sql`CURRENT_TIMESTAMP`)
