@@ -64,7 +64,19 @@ export function Modal({
 	return (
 		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
 			{/* Overlay */}
-			<div className="absolute inset-0" onClick={onClose} />
+			<div
+				className="absolute inset-0"
+				onClick={onClose}
+				onKeyDown={(e) => {
+					if (e.key === "Enter" || e.key === " ") {
+						e.preventDefault();
+						onClose();
+					}
+				}}
+				tabIndex={0}
+				role="button"
+				aria-label="モーダルを閉じる"
+			/>
 
 			{/* Modal Content */}
 			<div
@@ -81,6 +93,7 @@ export function Modal({
 							{title}
 						</h2>
 						<button
+							type="button"
 							onClick={onClose}
 							className={`rounded-full p-2 transition-colors ${themeClasses.closeButton}`}
 						>

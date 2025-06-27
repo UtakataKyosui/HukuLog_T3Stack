@@ -11,7 +11,7 @@ import {
 } from "react";
 
 type SessionContextType = {
-	session: any;
+	session: { user?: { id: string; name?: string; email?: string } } | null;
 	isLoading: boolean;
 	error: Error | null;
 	retry: () => void;
@@ -30,7 +30,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 			new QueryClient({
 				defaultOptions: {
 					queries: {
-						retry: (failureCount, error: any) => {
+						retry: (failureCount, error: { status?: number } | null) => {
 							// 認証エラーの場合はリトライしない
 							if (error?.status === 401 || error?.status === 403) {
 								return false;

@@ -139,6 +139,7 @@ export function Navigation() {
 
 						{/* Mobile menu button */}
 						<button
+							type="button"
 							onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
 							className="rounded-md p-2 text-theme-text-secondary hover:bg-theme-surface hover:text-theme-text md:hidden"
 						>

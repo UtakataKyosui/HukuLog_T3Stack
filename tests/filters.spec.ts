@@ -146,7 +146,7 @@ test.describe("Clothing Filters", () => {
 		const badge = page.locator('button:has-text("詳細フィルター") .badge');
 		await expect(badge).toBeVisible();
 		const badgeText = await badge.textContent();
-		expect(Number.parseInt(badgeText!)).toBeGreaterThan(0);
+		expect(Number.parseInt(badgeText || "0")).toBeGreaterThan(0);
 	});
 
 	test("should maintain filters when switching pages", async ({ page }) => {
