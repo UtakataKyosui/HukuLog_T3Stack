@@ -15,6 +15,10 @@ export const env = createEnv({
 		GOOGLE_CLIENT_SECRET: z.string().optional(),
 		NOTION_CLIENT_ID: z.string().optional(),
 		NOTION_CLIENT_SECRET: z.string().optional(),
+<<<<<<< HEAD
+		NOTION_DATABASE_IDS: z.string().optional(),
+=======
+>>>>>>> 88bbefc8b4121de2dfeeefbd39f1d62fc5b8959e
 		DATABASE_URL: z.string().url(),
 		NODE_ENV: z
 			.enum(["development", "test", "production"])
@@ -46,6 +50,10 @@ export const env = createEnv({
 		GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
 		NOTION_CLIENT_ID: process.env.NOTION_CLIENT_ID,
 		NOTION_CLIENT_SECRET: process.env.NOTION_CLIENT_SECRET,
+<<<<<<< HEAD
+		NOTION_DATABASE_IDS: process.env.NOTION_DATABASE_IDS,
+=======
+>>>>>>> 88bbefc8b4121de2dfeeefbd39f1d62fc5b8959e
 		NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
 		NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME,
 		NEXT_PUBLIC_APP_DESCRIPTION: process.env.NEXT_PUBLIC_APP_DESCRIPTION,

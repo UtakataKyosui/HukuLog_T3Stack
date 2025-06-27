@@ -1,5 +1,6 @@
 "use client";
 
+import { AuthStatusDisplay } from "@/components/auth/auth-status-display";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -9,16 +10,26 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { authClient } from "@/lib/auth-client";
+import { updateUser } from "@/lib/auth-utils";
+import { api } from "@/trpc/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function SetupProfilePage() {
 	const [name, setName] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
-	const [session, setSession] = useState<{
-		user?: { id: string; name?: string };
-	} | null>(null);
+	const [session, setSession] = useState<any>(null);
+	const [checkingStorage, setCheckingStorage] = useState(true);
 	const router = useRouter();
+
+	const { data: storagePreferences } =
+		api.userStorage.getStoragePreferences.useQuery(undefined, {
+			enabled: !!session,
+		});
+
+	const { data: authStatus } = api.authState.getAuthStatus.useQuery(undefined, {
+		enabled: !!session,
+	});
 
 	useEffect(() => {
 		const checkSession = async () => {
@@ -30,12 +41,36 @@ export default function SetupProfilePage() {
 			setSession(sessionData);
 
 			// すでに名前が設定されている場合はホームにリダイレクト
-			if (sessionData.user?.name) {
+			if (sessionData?.user?.name) {
 				router.push("/outfits");
 			}
 		};
 		checkSession();
 	}, [router]);
+
+	useEffect(() => {
+		if (storagePreferences) {
+			// データベース設定が未完了の場合、ストレージ選択ページにリダイレクト
+			if (
+				!storagePreferences.storageType ||
+				storagePreferences.storageType === "postgresql"
+			) {
+				// PostgreSQLの場合は追加設定不要なのでそのまま進む
+				setCheckingStorage(false);
+			} else if (storagePreferences.storageType === "notion") {
+				// Notionの場合、必要な設定が揃っているかチェック
+				if (
+					!storagePreferences.notionAccessToken ||
+					!storagePreferences.notionClothingDatabaseId ||
+					!storagePreferences.notionOutfitsDatabaseId
+				) {
+					router.push("/setup-storage");
+					return;
+				}
+				setCheckingStorage(false);
+			}
+		}
+	}, [storagePreferences, router]);
 
 	const handleSave = async () => {
 		if (!name.trim()) {
@@ -43,30 +78,50 @@ export default function SetupProfilePage() {
 			return;
 		}
 
-		setIsLoading(true);
-		try {
-			await authClient.updateUser({
-				name: name.trim(),
-			});
+		const result = await updateUser(
+			{ name: name.trim() },
+			() => setIsLoading(true),
+			() => setIsLoading(false),
+			(error) => alert(`プロフィールの設定に失敗しました: ${error}`),
+		);
 
-			// プロフィール設定完了後、メインページにリダイレクト
-			router.push("/outfits");
-		} catch (error) {
-			console.error("Profile setup error:", error);
-			alert("プロフィールの設定に失敗しました");
-		} finally {
-			setIsLoading(false);
+		if (result) {
+			// プロフィール設定完了後、認証レベルに基づいてリダイレクト先を決定
+			if (authStatus) {
+				if (authStatus.level === 4) {
+					// 完全認証済み - メインページへ
+					router.push("/outfits");
+				} else if (authStatus.level === 1) {
+					// 基本認証のみ - 統合認証セットアップを推奨
+					router.push("/setup-complete-auth");
+				} else {
+					// 部分的認証 - 不足している認証の設定へ
+					if (!authStatus.passkeyEnabled) {
+						router.push("/setup-passkey?auto=true");
+					} else if (!authStatus.notionEnabled) {
+						router.push("/setup-storage");
+					} else {
+						router.push("/outfits");
+					}
+				}
+			} else {
+				// 認証状態が不明な場合はデフォルトのフロー
+				router.push("/setup-storage");
+			}
 		}
 	};
 
 	const handleSkip = () => {
-		router.push("/outfits");
+		router.push("/setup-storage");
 	};
 
-	if (!session) {
+	if (!session || checkingStorage) {
 		return (
 			<div className="flex min-h-screen items-center justify-center">
-				<div>読み込み中...</div>
+				<div className="text-center">
+					<div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-theme-primary border-b-2"></div>
+					<div>{!session ? "読み込み中..." : "設定を確認中..."}</div>
+				</div>
 			</div>
 		);
 	}
@@ -127,6 +182,21 @@ export default function SetupProfilePage() {
 							後で設定する
 						</Button>
 					</div>
+
+					{/* 認証状態の表示 */}
+					{authStatus && (
+						<div className="space-y-3">
+							<AuthStatusDisplay variant="compact" showPrompt={false} />
+							{authStatus.level < 4 && (
+								<div className="rounded-lg border border-amber-200 bg-amber-50 p-3">
+									<p className="text-amber-800 text-xs">
+										✨
+										プロフィール設定後、追加の認証セットアップで更に安全で便利になります
+									</p>
+								</div>
+							)}
+						</div>
+					)}
 
 					<div className="rounded-lg border border-blue-200 bg-blue-50 p-3">
 						<p className="text-blue-800 text-xs">

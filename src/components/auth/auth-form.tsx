@@ -1,5 +1,7 @@
 "use client";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -8,7 +10,14 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { authClient } from "@/lib/auth-client";
+import { Separator } from "@/components/ui/separator";
+import {
+	handleGoogleAuth,
+	handleNotionAuth,
+	handlePasskeyAuth,
+	handlePasskeySignUp,
+} from "@/lib/auth-utils";
+import { ArrowRight, CheckCircle, Link, Lock, Star } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
@@ -21,121 +30,42 @@ export function AuthForm() {
 		searchParams.get("mode") === "signup",
 	);
 
-	const handlePasskeySignUp = async () => {
-		setIsLoading(true);
-		try {
-			console.log("Starting Better Auth passkey signup...");
+	const handlePasskeySignUpClick = async () => {
+		const result = await handlePasskeySignUp(
+			() => setIsLoading(true),
+			() => setIsLoading(false),
+		);
 
-			// ステップ1: 匿名ユーザーとしてサインイン
-			const anonymousResult = await authClient.signIn.anonymous();
-
-			if (!anonymousResult?.data) {
-				console.error("Anonymous signin result:", anonymousResult);
-				throw new Error("匿名ユーザーの作成に失敗しました");
-			}
-
-			console.log(
-				"Anonymous user created successfully:",
-				anonymousResult.data.user.id,
-			);
-
-			// 少し待機してセッション確立を確実にする
-			await new Promise((resolve) => setTimeout(resolve, 500));
-
-			// ステップ2: パスキーを追加（Better Authの推奨方法）
-			console.log("Adding passkey...");
-			const passkeyResult = await authClient.passkey.addPasskey({
-				name: "メインパスキー",
-			});
-
-			console.log("Passkey result:", passkeyResult);
-
-			// Better Authのパスキー追加は成功時にvoidを返すか、エラー時にthrowする
-			console.log("Passkey added successfully");
-
+		if (result) {
 			// 成功後、プロフィール設定ページにリダイレクト
 			router.push("/setup-profile");
-		} catch (error) {
-			console.error("Passkey signup error:", error);
-			const errorMessage =
-				error instanceof Error ? error.message : "パスキー登録に失敗しました";
-
-			// WebAuthnエラーのハンドリング
-			if (
-				errorMessage.includes("NotAllowedError") ||
-				errorMessage.includes("InvalidStateError")
-			) {
-				alert("パスキーの作成がキャンセルされました。もう一度お試しください。");
-			} else if (errorMessage.includes("NotSupportedError")) {
-				alert(
-					"お使いのブラウザまたはデバイスはパスキーをサポートしていません。Googleアカウントでの登録をお試しください。",
-				);
-				// フォールバック: Googleで登録
-				try {
-					await authClient.signIn.social({
-						provider: "google",
-						callbackURL: "/setup-passkey",
-					});
-				} catch (googleError) {
-					console.error("Google signup error:", googleError);
-					alert("Googleでの登録も失敗しました。");
-				}
-			} else {
-				alert(`パスキー登録エラー: ${errorMessage}`);
-			}
-		} finally {
-			setIsLoading(false);
 		}
 	};
 
-	const handleGoogleAuth = async () => {
-		setIsLoading(true);
-		try {
-			await authClient.signIn.social({
-				provider: "google",
-				callbackURL: "/setup-profile",
-			});
-		} catch (error) {
-			console.error("Google auth error:", error);
-		} finally {
-			setIsLoading(false);
-		}
+	const handleGoogleAuthClick = async () => {
+		await handleGoogleAuth(
+			"/setup-profile",
+			() => setIsLoading(true),
+			() => setIsLoading(false),
+		);
 	};
 
-	const handleNotionAuth = async () => {
-		setIsLoading(true);
-		try {
-			await authClient.signIn.oauth2({
-				providerId: "notion",
-				callbackURL: "/setup-profile",
-			});
-		} catch (error) {
-			console.error("Notion auth error:", error);
-			const message =
-				error instanceof Error ? error.message : "不明なエラーが発生しました。";
-			alert(`Notionでのログインに失敗しました。\n理由: ${message}`);
-		} finally {
-			setIsLoading(false);
-		}
+	const handleNotionAuthClick = async () => {
+		await handleNotionAuth(
+			"/setup-profile",
+			() => setIsLoading(true),
+			() => setIsLoading(false),
+		);
 	};
 
-	const handlePasskeyAuth = async () => {
-		setIsLoading(true);
-		try {
-			const result = await authClient.signIn.passkey();
+	const handlePasskeyAuthClick = async () => {
+		const result = await handlePasskeyAuth(
+			() => setIsLoading(true),
+			() => setIsLoading(false),
+		);
 
-			if (result?.error) {
-				throw new Error(result.error.message);
-			}
-
+		if (result) {
 			router.push("/");
-		} catch (error) {
-			console.error("Passkey auth error:", error);
-			alert(
-				"パスキーでのログインに失敗しました。パスキーが登録されているか確認してください。",
-			);
-		} finally {
-			setIsLoading(false);
 		}
 	};
 
@@ -148,7 +78,7 @@ export function AuthForm() {
 					</CardTitle>
 					<CardDescription className="text-theme-text-secondary">
 						{isSignUp
-							? "安全で簡単なパスキーでアカウント作成"
+							? "最高レベルのセキュリティと利便性を実現"
 							: "安全で簡単な方法でログイン"}
 					</CardDescription>
 
@@ -160,56 +90,153 @@ export function AuthForm() {
 						</div>
 					)}
 
-					<div className="mt-4 rounded-lg border border-green-200 bg-green-50 p-3">
-						<p className="text-green-700 text-sm">
-							🔒 パスワードは不要です。生体認証で安全にログイン
-						</p>
-					</div>
+					{isSignUp && (
+						<Alert className="mt-4 border-blue-200 bg-blue-50">
+							<Star className="h-4 w-4 text-blue-600" />
+							<AlertDescription className="text-blue-800">
+								<div className="space-y-2">
+									<p className="font-medium">
+										🎯 推奨: Passkey + Notion 統合認証
+									</p>
+									<div className="grid grid-cols-2 gap-2 text-xs">
+										<div className="flex items-center gap-1">
+											<Lock className="h-3 w-3" />
+											<span>最高セキュリティ</span>
+										</div>
+										<div className="flex items-center gap-1">
+											<Link className="h-3 w-3" />
+											<span>自由なデータ管理</span>
+										</div>
+									</div>
+								</div>
+							</AlertDescription>
+						</Alert>
+					)}
+
+					{!isSignUp && (
+						<div className="mt-4 rounded-lg border border-green-200 bg-green-50 p-3">
+							<p className="text-green-700 text-sm">
+								🔒 パスワードは不要です。生体認証で安全にログイン
+							</p>
+						</div>
+					)}
 				</CardHeader>
 				<CardContent className="space-y-4">
 					{isSignUp && (
 						<div className="space-y-4">
-							<div className="rounded-lg border border-blue-200 bg-blue-50 p-3">
-								<p className="text-blue-800 text-sm">
-									🔑 パスキーのみでアカウント作成が可能
-									<br />
-									メールアドレス不要で、生体認証による安全な登録
+							{/* 推奨統合認証セクション */}
+							<div className="rounded-lg border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-purple-50 p-4">
+								<div className="mb-3 flex items-center gap-2">
+									<Star className="h-5 w-5 text-blue-600" />
+									<span className="font-semibold text-blue-800">
+										推奨: 完全認証セットアップ
+									</span>
+									<Badge className="bg-blue-600">おすすめ</Badge>
+								</div>
+								<p className="mb-3 text-blue-700 text-sm">
+									Passkey + Notionで最高レベルのセキュリティと利便性を実現
+								</p>
+								<div className="grid grid-cols-2 gap-3 text-xs">
+									<div className="flex items-center gap-1">
+										<CheckCircle className="h-3 w-3 text-green-600" />
+										<span className="text-green-700">生体認証</span>
+									</div>
+									<div className="flex items-center gap-1">
+										<CheckCircle className="h-3 w-3 text-green-600" />
+										<span className="text-green-700">データ所有権</span>
+									</div>
+									<div className="flex items-center gap-1">
+										<CheckCircle className="h-3 w-3 text-green-600" />
+										<span className="text-green-700">パスワード不要</span>
+									</div>
+									<div className="flex items-center gap-1">
+										<CheckCircle className="h-3 w-3 text-green-600" />
+										<span className="text-green-700">自由編集</span>
+									</div>
+								</div>
+								<p className="mt-2 text-blue-600 text-xs">
+									※ 最初に基本認証を行い、後で追加認証を段階的に設定します
 								</p>
 							</div>
-							<Button
-								onClick={handlePasskeySignUp}
-								className="w-full bg-slate-800 text-white hover:bg-slate-700"
-								disabled={isLoading}
-							>
-								{isLoading ? "登録中..." : "🔑 パスキーのみで新規登録"}
-							</Button>
 
-							<div className="relative">
-								<div className="absolute inset-0 flex items-center">
-									<div className="w-full border-slate-300 border-t" />
+							{/* 基本認証オプション */}
+							<div className="space-y-3">
+								<div className="text-center">
+									<span className="text-gray-600 text-sm">
+										まず基本認証から開始
+									</span>
 								</div>
-								<div className="relative flex justify-center text-xs">
-									<span className="bg-white px-2 text-slate-500">または</span>
+
+								<Button
+									onClick={handlePasskeySignUpClick}
+									className="w-full bg-slate-800 text-white hover:bg-slate-700"
+									disabled={isLoading}
+								>
+									{isLoading ? "登録中..." : "🔑 Passkeyで始める"}
+								</Button>
+
+								<div className="relative">
+									<div className="absolute inset-0 flex items-center">
+										<div className="w-full border-slate-300 border-t" />
+									</div>
+									<div className="relative flex justify-center text-xs">
+										<span className="bg-white px-2 text-slate-500">または</span>
+									</div>
+								</div>
+
+								<div className="grid grid-cols-2 gap-2">
+									<Button
+										onClick={handleGoogleAuthClick}
+										variant="outline"
+										className="border-slate-300 hover:bg-slate-50"
+										disabled={isLoading}
+									>
+										{isLoading ? "登録中..." : "Google"}
+									</Button>
+
+									<Button
+										onClick={handleNotionAuthClick}
+										variant="outline"
+										className="border-slate-300 hover:bg-slate-50"
+										disabled={isLoading}
+									>
+										{isLoading ? "登録中..." : "Notion"}
+									</Button>
 								</div>
 							</div>
 
-							<Button
-								onClick={handleGoogleAuth}
-								variant="outline"
-								className="w-full border-slate-300 hover:bg-slate-50"
-								disabled={isLoading}
-							>
-								{isLoading ? "登録中..." : "Googleのみで新規登録"}
-							</Button>
-
-							<Button
-								onClick={handleNotionAuth}
-								variant="outline"
-								className="w-full border-slate-300 hover:bg-slate-50"
-								disabled={isLoading}
-							>
-								{isLoading ? "登録中..." : "Notionで新規登録"}
-							</Button>
+							{/* 段階的セットアップの説明 */}
+							<div className="rounded-lg border border-gray-200 bg-gray-50 p-3">
+								<h4 className="mb-2 font-medium text-gray-800 text-sm">
+									📋 セットアップフロー
+								</h4>
+								<div className="space-y-1 text-gray-600 text-xs">
+									<div className="flex items-center gap-2">
+										<span className="flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-white text-xs">
+											1
+										</span>
+										<span>基本認証でアカウント作成</span>
+									</div>
+									<div className="flex items-center gap-2">
+										<span className="flex h-4 w-4 items-center justify-center rounded-full bg-gray-400 text-white text-xs">
+											2
+										</span>
+										<span>プロフィール設定</span>
+									</div>
+									<div className="flex items-center gap-2">
+										<span className="flex h-4 w-4 items-center justify-center rounded-full bg-gray-400 text-white text-xs">
+											3
+										</span>
+										<span>追加認証セットアップ（推奨）</span>
+									</div>
+									<div className="flex items-center gap-2">
+										<span className="flex h-4 w-4 items-center justify-center rounded-full bg-gray-400 text-white text-xs">
+											4
+										</span>
+										<span>利用開始</span>
+									</div>
+								</div>
+							</div>
 						</div>
 					)}
 
@@ -229,7 +256,7 @@ export function AuthForm() {
 					{!isSignUp && (
 						<div className="space-y-3">
 							<Button
-								onClick={handlePasskeyAuth}
+								onClick={handlePasskeyAuthClick}
 								className="w-full bg-slate-800 text-white hover:bg-slate-700"
 								disabled={isLoading}
 							>
@@ -237,7 +264,7 @@ export function AuthForm() {
 							</Button>
 
 							<Button
-								onClick={handleGoogleAuth}
+								onClick={handleGoogleAuthClick}
 								variant="outline"
 								className="w-full border-slate-300 hover:bg-slate-50"
 								disabled={isLoading}
@@ -246,7 +273,7 @@ export function AuthForm() {
 							</Button>
 
 							<Button
-								onClick={handleNotionAuth}
+								onClick={handleNotionAuthClick}
 								variant="outline"
 								className="w-full border-slate-300 hover:bg-slate-50"
 								disabled={isLoading}
