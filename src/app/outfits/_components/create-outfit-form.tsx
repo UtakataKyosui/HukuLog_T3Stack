@@ -228,7 +228,6 @@ export default function CreateOutfitForm({
 										}
 									}}
 									tabIndex={0}
-									role="button"
 									aria-pressed={selectedClothingItems.includes(item.id)}
 								>
 									<div className="flex items-center gap-3">

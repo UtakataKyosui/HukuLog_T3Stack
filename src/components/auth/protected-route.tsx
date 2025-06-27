@@ -5,7 +5,7 @@ import { useEffect } from "react";
 
 interface ProtectedRouteProps {
 	children: React.ReactNode;
-	session: any;
+	session: { user?: { id: string; name?: string } } | null;
 }
 
 export function ProtectedRoute({ children, session }: ProtectedRouteProps) {

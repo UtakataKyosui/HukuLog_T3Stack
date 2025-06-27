@@ -126,7 +126,13 @@ export function VisualFeedbackSystem() {
 			});
 			prevThemeRef[0] = theme;
 		}
-	}, [theme, themeConfig, preferences.showDetailedMessages, addNotification, prevThemeRef]);
+	}, [
+		theme,
+		themeConfig,
+		preferences.showDetailedMessages,
+		addNotification,
+		prevThemeRef,
+	]);
 
 	// キーボードショートカットの使用通知
 	useEffect(() => {
@@ -326,6 +332,7 @@ export function VisualFeedbackSystem() {
 								)}
 							</div>
 							<button
+								type="button"
 								onClick={() => removeNotification(notification.id)}
 								className="flex-shrink-0 rounded p-1 transition-colors hover:bg-current hover:bg-opacity-20"
 								aria-label="通知を閉じる"
@@ -363,6 +370,7 @@ export function VisualFeedbackSystem() {
 			{/* アクセシビリティ設定の非表示入力（設定保存用） */}
 			<div className="sr-only">
 				<button
+					type="button"
 					onClick={() =>
 						savePreferences({
 							...preferences,
@@ -374,6 +382,7 @@ export function VisualFeedbackSystem() {
 					視覚的通知: {preferences.enableVisualNotifications ? "有効" : "無効"}
 				</button>
 				<button
+					type="button"
 					onClick={() =>
 						savePreferences({
 							...preferences,

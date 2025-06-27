@@ -115,7 +115,7 @@ export default function ClothingList() {
 		const startIndex = (currentPage - 1) * itemsPerPage;
 		const endIndex = startIndex + itemsPerPage;
 		return filteredClothingItems.slice(startIndex, endIndex);
-	}, [filteredClothingItems, currentPage, itemsPerPage]);
+	}, [filteredClothingItems, currentPage]);
 
 	const totalPages = Math.ceil(filteredClothingItems.length / itemsPerPage);
 
