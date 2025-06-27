@@ -44,10 +44,12 @@ test.describe("ナビゲーションとUIコンポーネント", () => {
 	test("アクティブな状態の表示", async ({ page }) => {
 		// 現在のページがアクティブ状態で表示されることを確認
 		await page.goto("/wardrobe");
-		
+
 		// アクティブなナビゲーションアイテムのスタイルを確認
 		const activeNavItem = page.locator("text=服の管理").locator("..");
-		await expect(activeNavItem).toHaveClass(/active|bg-blue-100|text-blue-600|border-b-2/);
+		await expect(activeNavItem).toHaveClass(
+			/active|bg-blue-100|text-blue-600|border-b-2/,
+		);
 	});
 
 	test("ユーザーメニューの表示", async ({ page }) => {
@@ -89,7 +91,9 @@ test.describe("モバイルナビゲーション", () => {
 
 	test("ハンバーガーメニューの表示", async ({ page }) => {
 		// ハンバーガーメニューボタンが表示されることを確認
-		const hamburgerButton = page.locator("button[aria-label*='メニュー'], .hamburger, [data-testid='mobile-menu-button']");
+		const hamburgerButton = page.locator(
+			"button[aria-label*='メニュー'], .hamburger, [data-testid='mobile-menu-button']",
+		);
 		await expect(hamburgerButton).toBeVisible();
 
 		// ハンバーガーメニューをクリック
@@ -104,11 +108,15 @@ test.describe("モバイルナビゲーション", () => {
 
 	test("モバイルメニューの閉じる機能", async ({ page }) => {
 		// ハンバーガーメニューを開く
-		const hamburgerButton = page.locator("button[aria-label*='メニュー'], .hamburger, [data-testid='mobile-menu-button']");
+		const hamburgerButton = page.locator(
+			"button[aria-label*='メニュー'], .hamburger, [data-testid='mobile-menu-button']",
+		);
 		await hamburgerButton.click();
 
 		// 閉じるボタンまたはオーバーレイをクリック
-		const closeButton = page.locator("button[aria-label*='閉じる'], .close, [data-testid='close-menu']");
+		const closeButton = page.locator(
+			"button[aria-label*='閉じる'], .close, [data-testid='close-menu']",
+		);
 		if (await closeButton.isVisible()) {
 			await closeButton.click();
 		} else {
@@ -122,7 +130,9 @@ test.describe("モバイルナビゲーション", () => {
 
 	test("モバイルメニューからのページ遷移", async ({ page }) => {
 		// ハンバーガーメニューを開く
-		const hamburgerButton = page.locator("button[aria-label*='メニュー'], .hamburger, [data-testid='mobile-menu-button']");
+		const hamburgerButton = page.locator(
+			"button[aria-label*='メニュー'], .hamburger, [data-testid='mobile-menu-button']",
+		);
 		await hamburgerButton.click();
 
 		// 服の管理ページに遷移
@@ -137,7 +147,7 @@ test.describe("モバイルナビゲーション", () => {
 	test("モバイルでのタッチジェスチャー", async ({ page }) => {
 		// スワイプジェスチャーでメニューを開く（実装されている場合）
 		await page.touchscreen.tap(50, 50);
-		
+
 		// サイドメニューのスワイプ操作をテスト
 		const startX = 0;
 		const startY = 300;
@@ -150,7 +160,9 @@ test.describe("モバイルナビゲーション", () => {
 		await page.mouse.up();
 
 		// スワイプでメニューが開くかを確認（実装されている場合）
-		const mobileMenu = page.locator(".mobile-menu, [data-testid='mobile-menu']");
+		const mobileMenu = page.locator(
+			".mobile-menu, [data-testid='mobile-menu']",
+		);
 		if (await mobileMenu.isVisible()) {
 			await expect(mobileMenu).toBeVisible();
 		}
@@ -161,7 +173,7 @@ test.describe("ブレッドクラム・ナビゲーション", () => {
 	test("ブレッドクラムの表示", async ({ page }) => {
 		// 服の詳細ページなどでブレッドクラムが表示されることを確認
 		await page.goto("/wardrobe");
-		
+
 		// ブレッドクラムが表示されることを確認
 		const breadcrumb = page.locator(".breadcrumb, [data-testid='breadcrumb']");
 		if (await breadcrumb.isVisible()) {
@@ -175,7 +187,9 @@ test.describe("ブレッドクラム・ナビゲーション", () => {
 		await page.goto("/wardrobe");
 
 		// ブレッドクラムのホームリンクをクリック
-		const breadcrumbHome = page.locator(".breadcrumb text=ホーム, [data-testid='breadcrumb'] text=ホーム");
+		const breadcrumbHome = page.locator(
+			".breadcrumb text=ホーム, [data-testid='breadcrumb'] text=ホーム",
+		);
 		if (await breadcrumbHome.isVisible()) {
 			await breadcrumbHome.click();
 			await expect(page).toHaveURL("/");
@@ -188,7 +202,9 @@ test.describe("UIコンポーネントの動作", () => {
 		await page.goto("/wardrobe");
 
 		// 検索バーが表示されることを確認
-		const searchInput = page.locator('input[placeholder*="検索"], [data-testid="search-input"]');
+		const searchInput = page.locator(
+			'input[placeholder*="検索"], [data-testid="search-input"]',
+		);
 		await expect(searchInput).toBeVisible();
 
 		// 検索キーワードを入力
@@ -198,7 +214,7 @@ test.describe("UIコンポーネントの動作", () => {
 		await page.waitForTimeout(500);
 		const searchResults = page.locator('[data-testid="clothing-item"]');
 		const resultCount = await searchResults.count();
-		
+
 		if (resultCount > 0) {
 			// 検索結果に入力したキーワードが含まれることを確認
 			for (let i = 0; i < resultCount; i++) {
@@ -221,13 +237,17 @@ test.describe("UIコンポーネントの動作", () => {
 		await expect(page.locator("text=ブランド")).toBeVisible();
 
 		// フィルターを適用
-		const categorySelect = page.locator('[data-testid="category-select"] button');
+		const categorySelect = page.locator(
+			'[data-testid="category-select"] button',
+		);
 		if (await categorySelect.isVisible()) {
 			await categorySelect.click();
-			
+
 			// カテゴリオプションが表示されることを確認
-			const categoryOptions = page.locator('[data-testid="category-select"] [role="option"]');
-			if (await categoryOptions.count() > 1) {
+			const categoryOptions = page.locator(
+				'[data-testid="category-select"] [role="option"]',
+			);
+			if ((await categoryOptions.count()) > 1) {
 				await categoryOptions.nth(1).click();
 			}
 		}
@@ -249,7 +269,7 @@ test.describe("UIコンポーネントの動作", () => {
 
 			// 次のページボタンをクリック
 			const nextButton = page.locator("text=次へ");
-			if (await nextButton.isVisible() && await nextButton.isEnabled()) {
+			if ((await nextButton.isVisible()) && (await nextButton.isEnabled())) {
 				await nextButton.click();
 
 				// ページが変更されることを確認
@@ -273,7 +293,9 @@ test.describe("UIコンポーネントの動作", () => {
 		await expect(page.locator("text=新しいお洋服を追加")).toBeVisible();
 
 		// モーダルの背景（オーバーレイ）が表示されることを確認
-		const overlay = page.locator(".overlay, .backdrop, [data-testid='modal-overlay']");
+		const overlay = page.locator(
+			".overlay, .backdrop, [data-testid='modal-overlay']",
+		);
 		if (await overlay.isVisible()) {
 			await expect(overlay).toBeVisible();
 		}
@@ -305,10 +327,12 @@ test.describe("UIコンポーネントの動作", () => {
 		await page.goto("/wardrobe");
 
 		// ローディングスピナーが表示される（短時間）
-		const loadingSpinner = page.locator(".loading, .spinner, [data-testid='loading']");
+		const loadingSpinner = page.locator(
+			".loading, .spinner, [data-testid='loading']",
+		);
 		if (await loadingSpinner.isVisible()) {
 			await expect(loadingSpinner).toBeVisible();
-			
+
 			// ローディングが完了することを確認
 			await expect(loadingSpinner).toBeHidden();
 		}
@@ -389,7 +413,7 @@ test.describe("テーマとアクセシビリティ", () => {
 			});
 
 			// 大きなフォントサイズが適用されていることを確認
-			expect(parseInt(fontSize)).toBeGreaterThan(20);
+			expect(Number.parseInt(fontSize)).toBeGreaterThan(20);
 		}
 	});
 });

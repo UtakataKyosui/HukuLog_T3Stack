@@ -206,7 +206,7 @@ export function ThemeProvider({
 		// CSS カスタムプロパティを設定（Tailwind v4準拠）
 		Object.entries(config.colors).forEach(([key, value]) => {
 			// キャメルケースをケバブケースに変換
-			const kebabKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
+			const kebabKey = key.replace(/([A-Z])/g, "-$1").toLowerCase();
 			// Tailwind v4の@themeディレクティブ用の命名規則
 			root.style.setProperty(`--color-theme-${kebabKey}`, value);
 			// 後方互換性のための従来の命名規則
@@ -215,13 +215,13 @@ export function ThemeProvider({
 
 		// データ属性も設定（CSS セレクターで使用可能）
 		root.setAttribute("data-theme", theme);
-		
+
 		// bodyクラスも設定（追加の確実性のため）
-		document.body.className = document.body.className.replace(/theme-\w+/g, '');
+		document.body.className = document.body.className.replace(/theme-\w+/g, "");
 		document.body.classList.add(`theme-${theme}`);
-		
+
 		// 強制的にスタイル再適用
-		root.style.setProperty('--force-update', Date.now().toString());
+		root.style.setProperty("--force-update", Date.now().toString());
 	}, [theme, mounted]);
 
 	const themeConfig = themeConfigs[theme];

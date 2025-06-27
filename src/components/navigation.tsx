@@ -93,8 +93,10 @@ export function Navigation() {
 								{isLoading ? (
 									<div className="hidden h-4 w-16 animate-pulse rounded bg-theme-surface sm:block" />
 								) : (
-									<span className="hidden max-w-20 truncate text-theme-text text-sm sm:block lg:max-w-none">
-										{session.user.name ? `${session.user.name}さん` : "ゲストさん"}
+									<span className="hidden max-w-20 truncate text-sm text-theme-text sm:block lg:max-w-none">
+										{session.user.name
+											? `${session.user.name}さん`
+											: "ゲストさん"}
 									</span>
 								)}
 
@@ -108,7 +110,7 @@ export function Navigation() {
 										className="h-8 w-8 rounded-full"
 									/>
 								) : (
-									<div className="flex h-8 w-8 items-center justify-center rounded-full bg-theme-surface border border-theme-border">
+									<div className="flex h-8 w-8 items-center justify-center rounded-full border border-theme-border bg-theme-surface">
 										<User className="h-5 w-5 text-theme-text-secondary" />
 									</div>
 								)}
@@ -179,7 +181,7 @@ export function Navigation() {
 									</Link>
 								</>
 							)}
-							
+
 							<div className="space-y-2 pt-2">
 								{/* アクションボタン - セッションがある場合のみ表示 */}
 								{session && (
@@ -207,9 +209,9 @@ export function Navigation() {
 										</Button>
 									</>
 								)}
-								
+
 								{/* モバイル用テーマセレクター - 常に表示 */}
-								<div className="pt-2 border-t border-theme-border space-y-2">
+								<div className="space-y-2 border-theme-border border-t pt-2">
 									<div className="flex items-center justify-center">
 										<FavoriteThemeSelector />
 									</div>

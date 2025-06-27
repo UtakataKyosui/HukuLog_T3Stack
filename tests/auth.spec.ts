@@ -5,7 +5,9 @@ test.describe("認証システム", () => {
 		await page.goto("/");
 	});
 
-	test("ランディングページから認証ページへのナビゲーション", async ({ page }) => {
+	test("ランディングページから認証ページへのナビゲーション", async ({
+		page,
+	}) => {
 		// ランディングページが表示されることを確認
 		await expect(page.locator("h1")).toContainText("HukuLog");
 
@@ -115,7 +117,7 @@ test.describe("認証UI/UXテスト", () => {
 	test("エラーメッセージの表示確認", async ({ page }) => {
 		// 認証エラーが発生した場合のメッセージ表示を確認
 		// （実際のエラー処理実装に応じて調整が必要）
-		
+
 		// ページにエラーパラメータを付けてアクセス
 		await page.goto("/auth?error=authentication_failed");
 
@@ -128,7 +130,7 @@ test.describe("認証状態の管理", () => {
 	test("ログイン後のナビゲーション", async ({ page }) => {
 		// 認証されたユーザーとしてページにアクセス
 		// （実際のセッション管理に応じて調整が必要）
-		
+
 		// ホームページに移動
 		await page.goto("/");
 
@@ -192,7 +194,9 @@ test.describe("Passkey管理", () => {
 			await deleteButton.click();
 
 			// 確認ダイアログが表示されることを確認
-			await expect(page.locator("text=このPasskeyを削除しますか？")).toBeVisible();
+			await expect(
+				page.locator("text=このPasskeyを削除しますか？"),
+			).toBeVisible();
 
 			// 削除を確認
 			await page.click("text=削除する");
@@ -209,7 +213,9 @@ test.describe("Passkey管理", () => {
 			await editButton.click();
 
 			// 名前変更フォームが表示されることを確認
-			await expect(page.locator('input[placeholder="Passkey名"]')).toBeVisible();
+			await expect(
+				page.locator('input[placeholder="Passkey名"]'),
+			).toBeVisible();
 
 			// 新しい名前を入力
 			await page.fill('input[placeholder="Passkey名"]', "新しいPasskey名");

@@ -12,8 +12,8 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
 import { openAPI } from "better-auth/plugins";
 import { anonymous } from "better-auth/plugins/anonymous";
-import { passkey } from "better-auth/plugins/passkey";
 import { genericOAuth } from "better-auth/plugins/generic-oauth";
+import { passkey } from "better-auth/plugins/passkey";
 
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {

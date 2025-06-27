@@ -21,7 +21,9 @@ test.describe("ユーザープロフィール管理", () => {
 		await expect(page.locator("text=メールアドレス")).toBeVisible();
 
 		// プロフィール画像エリアが表示されることを確認
-		const profileImage = page.locator("img[alt*='プロフィール'], img[alt*='profile']");
+		const profileImage = page.locator(
+			"img[alt*='プロフィール'], img[alt*='profile']",
+		);
 		if (await profileImage.isVisible()) {
 			await expect(profileImage).toBeVisible();
 		}
@@ -39,16 +41,23 @@ test.describe("ユーザープロフィール管理", () => {
 		await editNameButton.click();
 
 		// 名前入力フィールドが表示されることを確認
-		await expect(page.locator('input[placeholder*="名前"], input[name="name"]')).toBeVisible();
+		await expect(
+			page.locator('input[placeholder*="名前"], input[name="name"]'),
+		).toBeVisible();
 
 		// 新しい名前を入力
-		await page.fill('input[placeholder*="名前"], input[name="name"]', "新しい名前");
+		await page.fill(
+			'input[placeholder*="名前"], input[name="name"]',
+			"新しい名前",
+		);
 
 		// 保存ボタンをクリック
 		await page.click("text=保存");
 
 		// 成功メッセージが表示されることを確認
-		await expect(page.locator("text=プロフィールが更新されました")).toBeVisible();
+		await expect(
+			page.locator("text=プロフィールが更新されました"),
+		).toBeVisible();
 
 		// 更新された名前が表示されることを確認
 		await expect(page.locator("text=新しい名前")).toBeVisible();
@@ -56,7 +65,9 @@ test.describe("ユーザープロフィール管理", () => {
 
 	test("プロフィール画像のアップロード", async ({ page }) => {
 		// プロフィール画像アップロードボタンをクリック
-		const uploadButton = page.locator("text=画像を変更, text=プロフィール画像を変更");
+		const uploadButton = page.locator(
+			"text=画像を変更, text=プロフィール画像を変更",
+		);
 		if (await uploadButton.isVisible()) {
 			await uploadButton.click();
 
@@ -204,7 +215,10 @@ test.describe("設定の変更と保存", () => {
 		await expect(page.locator("text=名前は必須です")).toBeVisible();
 
 		// 長すぎる名前で保存を試行
-		await page.fill('input[placeholder*="名前"], input[name="name"]', "a".repeat(101));
+		await page.fill(
+			'input[placeholder*="名前"], input[name="name"]',
+			"a".repeat(101),
+		);
 		await page.click("text=保存");
 
 		// 文字数制限エラーが表示されることを確認
@@ -217,7 +231,10 @@ test.describe("設定の変更と保存", () => {
 		await editButton.click();
 
 		// 名前を変更
-		await page.fill('input[placeholder*="名前"], input[name="name"]', "変更された名前");
+		await page.fill(
+			'input[placeholder*="名前"], input[name="name"]',
+			"変更された名前",
+		);
 
 		// キャンセルボタンをクリック
 		await page.click("text=キャンセル");
@@ -226,7 +243,9 @@ test.describe("設定の変更と保存", () => {
 		await expect(page.locator("text=変更された名前")).not.toBeVisible();
 
 		// フォームが閉じることを確認
-		await expect(page.locator('input[placeholder*="名前"], input[name="name"]')).not.toBeVisible();
+		await expect(
+			page.locator('input[placeholder*="名前"], input[name="name"]'),
+		).not.toBeVisible();
 	});
 });
 
@@ -247,7 +266,9 @@ test.describe("アカウント管理機能", () => {
 			// アカウント削除ボタンが表示されることを確認
 			const deleteButton = page.locator("text=アカウントを削除");
 			await expect(deleteButton).toBeVisible();
-			await expect(deleteButton).toHaveClass(/bg-red-600|text-red-600|border-red-600/);
+			await expect(deleteButton).toHaveClass(
+				/bg-red-600|text-red-600|border-red-600/,
+			);
 		}
 	});
 
@@ -293,7 +314,9 @@ test.describe("アカウント管理機能", () => {
 			}
 
 			// コントラスト設定
-			const highContrastToggle = page.locator("text=高コントラスト").locator("input");
+			const highContrastToggle = page
+				.locator("text=高コントラスト")
+				.locator("input");
 			if (await highContrastToggle.isVisible()) {
 				await highContrastToggle.click();
 
