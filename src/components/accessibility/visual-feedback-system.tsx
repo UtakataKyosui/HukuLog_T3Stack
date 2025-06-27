@@ -2,7 +2,7 @@
 
 import { useTheme } from "@/components/providers/theme-provider";
 import { Check, Eye, Palette, Vibrate, X } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 interface NotificationMessage {
 	id: string;
@@ -57,64 +57,55 @@ export function VisualFeedbackSystem() {
 	};
 
 	// バイブレーション機能
-	const triggerVibration = useCallback(
-		(pattern: number[] = [200]) => {
-			if (!preferences.enableVibration) return;
+	const triggerVibration = (pattern: number[] = [200]) => {
+		if (!preferences.enableVibration) return;
 
-			if ("vibrate" in navigator) {
-				navigator.vibrate(pattern);
-			}
-		},
-		[preferences.enableVibration],
-	);
+		if ("vibrate" in navigator) {
+			navigator.vibrate(pattern);
+		}
+	};
 
 	// フラッシュインジケーター
-	const triggerFlashIndicator = useCallback(() => {
+	const triggerFlashIndicator = () => {
 		if (!preferences.enableFlashIndicator) return;
 
 		setFlashIndicator(true);
 		setTimeout(() => setFlashIndicator(false), 300);
-	}, [preferences.enableFlashIndicator]);
+	};
 
 	// 通知の追加
-	const addNotification = useCallback(
-		(notification: Omit<NotificationMessage, "id" | "timestamp">) => {
-			if (!preferences.enableVisualNotifications) return;
+	const addNotification = (
+		notification: Omit<NotificationMessage, "id" | "timestamp">,
+	) => {
+		if (!preferences.enableVisualNotifications) return;
 
-			const id = Math.random().toString(36).substr(2, 9);
-			const newNotification: NotificationMessage = {
-				...notification,
-				id,
-				timestamp: Date.now(),
-				duration: notification.duration || preferences.notificationDuration,
-			};
+		const id = Math.random().toString(36).substr(2, 9);
+		const newNotification: NotificationMessage = {
+			...notification,
+			id,
+			timestamp: Date.now(),
+			duration: notification.duration || preferences.notificationDuration,
+		};
 
-			setNotifications((prev) => [...prev, newNotification]);
+		setNotifications((prev) => [...prev, newNotification]);
 
-			// バイブレーション
-			const vibrationPatterns = {
-				success: [100, 50, 100],
-				info: [200],
-				warning: [100, 100, 100],
-				error: [200, 100, 200, 100, 200],
-			};
-			triggerVibration(vibrationPatterns[notification.type]);
+		// バイブレーション
+		const vibrationPatterns = {
+			success: [100, 50, 100],
+			info: [200],
+			warning: [100, 100, 100],
+			error: [200, 100, 200, 100, 200],
+		};
+		triggerVibration(vibrationPatterns[notification.type]);
 
-			// フラッシュインジケーター
-			triggerFlashIndicator();
+		// フラッシュインジケーター
+		triggerFlashIndicator();
 
-			// 自動削除
-			setTimeout(() => {
-				removeNotification(id);
-			}, newNotification.duration);
-		},
-		[
-			preferences.enableVisualNotifications,
-			preferences.notificationDuration,
-			triggerVibration,
-			triggerFlashIndicator,
-		],
-	);
+		// 自動削除
+		setTimeout(() => {
+			removeNotification(id);
+		}, newNotification.duration);
+	};
 
 	// 通知の削除
 	const removeNotification = (id: string) => {
@@ -135,13 +126,7 @@ export function VisualFeedbackSystem() {
 			});
 			prevThemeRef[0] = theme;
 		}
-	}, [
-		theme,
-		themeConfig,
-		preferences.showDetailedMessages,
-		addNotification,
-		prevThemeRef,
-	]);
+	}, [theme, themeConfig, preferences.showDetailedMessages]);
 
 	// キーボードショートカットの使用通知
 	useEffect(() => {
@@ -194,19 +179,7 @@ export function VisualFeedbackSystem() {
 		document.addEventListener("keydown", handleKeyboardShortcut);
 		return () =>
 			document.removeEventListener("keydown", handleKeyboardShortcut);
-	}, [addNotification]);
-
-	// 緊急通知ハンドラーの抽出
-	const handleEmergencyNotification = useCallback(() => {
-		addNotification({
-			type: "warning",
-			title: "緊急アクセシビリティモード",
-			message:
-				"ハイコントラストテーマに切り替えました。視認性が最大化されています。",
-			icon: <Eye className="h-5 w-5" />,
-			duration: 6000,
-		});
-	}, [addNotification]);
+	}, []);
 
 	// 緊急時のEscape×3の検出
 	useEffect(() => {
@@ -218,7 +191,14 @@ export function VisualFeedbackSystem() {
 				escapeCount++;
 
 				if (escapeCount === 3) {
-					handleEmergencyNotification();
+					addNotification({
+						type: "warning",
+						title: "緊急アクセシビリティモード",
+						message:
+							"ハイコントラストテーマに切り替えました。視認性が最大化されています。",
+						icon: <Eye className="h-5 w-5" />,
+						duration: 6000,
+					});
 					escapeCount = 0;
 					clearTimeout(escapeTimer);
 				} else if (escapeCount === 1) {
@@ -237,7 +217,7 @@ export function VisualFeedbackSystem() {
 			document.removeEventListener("keydown", handleEmergencyEscape);
 			clearTimeout(escapeTimer);
 		};
-	}, [handleEmergencyNotification]);
+	}, []);
 
 	// カスタムイベントリスナー（設定変更やテスト用）
 	useEffect(() => {
@@ -284,7 +264,7 @@ export function VisualFeedbackSystem() {
 				handleTestNotification as EventListener,
 			);
 		};
-	}, [addNotification, triggerFlashIndicator]);
+	}, []);
 
 	// 通知アイテムのスタイル
 	const getNotificationStyle = (type: NotificationMessage["type"]) => {
@@ -341,7 +321,6 @@ export function VisualFeedbackSystem() {
 								)}
 							</div>
 							<button
-								type="button"
 								onClick={() => removeNotification(notification.id)}
 								className="flex-shrink-0 rounded p-1 transition-colors hover:bg-current hover:bg-opacity-20"
 								aria-label="通知を閉じる"
@@ -379,7 +358,6 @@ export function VisualFeedbackSystem() {
 			{/* アクセシビリティ設定の非表示入力（設定保存用） */}
 			<div className="sr-only">
 				<button
-					type="button"
 					onClick={() =>
 						savePreferences({
 							...preferences,
@@ -391,7 +369,6 @@ export function VisualFeedbackSystem() {
 					視覚的通知: {preferences.enableVisualNotifications ? "有効" : "無効"}
 				</button>
 				<button
-					type="button"
 					onClick={() =>
 						savePreferences({
 							...preferences,

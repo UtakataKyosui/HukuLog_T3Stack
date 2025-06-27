@@ -47,7 +47,7 @@ export function FavoriteThemeSelector() {
 
 		const favorite = favoriteThemes.find((f) => f.id === favoriteId);
 		if (favorite) {
-			setTheme(favorite.id);
+			setTheme(favorite.id as any);
 
 			// 視覚的フィードバック
 			const event = new CustomEvent("accessibility-setting-changed", {
@@ -91,7 +91,7 @@ export function FavoriteThemeSelector() {
 				e.preventDefault();
 				const index = Number.parseInt(e.key) - 1;
 				if (favoriteThemes[index]) {
-					setTheme(favoriteThemes[index].id);
+					setTheme(favoriteThemes[index].id as any);
 
 					// 視覚的フィードバック
 					const event = new CustomEvent("accessibility-setting-changed", {

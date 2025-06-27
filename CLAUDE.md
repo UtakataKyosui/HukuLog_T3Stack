@@ -189,11 +189,12 @@ Loco.rsバックエンドAPI移行計画については [Issue #2](https://githu
 - Playwrightを使用し、アプリケーションの主要機能を網羅的にテストする方針
 - アプリケーションの既存機能の包括的な機能テストをPlaywrightで実装し、システムの信頼性を高める
 
-## 　認証実装メモ
+## 認証実装メモ
 - [https://www.better-auth.com/docs/plugins/passkey](https://www.better-auth.com/docs/plugins/passkey) 
   - このページを参考にPasskey認証を正しく実装してください
 -  https://www.better-auth.com/docs/plugins/open-api
    -  BetterAuthのOpen APIドキュメントが見れるようになるので、必要であればこれを実装に取り入れ、デバッグに活かしてください
+- BetterAuth公式が提供していないSNS Providerもhttps://www.better-auth.com/docs/authentication/other-social-providersを参考にして独自実装すればそのアカウントを用いてサインインしたりサインアウトしたりログインログアウトしたりできるようになります
 
 ## 開発サーバー管理
 

@@ -1,8 +1,7 @@
 "use client";
 
 import { useTheme } from "@/components/providers/theme-provider";
-import { allThemes } from "@/config/themes";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 interface AccessibilitySettings {
 	announceThemeChanges: boolean;
@@ -33,28 +32,25 @@ export function AccessibilityThemeManager() {
 	}, []);
 
 	// テーマ変更時の音声アナウンス
-	const announceThemeChange = useCallback(
-		(themeName: string) => {
-			if (!settings.announceThemeChanges) return;
+	const announceThemeChange = (themeName: string) => {
+		if (!settings.announceThemeChanges) return;
 
-			// スクリーンリーダー向けのアナウンス
-			const announcement = `テーマが ${themeName} に変更されました`;
+		// スクリーンリーダー向けのアナウンス
+		const announcement = `テーマが ${themeName} に変更されました`;
 
-			// aria-live領域を使ったアナウンス
-			const announcer = document.getElementById("theme-announcer");
-			if (announcer) {
-				announcer.textContent = announcement;
-				// 少し後にクリア（スクリーンリーダーが読み終わるまで）
-				setTimeout(() => {
-					announcer.textContent = "";
-				}, 3000);
-			}
-		},
-		[settings.announceThemeChanges],
-	);
+		// aria-live領域を使ったアナウンス
+		const announcer = document.getElementById("theme-announcer");
+		if (announcer) {
+			announcer.textContent = announcement;
+			// 少し後にクリア（スクリーンリーダーが読み終わるまで）
+			setTimeout(() => {
+				announcer.textContent = "";
+			}, 3000);
+		}
+	};
 
 	// アクセシビリティテーマへのクイック切り替え
-	const switchToAccessibilityTheme = useCallback(() => {
+	const switchToAccessibilityTheme = () => {
 		const accessibilityThemes = [
 			"high-contrast",
 			"eye-friendly",
@@ -66,49 +62,36 @@ export function AccessibilityThemeManager() {
 		const nextIndex = (currentIndex + 1) % accessibilityThemes.length;
 		const nextTheme = accessibilityThemes[nextIndex];
 
-		setTheme(nextTheme);
+		setTheme(nextTheme as any);
 		const themeConfig = allThemes.find((t) => t.id === nextTheme);
 		if (themeConfig) {
 			announceThemeChange(themeConfig.name);
 		}
-	}, [theme, setTheme, announceThemeChange, allThemes]);
+	};
 
 	// グローバルキーボードショートカット
 	useEffect(() => {
 		if (!settings.enableKeyboardShortcuts) return;
 
-		// テーマ切り替えのヘルパー関数
-		const handleAccessibilityThemeSwitch = () => {
-			switchToAccessibilityTheme();
-		};
-
-		const handleHighContrastThemeSwitch = () => {
-			setTheme("high-contrast");
-			announceThemeChange("ハイコントラスト");
-		};
-
-		const handleEyeFriendlyThemeSwitch = () => {
-			setTheme("eye-friendly");
-			announceThemeChange("目に優しい");
-		};
-
 		const handleGlobalKeyboard = (e: KeyboardEvent) => {
 			// Ctrl + Shift + A: アクセシビリティテーマ切り替え
 			if (e.ctrlKey && e.shiftKey && e.key === "A") {
 				e.preventDefault();
-				handleAccessibilityThemeSwitch();
+				switchToAccessibilityTheme();
 			}
 
 			// Ctrl + Shift + H: ハイコントラストに即切り替え
 			if (e.ctrlKey && e.shiftKey && e.key === "H") {
 				e.preventDefault();
-				handleHighContrastThemeSwitch();
+				setTheme("high-contrast");
+				announceThemeChange("ハイコントラスト");
 			}
 
 			// Ctrl + Shift + E: 目に優しいテーマに即切り替え
 			if (e.ctrlKey && e.shiftKey && e.key === "E") {
 				e.preventDefault();
-				handleEyeFriendlyThemeSwitch();
+				setTheme("eye-friendly");
+				announceThemeChange("目に優しい");
 			}
 
 			// Ctrl + Shift + L: ライトテーマに即切り替え
@@ -128,12 +111,7 @@ export function AccessibilityThemeManager() {
 
 		document.addEventListener("keydown", handleGlobalKeyboard);
 		return () => document.removeEventListener("keydown", handleGlobalKeyboard);
-	}, [
-		settings.enableKeyboardShortcuts,
-		setTheme,
-		announceThemeChange,
-		switchToAccessibilityTheme,
-	]);
+	}, [settings.enableKeyboardShortcuts, theme, setTheme, allThemes]);
 
 	// 緊急時の高コントラストモード切り替え（連続でEscapeキー）
 	useEffect(() => {
@@ -168,7 +146,7 @@ export function AccessibilityThemeManager() {
 			document.removeEventListener("keydown", handleEscapeSequence);
 			clearTimeout(escapeTimer);
 		};
-	}, [setTheme, announceThemeChange]);
+	}, [setTheme]);
 
 	return (
 		<>
@@ -178,7 +156,7 @@ export function AccessibilityThemeManager() {
 				aria-live="polite"
 				aria-atomic="true"
 				className="sr-only"
-			/>
+			></div>
 
 			{/* キーボードショートカットのヘルプ（スクリーンリーダー用） */}
 			<div className="sr-only">

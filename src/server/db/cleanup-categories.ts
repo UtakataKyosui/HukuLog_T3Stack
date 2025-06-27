@@ -32,32 +32,16 @@ async function cleanupCategories() {
 			{ name: "帽子", type: "accessories" },
 			{ name: "アクセサリー", type: "accessories" },
 		];
+
 		const insertedCategories = await db
 			.insert(clothingCategories)
 			.values(correctCategories)
 			.returning();
 
 		console.log(`✅ Inserted ${insertedCategories.length} clean categories:`);
-		for (const [index, category] of insertedCategories.entries()) {
-			console.log(
-				`  ${index + 1}. ID: ${category.id}, Name: "${category.name}", Type: "${category.type}"`,
-			);
-		}
-
-		console.log("🎉 Categories cleanup completed successfully!");
-
-		console.log(`✅ Inserted $
-	insertedCategories.length;
-	clean;
-	categories: `);
 		insertedCategories.forEach((category, index) => {
 			console.log(
-				`;
-	$;
-	index + 1;
-	. ID: $
-	category.id;
-	, Name: "${category.name}", Type: "${category.type}"`,
+				`  ${index + 1}. ID: ${category.id}, Name: "${category.name}", Type: "${category.type}"`,
 			);
 		});
 

@@ -1,5 +1,4 @@
 import { eq, inArray, not, sql } from "drizzle-orm";
-
 import { db } from "./index";
 import { clothingCategories, clothingItems } from "./schema";
 
@@ -57,13 +56,14 @@ async function deduplicateCategories() {
 					.where(inArray(clothingItems.categoryId, duplicateIdsToUpdate));
 			}
 		}
+
 		// 重複カテゴリを削除
 		console.log("🗑️  Deleting duplicate categories...");
 		const deleteResult = await db
 			.delete(clothingCategories)
 			.where(not(inArray(clothingCategories.id, keepIds)));
 
-		console.log("✅ Deleted duplicate categories");
+		console.log(`✅ Deleted duplicate categories`);
 
 		// 最終確認
 		const finalCategories = await db.select().from(clothingCategories);

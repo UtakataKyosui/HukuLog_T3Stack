@@ -41,13 +41,6 @@ export function ThemeSelector() {
 									: "theme-border hover:theme-border-secondary"
 							}`}
 							onClick={() => setTheme(themeConfig.id)}
-							onKeyDown={(e) => {
-								if (e.key === "Enter" || e.key === " ") {
-									e.preventDefault();
-									setTheme(themeConfig.id);
-								}
-							}}
-							aria-pressed={theme === themeConfig.id}
 						>
 							{theme === themeConfig.id && (
 								<div className="absolute top-2 right-2">
@@ -144,9 +137,9 @@ export function ThemeSelector() {
 							セカンダリテキスト
 						</p>
 						<div className="mt-3 flex gap-2">
-							<div className="h-6 w-6 rounded bg-theme-primary" />
-							<div className="h-6 w-6 rounded bg-theme-accent" />
-							<div className="h-6 w-6 rounded bg-theme-success" />
+							<div className="h-6 w-6 rounded bg-theme-primary"></div>
+							<div className="h-6 w-6 rounded bg-theme-accent"></div>
+							<div className="h-6 w-6 rounded bg-theme-success"></div>
 						</div>
 					</div>
 				</div>

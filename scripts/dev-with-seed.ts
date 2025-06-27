@@ -3,6 +3,7 @@ import { checkSeedData } from "../src/server/db/check-seed";
 
 async function runSeed() {
 	console.log("🌱 Running database seed...");
+
 	return new Promise<void>((resolve, reject) => {
 		const seedProcess = spawn("npm", ["run", "db:seed"], {
 			stdio: "inherit",
@@ -28,23 +29,21 @@ async function runSeed() {
 
 async function startDevServer() {
 	console.log("🚀 Starting development server...");
+
 	const devProcess = spawn("next", ["dev"], {
 		stdio: "inherit",
 		shell: true,
 	});
 
 	// プロセス終了時のクリーンアップ
-	process.on("SIGINT", () => {
-		console.log("\n🛑 Shutting down development server due to SIGINT...");
-		devProcess.kill("SIGINT");
+	const shutdown = (signal: NodeJS.Signals) => {
+		console.log("\n🛑 Shutting down development server...");
+		devProcess.kill(signal);
 		process.exit(0);
-	});
+	};
 
-	process.on("SIGTERM", () => {
-		console.log("\n🛑 Shutting down development server due to SIGTERM...");
-		devProcess.kill("SIGTERM");
-		process.exit(0);
-	});
+	process.on("SIGINT", () => shutdown("SIGINT"));
+	process.on("SIGTERM", () => shutdown("SIGTERM"));
 }
 
 async function main() {
