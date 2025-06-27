@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 export default function SetupPasskeyPage() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isSetupComplete, setIsSetupComplete] = useState(false);
-	const [session, setSession] = useState<any>(null);
+	const [session, setSession] = useState<{ user?: { id: string; name?: string } } | null>(null);
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const isAuto = searchParams.get("auto") === "true";

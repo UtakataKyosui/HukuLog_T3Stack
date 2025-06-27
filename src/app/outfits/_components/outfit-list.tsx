@@ -53,7 +53,7 @@ export default function OutfitList() {
 			<div className="flex items-center gap-1">
 				{Array.from({ length: 5 }, (_, i) => (
 					<Star
-						key={i}
+						key={`star-${i}`}
 						className={`h-4 w-4 ${
 							i < rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
 						}`}
@@ -123,7 +123,7 @@ export default function OutfitList() {
 		const startIndex = (currentPage - 1) * itemsPerPage;
 		const endIndex = startIndex + itemsPerPage;
 		return filteredOutfits.slice(startIndex, endIndex);
-	}, [filteredOutfits, currentPage, itemsPerPage]);
+	}, [filteredOutfits, currentPage]);
 
 	const totalPages = Math.ceil(filteredOutfits.length / itemsPerPage);
 
@@ -168,6 +168,7 @@ export default function OutfitList() {
 					</div>
 				</div>
 				<button
+					type="button"
 					onClick={() => setShowCreateForm(true)}
 					className="clean-button flex w-full items-center justify-center gap-2 px-4 py-3 font-bold text-white sm:w-auto sm:px-6"
 				>

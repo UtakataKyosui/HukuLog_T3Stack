@@ -126,7 +126,7 @@ export function VisualFeedbackSystem() {
 			});
 			prevThemeRef[0] = theme;
 		}
-	}, [theme, themeConfig, preferences.showDetailedMessages]);
+	}, [theme, themeConfig, preferences.showDetailedMessages, addNotification, prevThemeRef]);
 
 	// キーボードショートカットの使用通知
 	useEffect(() => {
@@ -179,7 +179,7 @@ export function VisualFeedbackSystem() {
 		document.addEventListener("keydown", handleKeyboardShortcut);
 		return () =>
 			document.removeEventListener("keydown", handleKeyboardShortcut);
-	}, []);
+	}, [addNotification]);
 
 	// 緊急通知ハンドラーの抽出
 	const handleEmergencyNotification = () => {
@@ -222,7 +222,7 @@ export function VisualFeedbackSystem() {
 			document.removeEventListener("keydown", handleEmergencyEscape);
 			clearTimeout(escapeTimer);
 		};
-	}, []);
+	}, [handleEmergencyNotification]);
 
 	// カスタムイベントリスナー（設定変更やテスト用）
 	useEffect(() => {
@@ -269,7 +269,7 @@ export function VisualFeedbackSystem() {
 				handleTestNotification as EventListener,
 			);
 		};
-	}, []);
+	}, [addNotification]);
 
 	// 通知アイテムのスタイル
 	const getNotificationStyle = (type: NotificationMessage["type"]) => {
