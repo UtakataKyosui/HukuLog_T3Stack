@@ -215,3 +215,160 @@ const optimizeImage = async (file: File): Promise<File> => {
 - **XSS対策**: ユーザー入力のサニタイゼーション
 - **CSP**: Content Security Policyの適切な設定
 - **HTTPS**: 全通信の暗号化
+
+## Notionデータベース連携システム
+
+### アーキテクチャ設計
+
+#### マルチデータベース対応アーキテクチャ
+- **概念**: PostgreSQL と Notion DB の選択可能なハイブリッド構成
+- **設計原理**: 
+  - ユーザーが好みに応じてデータ保存先を選択
+  - 統一されたAPIインターフェースによる透過的なデータアクセス
+  - 動的ルーティングによる切り替え処理の自動化
+
+#### 実装パターン
+
+##### 1. ユニバーサルルーター設計
+```typescript
+// src/server/api/routers/universal-clothing.ts
+export const universalClothingRouter = createTRPCRouter({
+  create: protectedProcedure
+    .input(createClothingItemSchema)
+    .mutation(async ({ ctx, input }) => {
+      const userConfig = await getUserStorageConfig(ctx.session.user.id);
+      
+      if (userConfig.storageType === "notion") {
+        return createNotionClothingItem(userConfig, input);
+      } else {
+        return createPostgreSQLClothingItem(ctx.db, input);
+      }
+    }),
+});
+```
+
+##### 2. Notion API統合パターン
+```typescript
+// src/lib/notion-api.ts
+export class NotionAPIClient {
+  async createDatabasesInPage(pageId: string) {
+    // 自動データベース作成の実装
+    const clothingDb = await this.createDatabase(pageId, clothingSchema);
+    const outfitsDb = await this.createDatabase(pageId, outfitsSchema);
+    return { clothingDb, outfitsDb };
+  }
+}
+```
+
+### データベーススキーマ設計
+
+#### Notion プロパティマッピング
+服データベース（Clothing Items）:
+- `Name` (Title) → PostgreSQL: `name`
+- `Brand` (Rich Text) → PostgreSQL: `brand`
+- `Color` (Select) → PostgreSQL: `color`
+- `Size` (Select) → PostgreSQL: `size`
+- `Season` (Multi-select) → PostgreSQL: `season[]`
+- `Price` (Number) → PostgreSQL: `price`
+- `Purchase Date` (Date) → PostgreSQL: `purchaseDate`
+- `User ID` (Rich Text) → PostgreSQL: `userId`
+
+コーデデータベース（Outfits）:
+- `Name` (Title) → PostgreSQL: `name`
+- `Description` (Rich Text) → PostgreSQL: `description`
+- `Clothing Items` (Relation) → PostgreSQL: `outfitItems`関連テーブル
+- `Occasion` (Select) → PostgreSQL: `occasion`
+- `Season` (Multi-select) → PostgreSQL: `season[]`
+
+### 自動セットアップシステム
+
+#### 自動データベース作成フロー
+1. **ページアクセス検証**: 指定されたNotionページへの書き込み権限確認
+2. **スキーマ定義**: 事前定義されたデータベーススキーマの適用
+3. **データベース作成**: APIを使用した自動データベース生成
+4. **関連設定**: リレーション設定とプロパティ構成
+5. **設定保存**: ユーザー設定への自動反映
+
+#### エラーハンドリング戦略
+```typescript
+// Notion API エラーの分類と対応
+export const handleNotionError = (error: any) => {
+  if (error.code === "unauthorized") {
+    return "統合のアクセス権限を確認してください";
+  }
+  if (error.code === "object_not_found") {
+    return "指定されたページまたはデータベースが見つかりません";
+  }
+  return "Notion APIエラーが発生しました";
+};
+```
+
+### UI/UX設計パターン
+
+#### 段階的セットアップワザード
+```typescript
+// storage-selection-enhanced.tsx のUIパターン
+const [setupStep, setSetupStep] = useState<"select" | "notion-config" | "creating">("select");
+
+// 自動セットアップ vs 手動セットアップの分岐
+const [useAutoSetup, setUseAutoSetup] = useState(true);
+```
+
+#### 視覚的フィードバック設計
+- **プログレス表示**: データベース作成の進行状況
+- **検証フィードバック**: リアルタイムでの設定検証
+- **エラー状態**: 分かりやすいエラーメッセージと解決案
+
+### セキュリティ考慮事項
+
+#### アクセストークン管理
+- **暗号化保存**: データベース内でのトークン暗号化
+- **スコープ制限**: 最小権限の原則（読み取り・更新・挿入のみ）
+- **定期的な検証**: トークンの有効性確認
+
+#### データ分離
+- **User ID フィルタリング**: 全てのNotion操作でユーザーID条件付与
+- **アクセス制御**: 他ユーザーのデータへの不正アクセス防止
+- **監査ログ**: データアクセスの記録と監視
+
+### パフォーマンス最適化
+
+#### Notion API制限対応
+- **レート制限**: 1秒あたり3リクエストの制限遵守
+- **バッチ処理**: 複数操作の効率的な実行
+- **キャッシュ戦略**: 頻繁にアクセスするデータのキャッシュ
+
+#### レスポンス最適化
+```typescript
+// Notion APIレスポンスの最適化
+const optimizeNotionResponse = (rawData: any) => {
+  return {
+    id: rawData.id,
+    name: rawData.properties.Name.title[0]?.plain_text,
+    // 必要なフィールドのみ抽出
+  };
+};
+```
+
+### 運用・保守
+
+#### 設定変更フロー
+1. **現在の設定確認**: ユーザーの現在のストレージ設定取得
+2. **データ移行オプション**: PostgreSQL ↔ Notion 間のデータ移行
+3. **設定更新**: 新しいストレージ設定の適用
+4. **検証**: 変更後の動作確認
+
+#### トラブルシューティング
+- **接続テスト**: Notion APIへの接続確認機能
+- **設定検証**: データベースIDとアクセス権限の確認
+- **データ同期**: 不整合が発生した場合の修復機能
+
+### 今後の拡張予定
+
+#### 機能追加候補
+- **データ同期**: PostgreSQL と Notion 間の双方向同期
+- **バックアップ機能**: Notionデータの定期バックアップ
+- **分析機能**: Notion の数式機能を活用した高度な分析
+- **テンプレート**: 様々な用途に対応したデータベーステンプレート
+
+この実装により、ユーザーは自分の好みや用途に応じてデータストレージを選択でき、それぞれの利点を活用できるようになりました。
